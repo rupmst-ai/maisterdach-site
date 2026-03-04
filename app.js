@@ -76,19 +76,43 @@ function applyLinks() {
 }
 applyLinks();
 
-// ── Form conversion tracking ──
+// ── Form conversion tracking — fires ONLY after Formspree success ──
 document.addEventListener('DOMContentLoaded', function() {
   var form = document.getElementById('contact-form');
   if (form) {
-    form.addEventListener('submit', function() {
-      trackConversion('form_submit');
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'form_submit', { event_category: 'Contact', event_label: 'Besichtigung' });
-      }
-      setTimeout(function() {
-        var s = document.getElementById('form-success');
-        if (s) s.style.display = 'block';
-      }, 800);
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var data = new FormData(form);
+      fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(function(response) {
+        if (response.ok) {
+          // ✅ Only fires after confirmed Formspree success
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'conversion', {
+              'send_to': 'AW-17044870869/REPLACE_WITH_LABEL', // ← înlocuiește REPLACE_WITH_LABEL cu labelul din Google Ads
+              'value': 1.0,
+              'currency': 'EUR'
+            });
+            gtag('event', 'form_submit', {
+              event_category: 'Contact',
+              event_label: 'Besichtigung'
+            });
+          }
+          // Show success message
+          var s = document.getElementById('form-success');
+          if (s) s.style.display = 'block';
+          form.reset();
+        } else {
+          alert('Es gab einen Fehler. Bitte versuchen Sie es erneut.');
+        }
+      })
+      .catch(function() {
+        alert('Es gab einen Fehler. Bitte versuchen Sie es erneut.');
+      });
     });
   }
 });
