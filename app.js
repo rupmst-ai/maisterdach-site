@@ -120,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function toggleNav() {
   const n = document.getElementById('nav'), h = document.getElementById('hbg');
   n.classList.toggle('open'); h.classList.toggle('open');
+  h.setAttribute('aria-expanded', n.classList.contains('open') ? 'true' : 'false');
 }
 document.addEventListener('click', e => {
   const n = document.getElementById('nav'), h = document.getElementById('hbg');
