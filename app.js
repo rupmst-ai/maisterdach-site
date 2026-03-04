@@ -1,4 +1,5 @@
 const WA = '4917688087715', PHONE = '+4917688087715';
+const GTAG_ID = 'AW-17044870869';
 
 const FALLBACK_LOC = 'in Brandenburg';
 const FALLBACK_REGION = 'im Raum Brandenburg';
@@ -9,6 +10,17 @@ const PAGE_MESSAGES = {
   'blechdach.html': 'Hallo, ich brauche Hilfe mit einem Blechdach {Loc}. Bitte um kurzen Rückruf oder Angebot.',
   'klempner.html':  'Hallo, ich brauche Hilfe mit Dachrinne oder Fallrohr {Loc}. Bitte um kurzen Rückruf oder Angebot.',
 };
+
+const FALLBACK_LOC2 = 'in Brandenburg';
+
+// ── Conversion tracking ──
+function trackConversion(label) {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'conversion', {
+      'send_to': GTAG_ID + '/' + label,
+    });
+  }
+}
 
 function applyLinks() {
   const city = (new URLSearchParams(window.location.search).get('city') || '')
@@ -35,15 +47,51 @@ function applyLinks() {
     ? 'Dachdecker in ' + city + ' | Dachreparatur & Flachdach'
     : 'Dachdecker Brandenburg | Dachreparatur & Flachdach';
 
-  // ── WhatsApp ── natural message, no technical info
+  // ── WhatsApp message ──
   const template = PAGE_MESSAGES[path] || PAGE_MESSAGES['index.html'];
   const msg = template.replace('{Loc}', loc);
-  const waURL = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(msg);
+  const waURL = 'https://wa.me/4917688087715?text=' + encodeURIComponent(msg);
 
-  document.querySelectorAll('.wa-l, .whatsapp-link').forEach(el => el.href = waURL);
-  document.querySelectorAll('.call-l').forEach(el => el.href = 'tel:' + PHONE);
+  // ── Apply links + conversion tracking ──
+  document.querySelectorAll('.wa-l, .whatsapp-link').forEach(el => {
+    el.href = waURL;
+    el.addEventListener('click', function() {
+      trackConversion('whatsapp_click');
+      // Also fire standard event
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'click', { event_category: 'WhatsApp', event_label: path });
+      }
+    });
+  });
+
+  document.querySelectorAll('.call-l').forEach(el => {
+    el.href = 'tel:' + PHONE;
+    el.addEventListener('click', function() {
+      trackConversion('phone_call');
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'click', { event_category: 'Phone', event_label: path });
+      }
+    });
+  });
 }
 applyLinks();
+
+// ── Form conversion tracking ──
+document.addEventListener('DOMContentLoaded', function() {
+  var form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', function() {
+      trackConversion('form_submit');
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'form_submit', { event_category: 'Contact', event_label: 'Besichtigung' });
+      }
+      setTimeout(function() {
+        var s = document.getElementById('form-success');
+        if (s) s.style.display = 'block';
+      }, 800);
+    });
+  }
+});
 
 function toggleNav() {
   const n = document.getElementById('nav'), h = document.getElementById('hbg');

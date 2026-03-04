@@ -2,16 +2,29 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <meta name="description" content="Dachdecker in Brandenburg – Blechdach, Flachdach, Dachrinnen, Kamine & Dachfenster. Kostenlose Besichtigung."/>
+  <meta name="description" content="Dachdecker in Brandenburg. Flachdach, Bitumen, Dachreparatur und Dachrinne. Kostenlose Besichtigung und Angebot."/>
+  
   <title>Dachdecker | Maisterdach – Kostenlose Besichtigung</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
+  <link rel="preload" as="image" href="hero-index.jpg"/>
+  <link rel="preload" as="image" href="hero-index.webp" type="image/webp"/>
+<!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17044870869"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-17044870869');
+  </script>
+  <link rel="canonical" href="https://dachjetz.de/index.html"/>
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
 </head>
 <body>
 <header>
-  <a href="index.html" class="logo"><img src="logo.png" alt="Maisterdach" height="40"/> <span>Maister<em>dach</em></span></a>
+  <a href="index.html" class="logo"><img src="logo.png" alt="Maisterdach" width="80" height="40" loading="eager"/> <span>Maister<em>dach</em></span></a>
   <button class="hamburger" id="hbg" onclick="toggleNav()"><span></span><span></span><span></span></button>
 </header>
 <nav class="nav" id="nav">
@@ -23,7 +36,7 @@
   <a href="impressum.html">Impressum</a>
 </nav>
 <section class="hero-index" style="min-height:clamp(320px, 100vw, 520px);">
-  <div class="hero-index-bg" style="background-image:url('hero-index.jpg');"></div>
+  <div class="hero-index-bg" style="background-image:url('hero-index.webp');"></div>
   <div class="hero-index-content">
     <h1>Dachdecker<span class="city-full"> in <span class="city-name"></span> und Umgebung</span></h1>
     <p class="hero-index-sub">Kostenlose Besichtigung und unverbindliches Angebot.</p>
@@ -79,19 +92,20 @@
 </section>
 <section class="contact-sec" id="kontakt">
   <h2>Jetzt <em>kostenlos</em><br/>anfragen</h2>
-  <p class="contact-desc">Füllen Sie das Formular aus oder kontaktieren Sie uns direkt. Wir melden uns innerhalb von 24 Stunden.</p>
+  <p class="contact-desc">Füllen Sie das Formular aus oder kontaktieren Sie uns direkt. Rückmeldung in max. 2 Stunden.</p>
   <div class="contact-btns">
     <a class="btn btn-or call-l" href="#">&#9990;&nbsp; +49 176 88087715</a>
     <a class="btn btn-wa wa-l" href="#">&#128172;&nbsp; Angebot per WhatsApp</a>
   </div>
   <div class="form-box">
-    <form name="kontakt" method="POST" data-netlify="true">
-      <input type="hidden" name="form-name" value="kontakt"/>
+    <form action="https://formspree.io/f/xvzbwbrj" method="POST" id="contact-form" name="kontakt" method="POST">
+      
       <div class="fgroup"><label>Name *</label><input type="text" name="name" required placeholder="Ihr Name"/></div>
       <div class="fgroup"><label>Telefon *</label><input type="tel" name="telefon" required placeholder="Ihre Telefonnummer"/></div>
       <div class="fgroup"><label>PLZ *</label><input type="text" name="plz" required placeholder="Ihre Postleitzahl"/></div>
       <div class="fgroup"><label>Kurzbeschreibung</label><textarea name="nachricht" placeholder="Was können wir für Sie tun?"></textarea></div>
-      <button type="submit" class="btn btn-or">Kostenlos anfragen</button>
+      <button type="submit" class="btn btn-or" style="width:100%;">Kostenlose Besichtigung anfragen</button>
+      <p class="form-success" id="form-success" style="display:none;color:#22C55E;font-weight:700;margin-top:14px;text-align:center;">Vielen Dank! Rückmeldung in max. 2 Stunden.</p>
     </form>
   </div>
 </section><div class="fab-wrap">
@@ -117,5 +131,18 @@
     <a href="datenschutz.html">Datenschutz</a>
   </div>
 </footer>
-<script src="app.js"></script>
+<script src="app.js" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var form = document.getElementById('contact-form');
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      setTimeout(function() {
+        var s = document.getElementById('form-success');
+        if (s) s.style.display = 'block';
+      }, 800);
+    });
+  }
+});
+</script>
 </body></html>

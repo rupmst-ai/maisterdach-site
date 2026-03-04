@@ -245,3 +245,14 @@ footer{background:var(--dk);padding:36px 20px 24px}
   font-weight: 500;
   margin-bottom: 20px;
 }
+
+/* TRUST SECTION */
+.trust-sec { background: #fff; padding: 18px 20px; border-bottom: 1px solid var(--bdr); }
+.trust-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.trust-item { display: flex; align-items: center; gap: 8px; font-size: .85rem; font-weight: 600; color: var(--txt); }
+.trust-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+/* FORM SECTION */
+.form-sec { background: var(--bg); padding: 40px 20px; }
+.form-sec h2 { font-size: 1.5rem; font-weight: 900; margin-bottom: 6px; color: var(--txt); }
+.form-sec p { font-size: .9rem; color: var(--mid); margin-bottom: 20px; }
