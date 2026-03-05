@@ -1,0 +1,4 @@
+/flachdach.html* /flachdach.html 200
+/blechdach.html* /blechdach.html 200
+/klempner.html* /klempner.html 200
+/index.html* /index.html 200
