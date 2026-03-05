@@ -24,7 +24,7 @@
 <body>
 <header>
   <a href="index.html" class="logo"><img src="logo.png" alt="Maisterdach" width="80" height="40" loading="eager"/> <span>Maister<em>dach</em></span></a>
-  <button class="hamburger" id="hbg" onclick="toggleNav()" aria-label="Meniu navigare" aria-expanded="false"><span></span><span></span><span></span></button>
+  <button class="hamburger" id="hbg" onclick="toggleNav()"><span></span><span></span><span></span></button>
 </header>
 <nav class="nav" id="nav">
   <a href="index.html" class='active'>Startseite</a>
@@ -90,6 +90,34 @@
     <div class="step"><div class="step-num">3</div><h3>Umsetzung</h3><p>Nach Zusage starten wir zeitnah mit der Arbeit.</p></div>
   </div>
 </section>
+
+<!-- FAQ CU PRETURI -->
+<section class="faq-sec">
+  <h2>Häufige Fragen &amp; Preise</h2>
+  <div class="faq-list">
+    <div class="faq-item open" id="faq1">
+      <button class="faq-trigger" onclick="faq('faq1')">Was kostet eine Dachreparatur? <span class="faq-chev">▾</span></button>
+      <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Ab 40 €/m² inkl. Material. Der genaue Preis hängt von Dachfläche, Zustand und Material ab. Kostenlose Besichtigung – verbindliches Angebot danach.</div></div></div>
+    </div>
+    <div class="faq-item" id="faq2">
+      <button class="faq-trigger" onclick="faq('faq2')">Was kostet ein neues Flachdach? <span class="faq-chev">▾</span></button>
+      <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Flachdach-Abdichtung ab 40 €/m², Komplettsanierung ab 80 €/m². Abhängig von Fläche, Material und Zustand des Untergrunds.</div></div></div>
+    </div>
+    <div class="faq-item" id="faq3">
+      <button class="faq-trigger" onclick="faq('faq3')">Was kostet ein Blechdach? <span class="faq-chev">▾</span></button>
+      <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Blechdach-Montage ab 35 €/m² inkl. Material. Trapezblech und Ziegeloptik verfügbar. Preis je nach Dachform und Größe.</div></div></div>
+    </div>
+    <div class="faq-item" id="faq4">
+      <button class="faq-trigger" onclick="faq('faq4')">Gibt es eine Gewährleistung? <span class="faq-chev">▾</span></button>
+      <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Ja, wir geben Gewährleistung auf alle unsere Arbeiten. Details werden schriftlich im Angebot festgehalten.</div></div></div>
+    </div>
+    <div class="faq-item" id="faq5">
+      <button class="faq-trigger" onclick="faq('faq5')">Wie schnell können Sie kommen? <span class="faq-chev">▾</span></button>
+      <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Besichtigung meist innerhalb von 1–2 Werktagen. Bei dringenden Schäden versuchen wir einen Termin am selben Tag.</div></div></div>
+    </div>
+  </div>
+</section>
+
 <section class="contact-sec" id="kontakt">
   <h2>Jetzt <em>kostenlos</em><br/>anfragen</h2>
   <p class="contact-desc">Füllen Sie das Formular aus oder kontaktieren Sie uns direkt. Rückmeldung in max. 2 Stunden.</p>
@@ -115,15 +143,15 @@
   <div class="footer-logo"><img src="logo.png" alt="Maisterdach" height="36" style="vertical-align:middle;margin-right:8px;"/>Maister<em>dach</em></div>
   <p class="footer-desc">Ihr Ansprechpartner für Dacharbeiten in Brandenburg und Umgebung. Kostenlose Besichtigung &amp; unverbindliches Angebot.</p>
   <div class="footer-sec">
-    <h3>Leistungen</h3>
+    <h4>Leistungen</h4>
     <a href="flachdach.html">Flachdach &amp; Bitumen</a>
     <a href="blechdach.html">Blechdach Montage</a>
     <a href="klempner.html">Dachrinnen, Kamine &amp; Dachfenster</a>
   </div>
   <div class="footer-sec">
-    <h3>Kontakt</h3>
-    <div class="f-contact"><em>📞</em> <a href="tel:+4917688087715" style="color:rgba(255,255,255,.80)">+49 176 88087715</a></div>
-    <div class="f-contact"><em>✉️</em> <a href="mailto:dachgmbh01@gmail.com" style="color:rgba(255,255,255,.80)">dachgmbh01@gmail.com</a></div>
+    <h4>Kontakt</h4>
+    <div class="f-contact"><em>📞</em> <a href="tel:+4917688087715" style="color:rgba(255,255,255,.5)">+49 176 88087715</a></div>
+    <div class="f-contact"><em>✉️</em> <a href="mailto:dachgmbh01@gmail.com" style="color:rgba(255,255,255,.5)">dachgmbh01@gmail.com</a></div>
   </div>
   <div class="footer-bottom">
     © 2026 Maisterdach. Alle Rechte vorbehalten.<br/>
