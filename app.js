@@ -47,6 +47,30 @@ function applyLinks() {
     ? 'Dachdecker in ' + city + ' | Dachreparatur & Flachdach'
     : 'Dachdecker Brandenburg | Dachreparatur & Flachdach';
 
+
+
+  // ── Force all FAQ panels open ──
+  document.querySelectorAll('.faq-item').forEach(el => {
+    el.classList.add('open');
+    var panel = el.querySelector('.faq-panel');
+    var chev = el.querySelector('.faq-chev');
+    if (panel) panel.style.cssText = 'display:block !important; grid-template-rows:1fr !important;';
+    if (chev) chev.style.display = 'none';
+  });
+  document.querySelectorAll('.faq-inner').forEach(el => {
+    el.style.overflow = 'visible';
+  });
+
+  // ── Propagate city to all internal links ──
+  if (city) {
+    document.querySelectorAll('a[href]').forEach(el => {
+      const href = el.getAttribute('href');
+      if (href && href.endsWith('.html') && !href.startsWith('http') && !href.includes('?')) {
+        el.href = href + '?city=' + encodeURIComponent(city);
+      }
+    });
+  }
+
   // ── WhatsApp message ──
   const template = PAGE_MESSAGES[path] || PAGE_MESSAGES['index.html'];
   const msg = template.replace('{Loc}', loc);
