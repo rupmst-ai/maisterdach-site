@@ -48,6 +48,25 @@ function applyLinks() {
     ? 'Dachdecker in ' + city + ' | Maisterdach – Kostenlose Besichtigung'
     : 'Maisterdach – Ihr Dachdecker | Kostenlose Besichtigung';
 
+  // Dynamic meta description based on city
+  const META_DESC = {
+    'index.html':                    'Dachdecker {City}. Flachdach, Bitumen, Dachreparatur und Dachrinne. Kostenlose Besichtigung und Angebot.',
+    'flachdach.html':                'Flachdach Abdichtung {City} – ab 50 € / m² inkl. Material. Kostenlose Besichtigung.',
+    'blechdach.html':                'Blechdach Montage {City} – Trapezblech ab 50 €/m², Ziegeloptik ab 60 €/m². Kostenlose Besichtigung.',
+    'dachrinne.html':                'Dachrinnen Montage & Reparatur {City} – schnelle Hilfe, faire Preise. Kostenlose Besichtigung.',
+    'dachfenster.html':              'Dachfenster Einbau {City} – professionelle Montage, alle Marken. Kostenlose Besichtigung.',
+    'dachkasten.html':               'Dachkasten Arbeiten {City} – Montage, Reparatur, Verkleidung. Kostenlose Besichtigung.',
+    'schornsteinverkleidung.html':   'Schornsteinverkleidung {City} – sauber, dicht, langlebig. Kostenlose Besichtigung.',
+    'dachreparatur.html':            'Dachreparatur {City} – schnelle Hilfe bei Schäden. Kostenlose Besichtigung und Angebot.',
+    'reinigung-beschichtung.html':   'Dachreinigung & Beschichtung {City} – professionell und günstig. Kostenlose Besichtigung.',
+    'sanierung-grosser-daecher.html':'Sanierung großer Dächer {City} – Gewerbe & Industrie. Kostenlose Besichtigung.'
+  };
+  const descTemplate = META_DESC[path] || META_DESC['index.html'];
+  const cityInDesc = city ? 'in ' + city : 'in Ihrer Nähe';
+  const descText = descTemplate.replace('{City}', cityInDesc);
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.setAttribute('content', descText);
+
   const template = PAGE_MESSAGES[path] || PAGE_MESSAGES['index.html'];
   const locStr = city ? 'in ' + city : '';
   const msg = template.replace(' {Loc}', locStr ? ' ' + locStr : '').trim();
