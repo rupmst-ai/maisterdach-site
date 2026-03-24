@@ -48,10 +48,7 @@ function applyLinks() {
     ? 'Dachdecker in ' + city + ' | Maisterdach – Kostenlose Besichtigung'
     : 'Maisterdach – Ihr Dachdecker | Kostenlose Besichtigung';
 
-  const template = PAGE_MESSAGES[path] || PAGE_MESSAGES['index.html'];
-  const locStr = city ? 'in ' + city : '';
-  const msg = template.replace(' {Loc}', locStr ? ' ' + locStr : '').trim();
-  const waURL = 'https://wa.me/4917688087715?text=' + encodeURIComponent(msg);
+  const waURL = 'https://wa.me/4917688087715';
 
   document.querySelectorAll('.wa-l, .whatsapp-link').forEach(el => {
     el.href = waURL;
