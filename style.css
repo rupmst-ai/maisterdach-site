@@ -433,3 +433,19 @@ body { padding-bottom: 110px; }
   font-weight: 700;
   font-size: 1rem;
 }
+
+/* ═══ AKTION PREIS ═══ */
+.svc-card{position:relative;}
+.aktion-badge{
+  position:absolute;top:12px;right:12px;
+  background:linear-gradient(135deg,#ef4444,#dc2626);
+  color:#fff;font-size:.68rem;font-weight:800;
+  padding:4px 10px;border-radius:99px;
+  letter-spacing:.3px;box-shadow:0 2px 8px rgba(239,68,68,.4);
+  text-transform:uppercase;z-index:2;
+}
+.preis-block{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+.preis-alt{font-size:.97rem;font-weight:600;color:#9ca3af;text-decoration:line-through;text-decoration-color:#ef4444;text-decoration-thickness:2px;}
+.preis-neu{font-size:1.2rem;font-weight:900;color:var(--or);}
+.preis-unit{font-size:.8rem;font-weight:600;color:var(--mid);}
+.aktion-line{font-size:.8rem;font-weight:700;color:#dc2626;margin-bottom:12px;}
