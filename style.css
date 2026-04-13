@@ -449,3 +449,159 @@ body { padding-bottom: 110px; }
 .preis-neu{font-size:1.2rem;font-weight:900;color:var(--or);}
 .preis-unit{font-size:.8rem;font-weight:600;color:var(--mid);}
 .aktion-line{font-size:.8rem;font-weight:700;color:#dc2626;margin-bottom:12px;}
+
+/* ═══════════════════════════════════════
+   DESKTOP RESPONSIVE (min-width: 768px)
+═══════════════════════════════════════ */
+@media (min-width: 768px) {
+  /* Stop pulse animation on desktop — looks bad */
+  .btn-or.call-l, .btn-wa.wa-l,
+  .sticky-btn-call, .sticky-btn-wa,
+  .fab-wa, .fab-or { animation: none !important; }
+
+  /* Max width container */
+  body { max-width: 1200px; margin: 0 auto; }
+
+  /* Header */
+  header { padding: 0 40px; height: 68px; }
+  .logo span { font-size: 1.3rem; }
+
+  /* Hero — side by side on desktop */
+  .hero, .hero-index {
+    flex-direction: row;
+    min-height: 480px;
+  }
+  .hero-bg, .hero-index-bg {
+    width: 50%;
+    height: auto;
+    min-height: 480px;
+    flex-shrink: 0;
+  }
+  .hero-content, .hero-index-content {
+    width: 50%;
+    padding: 48px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hero h1, .hero-index h1 {
+    font-size: 2.8rem;
+  }
+  .hero-btns {
+    flex-direction: row;
+    gap: 12px;
+  }
+  .hero-btns .btn {
+    width: auto;
+    padding: 16px 28px;
+  }
+
+  /* Sections */
+  .sec { padding: 64px 48px; }
+
+  /* Service cards grid */
+  .svc-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  /* Warum grid */
+  .warum-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  /* Steps row */
+  .steps {
+    flex-direction: row;
+    justify-content: center;
+    gap: 48px;
+    align-items: flex-start;
+  }
+  .step { max-width: 220px; }
+
+  /* FAQ 2 column */
+  .faq-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* Contact section */
+  .contact-sec { padding: 48px; }
+  .contact-btns {
+    flex-direction: row;
+    gap: 12px;
+  }
+  .contact-btns .btn {
+    width: auto;
+    padding: 16px 28px;
+  }
+
+  /* Sticky bar — smaller on desktop */
+  .sticky-bar {
+    padding: 10px 24px 12px;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+  .sticky-bar-top {
+    flex: 1;
+    gap: 10px;
+  }
+  .sticky-btn {
+    padding: 11px 20px;
+    font-size: .9rem;
+  }
+  .sticky-btn-anfrage {
+    width: auto;
+    padding: 11px 28px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  body { padding-bottom: 70px; }
+
+  /* Check list 2 col */
+  .check-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 32px;
+  }
+
+  /* Mid CTA */
+  .mid-cta-btns {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .mid-cta-btns .btn {
+    width: auto;
+    padding: 16px 32px;
+  }
+
+  /* Footer grid */
+  footer { padding: 48px; }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+  }
+
+  /* Images in cards — better height on desktop */
+  .svc-card img {
+    height: 180px;
+  }
+
+  /* Form box wider */
+  .form-box { max-width: 600px; }
+}
+
+@media (min-width: 1024px) {
+  .svc-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .hero h1, .hero-index h1 {
+    font-size: 3rem;
+  }
+}

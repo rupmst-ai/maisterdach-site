@@ -1,14 +1,18 @@
 const WA = '4917688087715', PHONE = '+4917688087715';
 const GTAG_ID = 'AW-17044870869';
-const FALLBACK_LOC = '';
-const FALLBACK_REGION = 'in Ihrer Nähe';
+const FALLBACK_CITY = '';
+const CITY_COOKIE = 'md_city';
+const COOKIE_DAYS = 7;
 
-const PAGE_MESSAGES = {
-  'index.html':     'Hallo, ich habe ein Problem mit meinem Dach {Loc}. Bitte um kurzen Rückruf oder Angebot.',
-  'flachdach.html': 'Hallo, ich brauche Hilfe mit einem Flachdach {Loc}. Bitte um kurzen Rückruf oder Angebot.',
-  'blechdach.html': 'Hallo, ich brauche Hilfe mit einem Blechdach {Loc}. Bitte um kurzen Rückruf oder Angebot.',
-  'klempner.html':  'Hallo, ich brauche Hilfe mit Dachrinne oder Fallrohr {Loc}. Bitte um kurzen Rückruf oder Angebot.',
-};
+function setCookie(name, value, days) {
+  var d = new Date();
+  d.setTime(d.getTime() + (days * 864e5));
+  document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+}
+function getCookie(name) {
+  var v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+  return v ? decodeURIComponent(v.pop()) : '';
+}
 
 function trackConversion(label) {
   if (typeof gtag !== 'undefined') {
@@ -16,134 +20,164 @@ function trackConversion(label) {
   }
 }
 
-function applyLinks() {
-  const rawCity = (new URLSearchParams(window.location.search).get('city') || '');
-  // Only accept valid city names — reject Google Ads placeholders
-  const city = /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(rawCity) ? rawCity.trim() : '';
+function applyCity(city) {
+  if (!city) return;
 
-  const path = window.location.pathname.split('/').pop() || 'index.html';
-  const loc  = city ? 'in ' + city : FALLBACK_LOC;
+  document.querySelectorAll('.city').forEach(function(el) { el.textContent = city; });
 
-  // city-full: show only when city is valid
-  document.querySelectorAll('.city-full').forEach(el => {
-    if (city) {
-      el.style.display = '';
-      el.querySelector('.city-name') && (el.querySelector('.city-name').textContent = city);
-    } else {
-      el.style.display = 'none';
-    }
+  document.querySelectorAll('.city-full').forEach(function(el) {
+    el.style.display = '';
+    var cn = el.querySelector('.city-name');
+    if (cn) cn.textContent = city;
   });
 
-  // city-sub: show only when city is valid
-  document.querySelectorAll('.city-sub').forEach(el => {
-    if (city) {
-      el.textContent = 'in ' + city + ' und Umgebung';
-      el.style.display = '';
-    } else {
-      el.style.display = 'none';
-    }
+  document.querySelectorAll('.city-sub').forEach(function(el) {
+    el.textContent = 'in ' + city + ' und Umgebung';
+    el.style.display = '';
   });
 
-  document.title = city
-    ? 'Dachdecker in ' + city + ' | Maisterdach – Kostenlose Besichtigung'
-    : 'Maisterdach – Ihr Dachdecker | Kostenlose Besichtigung';
+  document.title = 'Dachdecker in ' + city + ' | Maisterdach – Kostenlose Besichtigung';
 
-  const waURL = 'https://wa.me/4917688087715';
-
-  document.querySelectorAll('.wa-l, .whatsapp-link').forEach(el => {
-    el.href = waURL;
-    el.addEventListener('click', function() {
-      trackConversion('whatsapp_click');
-    });
-  });
-
-  document.querySelectorAll('.call-l').forEach(el => {
-    el.href = 'tel:' + PHONE;
-    el.addEventListener('click', function() {
-      trackConversion('phone_call');
-    });
-  });
-
-  // Propagate city to all internal links
-  if (city) {
-    document.querySelectorAll('a[href]').forEach(el => {
-      const href = el.getAttribute('href');
-      if (href && href.endsWith('.html') && !href.startsWith('http') && !href.includes('?')) {
-        el.href = href + '?city=' + encodeURIComponent(city);
-      }
-    });
+  var section = document.getElementById('map-section');
+  if (section) section.style.display = 'block';
+  document.querySelectorAll('.city-map').forEach(function(el) { el.textContent = city; });
+  var mapDiv = document.getElementById('dynamic-map');
+  if (mapDiv && mapDiv.children.length === 0) {
+    var iframe = document.createElement('iframe');
+    iframe.src = 'https://www.google.com/maps?q=' + encodeURIComponent(city + ', Germany') + '&output=embed&z=10';
+    iframe.width = '100%'; iframe.height = '150';
+    iframe.style.cssText = 'border:0;display:block;';
+    iframe.loading = 'lazy';
+    mapDiv.appendChild(iframe);
   }
 
-  // ── Force all FAQ panels open ──
-  document.querySelectorAll('.faq-item').forEach(el => {
+  document.querySelectorAll('a[href]').forEach(function(el) {
+    var href = el.getAttribute('href');
+    if (href && href.endsWith('.html') && !href.startsWith('http') && !href.includes('?')) {
+      el.href = href + '?city=' + encodeURIComponent(city);
+    }
+  });
+}
+
+function detectCity(callback) {
+  // 1. URL param (Google Ads)
+  var rawCity = new URLSearchParams(window.location.search).get('city') || '';
+  if (/^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(rawCity)) {
+    var city = rawCity.trim();
+    setCookie(CITY_COOKIE, city, COOKIE_DAYS);
+    return callback(city);
+  }
+
+  // 2. Cookie
+  var cached = getCookie(CITY_COOKIE);
+  if (cached && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(cached)) {
+    return callback(cached);
+  }
+
+  // 3. ipinfo.io (primary — 50k/month free)
+  fetch('https://ipinfo.io/json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var city = (data.city || '').trim();
+      if (city && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(city)) {
+        setCookie(CITY_COOKIE, city, COOKIE_DAYS);
+        callback(city);
+      } else { tryIpApi(callback); }
+    })
+    .catch(function() { tryIpApi(callback); });
+}
+
+function tryIpApi(callback) {
+  // 4. ip-api.com (fallback)
+  fetch('https://ip-api.com/json/?fields=city&lang=de')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var c = (d.city || '').trim();
+      if (c && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(c)) {
+        setCookie(CITY_COOKIE, c, COOKIE_DAYS);
+        callback(c);
+      } else { callback(FALLBACK_CITY); }
+    })
+    .catch(function() { callback(FALLBACK_CITY); });
+}
+
+function applyLinks() {
+  var waURL = 'https://wa.me/' + WA;
+  document.querySelectorAll('.wa-l, .whatsapp-link').forEach(function(el) {
+    el.href = waURL;
+    el.addEventListener('click', function() { trackConversion('whatsapp_click'); });
+  });
+  document.querySelectorAll('.call-l').forEach(function(el) {
+    el.href = 'tel:' + PHONE;
+    el.addEventListener('click', function() { trackConversion('phone_call'); });
+  });
+}
+
+function forceOpenFAQ() {
+  document.querySelectorAll('.faq-item').forEach(function(el) {
     el.classList.add('open');
     var panel = el.querySelector('.faq-panel');
     var chev = el.querySelector('.faq-chev');
-    if (panel) { panel.style.cssText = 'display:block!important;grid-template-rows:1fr!important;'; }
+    if (panel) panel.style.cssText = 'display:block!important;grid-template-rows:1fr!important;';
     if (chev) chev.style.display = 'none';
   });
-  document.querySelectorAll('.faq-inner').forEach(el => {
-    el.style.overflow = 'visible';
-  });
-
+  document.querySelectorAll('.faq-inner').forEach(function(el) { el.style.overflow = 'visible'; });
 }
-applyLinks();
 
-  // Popup form submission
-  var popupForm = document.getElementById('popup-form');
-  if (popupForm) {
-    popupForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      var data = new FormData(popupForm);
-      fetch(popupForm.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
-      .then(function(r) {
-        if (r.ok) {
-          document.getElementById('popup-success').style.display = 'block';
-          popupForm.reset();
-          setTimeout(function() {
-            document.getElementById('formPopupOverlay').style.display = 'none';
-            localStorage.setItem('popupClosed', 'true');
-          }, 2000);
-        }
-      });
-    });
-  }
-
-// Form submission
 document.addEventListener('DOMContentLoaded', function() {
+  applyLinks();
+  forceOpenFAQ();
+  detectCity(function(city) { if (city) applyCity(city); });
+
   var form = document.getElementById('contact-form');
   if (form) {
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       var data = new FormData(form);
       fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
-      .then(function(response) {
-        if (response.ok) {
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'conversion', { 'send_to': 'AW-17044870869/REPLACE_WITH_LABEL', 'value': 1.0, 'currency': 'EUR' });
+        .then(function(response) {
+          if (response.ok) {
+            if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': GTAG_ID + '/form_submit', 'value': 1.0, 'currency': 'EUR' });
+            var s = document.getElementById('form-success');
+            if (s) s.style.display = 'block';
+            form.reset();
+            var overlay = document.getElementById('formPopupOverlay');
+            if (overlay) overlay.style.display = 'none';
+            localStorage.setItem('popupClosed', 'true');
+          } else { alert('Es gab einen Fehler. Bitte versuchen Sie es erneut.'); }
+        })
+        .catch(function() { alert('Es gab einen Fehler. Bitte versuchen Sie es erneut.'); });
+    });
+  }
+
+  var popupForm = document.getElementById('popup-form');
+  if (popupForm) {
+    popupForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      var data = new FormData(popupForm);
+      fetch(popupForm.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
+        .then(function(r) {
+          if (r.ok) {
+            var s = document.getElementById('popup-success');
+            if (s) s.style.display = 'block';
+            popupForm.reset();
+            setTimeout(function() {
+              var ov = document.getElementById('formPopupOverlay');
+              if (ov) ov.style.display = 'none';
+              localStorage.setItem('popupClosed', 'true');
+            }, 2000);
           }
-          var s = document.getElementById('form-success');
-          if (s) s.style.display = 'block';
-          form.reset();
-          // Close popup if form submitted from popup
-          var overlay = document.getElementById('formPopupOverlay');
-          if (overlay) overlay.style.display = 'none';
-          localStorage.setItem('popupClosed', 'true');
-        } else {
-          alert('Es gab einen Fehler. Bitte versuchen Sie es erneut.');
-        }
-      })
-      .catch(function() { alert('Es gab einen Fehler. Bitte versuchen Sie es erneut.'); });
+        });
     });
   }
 });
 
 function toggleNav() {
-  const n = document.getElementById('nav'), h = document.getElementById('hbg');
+  var n = document.getElementById('nav'), h = document.getElementById('hbg');
   n.classList.toggle('open'); h.classList.toggle('open');
 }
-document.addEventListener('click', e => {
-  const n = document.getElementById('nav'), h = document.getElementById('hbg');
+document.addEventListener('click', function(e) {
+  var n = document.getElementById('nav'), h = document.getElementById('hbg');
   if (n && n.classList.contains('open') && !n.contains(e.target) && !h.contains(e.target)) {
     n.classList.remove('open'); h.classList.remove('open');
   }
@@ -153,13 +187,20 @@ function faq(id) {
   var item = document.getElementById(id);
   if (item) item.classList.toggle('open');
 }
-
 function acc(id) {
-  const item = document.getElementById(id);
-  const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.acc-item').forEach(el => el.classList.remove('open'));
+  var item = document.getElementById(id);
+  var isOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item').forEach(function(el) { el.classList.remove('open'); });
   if (!isOpen) {
     item.classList.add('open');
-    setTimeout(() => item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    setTimeout(function() { item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 50);
   }
+}
+function openStickyForm() {
+  var m = document.getElementById('stickyModal');
+  if (m) { m.classList.add('open'); document.body.style.overflow = 'hidden'; }
+}
+function closeStickyForm() {
+  var m = document.getElementById('stickyModal');
+  if (m) { m.classList.remove('open'); document.body.style.overflow = ''; }
 }
