@@ -292,8 +292,7 @@
     <a href="datenschutz.html">Datenschutz</a>
   </div>
 </footer>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="loc-lookup.js" defer></script>
-<script src="app.js" defer></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="app.js" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var form = document.getElementById('contact-form');
@@ -370,7 +369,29 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 })();
 </script>
-
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var params = new URLSearchParams(window.location.search);
+  var city = params.get('city');
+  if (city && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(city)) {
+    city = city.trim();
+    var section = document.getElementById('map-section');
+    if (section) section.style.display = 'block';
+    document.querySelectorAll('.city-map').forEach(function(el) { el.textContent = city; });
+    var mapDiv = document.getElementById('dynamic-map');
+    if (mapDiv) {
+      var iframe = document.createElement('iframe');
+      iframe.src = 'https://www.google.com/maps?q=' + encodeURIComponent(city + ', Germany') + '&output=embed&z=8';
+      iframe.width = '100%';
+      iframe.height = '150';
+      iframe.style.border = '0';
+      iframe.style.display = 'block';
+      iframe.loading = 'lazy';
+      mapDiv.appendChild(iframe);
+    }
+  }
+});
+</script>
 <!-- STICKY BOTTOM BAR -->
 <div class="sticky-bar">
   <div class="sticky-bar-top">

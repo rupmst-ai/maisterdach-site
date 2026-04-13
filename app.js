@@ -1,5 +1,6 @@
 const WA = '4917688087715', PHONE = '+4917688087715';
 const GTAG_ID = 'AW-17044870869';
+const FALLBACK_CITY = '';
 const CITY_COOKIE = 'md_city';
 const COOKIE_DAYS = 7;
 
@@ -53,13 +54,13 @@ function applyCity(city) {
   document.querySelectorAll('a[href]').forEach(function(el) {
     var href = el.getAttribute('href');
     if (href && href.endsWith('.html') && !href.startsWith('http') && !href.includes('?')) {
-      el.href = href + '?loc_id=' + new URLSearchParams(window.location.search).get('loc_id');
+      el.href = href + '?city=' + encodeURIComponent(city);
     }
   });
 }
 
 function detectCity(callback) {
-  // 1. ?city= param (manual / legacy)
+  // 1. URL param (Google Ads)
   var rawCity = new URLSearchParams(window.location.search).get('city') || '';
   if (/^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(rawCity)) {
     var city = rawCity.trim();
@@ -67,20 +68,37 @@ function detectCity(callback) {
     return callback(city);
   }
 
-  // 2. Daca loc_id e in URL, ignora cookie-ul — loc-lookup.js se ocupa de oras
-  var hasLocId = new URLSearchParams(window.location.search).get('loc_id') || '';
-  if (hasLocId) {
-    return callback('');
-  }
-
-  // 3. Cookie (din vizita anterioara, doar daca nu exista loc_id in URL)
+  // 2. Cookie
   var cached = getCookie(CITY_COOKIE);
   if (cached && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(cached)) {
     return callback(cached);
   }
 
-  // 4. Niciun oras gasit — titlul ramane "Ihr Dachdecker in der Nähe"
-  callback('');
+  // 3. ipinfo.io (primary — 50k/month free)
+  fetch('https://ipinfo.io/json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var city = (data.city || '').trim();
+      if (city && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(city)) {
+        setCookie(CITY_COOKIE, city, COOKIE_DAYS);
+        callback(city);
+      } else { tryIpApi(callback); }
+    })
+    .catch(function() { tryIpApi(callback); });
+}
+
+function tryIpApi(callback) {
+  // 4. ip-api.com (fallback)
+  fetch('https://ip-api.com/json/?fields=city&lang=de')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var c = (d.city || '').trim();
+      if (c && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(c)) {
+        setCookie(CITY_COOKIE, c, COOKIE_DAYS);
+        callback(c);
+      } else { callback(FALLBACK_CITY); }
+    })
+    .catch(function() { callback(FALLBACK_CITY); });
 }
 
 function applyLinks() {
