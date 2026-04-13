@@ -67,19 +67,14 @@ function detectCity(callback) {
     return callback(city);
   }
 
-  // 2. Daca loc_id e in URL, ignora cookie-ul — loc-lookup.js se ocupa de oras
-  var hasLocId = new URLSearchParams(window.location.search).get('loc_id') || '';
-  if (hasLocId) {
-    return callback('');
-  }
-
-  // 3. Cookie (din vizita anterioara, doar daca nu exista loc_id in URL)
+  // 2. Cookie (from previous visit via loc_id or city param)
   var cached = getCookie(CITY_COOKIE);
   if (cached && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(cached)) {
     return callback(cached);
   }
 
-  // 4. Niciun oras gasit — titlul ramane "Ihr Dachdecker in der Nähe"
+  // 3. loc_id is handled by loc-lookup.js — no IP detection, no fallback city
+  // If neither param is present, title stays "Ihr Dachdecker in der Nähe"
   callback('');
 }
 
