@@ -1,86 +1,10 @@
 const WA = '4917688087715', PHONE = '+4917688087715';
 const GTAG_ID = 'AW-17044870869';
-const CITY_COOKIE = 'md_city';
-const COOKIE_DAYS = 7;
-
-function setCookie(name, value, days) {
-  var d = new Date();
-  d.setTime(d.getTime() + (days * 864e5));
-  document.cookie = name + '=' + encodeURIComponent(value) + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
-}
-function getCookie(name) {
-  var v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-  return v ? decodeURIComponent(v.pop()) : '';
-}
 
 function trackConversion(label) {
   if (typeof gtag !== 'undefined') {
     gtag('event', 'conversion', { 'send_to': GTAG_ID + '/' + label });
   }
-}
-
-function applyCity(city) {
-  if (!city) return;
-
-  document.querySelectorAll('.city').forEach(function(el) { el.textContent = city; });
-
-  document.querySelectorAll('.city-full').forEach(function(el) {
-    el.style.display = '';
-    var cn = el.querySelector('.city-name');
-    if (cn) cn.textContent = city;
-  });
-
-  document.querySelectorAll('.city-sub').forEach(function(el) {
-    el.textContent = 'in ' + city + ' und Umgebung';
-    el.style.display = '';
-  });
-
-  document.title = 'Dachdecker in ' + city + ' | Maisterdach – Kostenlose Besichtigung';
-
-  var section = document.getElementById('map-section');
-  if (section) section.style.display = 'block';
-  document.querySelectorAll('.city-map').forEach(function(el) { el.textContent = city; });
-  var mapDiv = document.getElementById('dynamic-map');
-  if (mapDiv && mapDiv.children.length === 0) {
-    var iframe = document.createElement('iframe');
-    iframe.src = 'https://www.google.com/maps?q=' + encodeURIComponent(city + ', Germany') + '&output=embed&z=10';
-    iframe.width = '100%'; iframe.height = '150';
-    iframe.style.cssText = 'border:0;display:block;';
-    iframe.loading = 'lazy';
-    mapDiv.appendChild(iframe);
-  }
-
-  document.querySelectorAll('a[href]').forEach(function(el) {
-    var href = el.getAttribute('href');
-    if (href && href.endsWith('.html') && !href.startsWith('http') && !href.includes('?')) {
-      el.href = href + '?loc_id=' + new URLSearchParams(window.location.search).get('loc_id');
-    }
-  });
-}
-
-function detectCity(callback) {
-  // 1. ?city= param (manual / legacy)
-  var rawCity = new URLSearchParams(window.location.search).get('city') || '';
-  if (/^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(rawCity)) {
-    var city = rawCity.trim();
-    setCookie(CITY_COOKIE, city, COOKIE_DAYS);
-    return callback(city);
-  }
-
-  // 2. Daca loc_id e in URL, ignora cookie-ul — loc-lookup.js se ocupa de oras
-  var hasLocId = new URLSearchParams(window.location.search).get('loc_id') || '';
-  if (hasLocId) {
-    return callback('');
-  }
-
-  // 3. Cookie (din vizita anterioara, doar daca nu exista loc_id in URL)
-  var cached = getCookie(CITY_COOKIE);
-  if (cached && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(cached)) {
-    return callback(cached);
-  }
-
-  // 4. Niciun oras gasit — titlul ramane "Ihr Dachdecker in der Nähe"
-  callback('');
 }
 
 function applyLinks() {
@@ -109,7 +33,6 @@ function forceOpenFAQ() {
 document.addEventListener('DOMContentLoaded', function() {
   applyLinks();
   forceOpenFAQ();
-  detectCity(function(city) { if (city) applyCity(city); });
 
   var form = document.getElementById('contact-form');
   if (form) {
