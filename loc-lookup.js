@@ -1,5 +1,5 @@
 (function () {
-  var FALLBACK = 'in Ihrer Nähe';
+  var FALLBACK = 'in der Nähe';
 
   function getLocId() {
     return new URLSearchParams(window.location.search).get('loc_id') || '';
