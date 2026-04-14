@@ -5,19 +5,7 @@
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <meta name="description" content="Flachdach Sanierung &amp; Abdichtung in Ihrer Nähe – inkl. Material und Montage. Kostenlose Besichtigung."/>
   <title>Flachdach Abdichtung | Maisterdach</title>
-<script>
-(function() {
-  var city = new URLSearchParams(window.location.search).get('city');
-  if (city && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(city)) {
-    var meta = document.querySelector('meta[name="description"]');
-    if (meta) {
-      meta.content = meta.content.replace('Kostenlose Besichtigung', 'in ' + city.trim() + ' – Kostenlose Besichtigung');
-    }
-    document.title = document.title + ' | ' + city.trim();
-  }
-})();
-</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/></noscript>
@@ -309,29 +297,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 })();
-</script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  var params = new URLSearchParams(window.location.search);
-  var city = params.get('city');
-  if (city && /^[a-zA-ZäöüÄÖÜß\s\-]{2,50}$/.test(city)) {
-    city = city.trim();
-    var section = document.getElementById('map-section');
-    if (section) section.style.display = 'block';
-    document.querySelectorAll('.city-map').forEach(function(el) { el.textContent = city; });
-    var mapDiv = document.getElementById('dynamic-map');
-    if (mapDiv) {
-      var iframe = document.createElement('iframe');
-      iframe.src = 'https://www.google.com/maps?q=' + encodeURIComponent(city + ', Germany') + '&output=embed&z=8';
-      iframe.width = '100%';
-      iframe.height = '150';
-      iframe.style.border = '0';
-      iframe.style.display = 'block';
-      iframe.loading = 'lazy';
-      mapDiv.appendChild(iframe);
-    }
-  }
-});
 </script>
 <!-- STICKY BOTTOM BAR -->
 <div class="sticky-bar">

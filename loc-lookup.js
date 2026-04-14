@@ -1,13 +1,30 @@
 (function () {
   var FALLBACK = 'in der Nähe';
 
-  function getLocId() {
-    return new URLSearchParams(window.location.search).get('loc_id') || '';
+  // Citeste parametrul din URL — suporta toate variantele:
+  // ?loc_physical_ms=1003853  (Google Ads direct)
+  // ?loc_id=1003853           (tracking template)
+  // ?city=Berlin              (fallback text direct)
+  function getParams() {
+    var p = new URLSearchParams(window.location.search);
+    return {
+      locId: p.get('loc_physical_ms') || p.get('loc_id') || ''
+    };
   }
 
   function applyCity(city) {
     var name = (city && city.trim()) ? city.trim() : '';
 
+    // Actualizeaza <title> si <meta description>
+    if (name) {
+      document.title = 'Dachdecker in ' + name + ' | Maisterdach – Kostenlose Besichtigung';
+      var meta = document.querySelector('meta[name="description"]');
+      if (meta) {
+        meta.content = meta.content.replace('Kostenlose Besichtigung', 'in ' + name + ' – Kostenlose Besichtigung');
+      }
+    }
+
+    // Actualizeaza elementele .city
     document.querySelectorAll('.city').forEach(function (el) {
       el.textContent = name || FALLBACK;
     });
@@ -27,9 +44,8 @@
       }
     });
 
+    // Afiseaza harta daca exista oras
     if (name) {
-      document.title = 'Dachdecker in ' + name + ' | Maisterdach – Kostenlose Besichtigung';
-
       var section = document.getElementById('map-section');
       if (section) section.style.display = 'block';
 
@@ -49,8 +65,9 @@
       }
     }
 
-    // Propagă loc_id în toate link-urile interne
-    var locId = getLocId();
+    // Propaga loc_id in toate link-urile interne
+    var params = getParams();
+    var locId = params.locId;
     if (locId) {
       document.querySelectorAll('a[href]').forEach(function (el) {
         var href = el.getAttribute('href');
@@ -62,20 +79,21 @@
   }
 
   function run() {
-    var locId = getLocId();
+    var params = getParams();
 
-    if (!locId) {
+    // Daca avem loc_id sau loc_physical_ms, cauta in JSON
+    if (!params.locId) {
       applyCity('');
       return;
     }
 
-    fetch('/de-cities.json')
+    fetch('de-cities.json')
       .then(function (r) {
         if (!r.ok) throw new Error('fetch failed');
         return r.json();
       })
       .then(function (map) {
-        var city = map[locId] || '';
+        var city = map[params.locId] || '';
         applyCity(city);
       })
       .catch(function () {
