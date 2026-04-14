@@ -70,6 +70,11 @@
   var locId = getLocId();
   if (!locId) return;
 
+  // Sterge cookie-ul vechi imediat, ca detectCity() sa nu aplice orasul din vizita anterioara
+  try {
+    document.cookie = 'md_city=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;SameSite=Lax';
+  } catch(e) {}
+
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() { run(locId); });
   } else {
