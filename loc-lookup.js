@@ -5,8 +5,9 @@
  */
 (function() {
   var JSON_URL = 'de-cities.json';
-  var CACHE_KEY = 'md_geo_de';
-  var CACHE_TS  = 'md_geo_ts';
+  var CACHE_VER = '2026-03-31';
+  var CACHE_KEY = 'md_geo_de_' + CACHE_VER;
+  var CACHE_TS  = 'md_geo_ts_' + CACHE_VER;
   var CACHE_DAYS = 30;
 
   function getLocId() {
