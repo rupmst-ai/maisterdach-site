@@ -1,10 +1,6 @@
 (function () {
   var FALLBACK = 'Berlin und Brandenburg';
 
-  // Citeste parametrul din URL — suporta toate variantele:
-  // ?loc_physical_ms=1003853  (Google Ads direct)
-  // ?loc_id=1003853           (tracking template)
-  // ?city=Berlin              (fallback text direct)
   function getParams() {
     var p = new URLSearchParams(window.location.search);
     return {
@@ -12,52 +8,44 @@
     };
   }
 
-  function applyCity(city) {
-    var name = (city && city.trim()) ? city.trim() : '';
+  function applyCity(name) {
+    name = (name && name.trim()) ? name.trim() : '';
+    var display = name || FALLBACK;
 
     // Actualizeaza <title> si <meta description>
-    if (name) {
-      document.title = 'Dachdecker in ' + name + ' | Maisterdach – Kostenlose Besichtigung';
-      var meta = document.querySelector('meta[name="description"]');
-      if (meta) {
-        meta.content = meta.content.replace('Kostenlose Besichtigung', 'in ' + name + ' – Kostenlose Besichtigung');
-      }
-    } else {
-      document.title = 'Dachdecker in Berlin und Brandenburg | Maisterdach – Kostenlose Besichtigung';
-      var meta = document.querySelector('meta[name="description"]');
-      if (meta) {
-        meta.content = meta.content.replace('Kostenlose Besichtigung', 'in Berlin und Brandenburg – Kostenlose Besichtigung');
-      }
+    document.title = 'Dachdecker in ' + display + ' | Maisterdach – Kostenlose Besichtigung';
+    var meta = document.querySelector('meta[name="description"]');
+    if (meta) {
+      meta.content = meta.content.replace('Kostenlose Besichtigung', 'in ' + display + ' – Kostenlose Besichtigung');
     }
 
-    // Actualizeaza elementele .city
+    // .city
     document.querySelectorAll('.city').forEach(function (el) {
-      el.textContent = name || FALLBACK;
+      el.textContent = display;
     });
 
+    // .city-full — afiseaza intotdeauna
     document.querySelectorAll('.city-full').forEach(function (el) {
-      el.style.display = name ? '' : 'none';
+      el.style.display = '';
       var cn = el.querySelector('.city-name');
-      if (cn) cn.textContent = name;
+      if (cn) cn.textContent = display;
     });
 
+    // .city-sub
     document.querySelectorAll('.city-sub').forEach(function (el) {
-      if (name) {
-        el.textContent = 'in ' + name + ' und Umgebung';
-        el.style.display = '';
-      } else {
-        el.style.display = 'none';
-      }
+      el.textContent = 'in ' + display + ' und Umgebung';
+      el.style.display = '';
     });
 
-    // Afiseaza harta daca exista oras
+    // .city-map
+    document.querySelectorAll('.city-map').forEach(function (el) {
+      el.textContent = display;
+    });
+
+    // Harta — doar daca avem oras real (nu fallback generic)
     if (name) {
       var section = document.getElementById('map-section');
       if (section) section.style.display = 'block';
-
-      document.querySelectorAll('.city-map').forEach(function (el) {
-        el.textContent = name;
-      });
 
       var mapDiv = document.getElementById('dynamic-map');
       if (mapDiv && mapDiv.children.length === 0) {
@@ -71,9 +59,8 @@
       }
     }
 
-    // Propaga loc_id in toate link-urile interne
-    var params = getParams();
-    var locId = params.locId;
+    // Propaga loc_id in link-urile interne
+    var locId = getParams().locId;
     if (locId) {
       document.querySelectorAll('a[href]').forEach(function (el) {
         var href = el.getAttribute('href');
@@ -85,10 +72,9 @@
   }
 
   function run() {
-    var params = getParams();
+    var locId = getParams().locId;
 
-    // Daca avem loc_id sau loc_physical_ms, cauta in JSON
-    if (!params.locId) {
+    if (!locId) {
       applyCity('');
       return;
     }
@@ -99,8 +85,7 @@
         return r.json();
       })
       .then(function (map) {
-        var city = map[params.locId] || '';
-        applyCity(city);
+        applyCity(map[locId] || '');
       })
       .catch(function () {
         applyCity('');
