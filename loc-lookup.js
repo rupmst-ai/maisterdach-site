@@ -1,5 +1,5 @@
 (function () {
-  var FALLBACK = 'in der Nähe';
+  var FALLBACK = 'Berlin und Brandenburg';
 
   // Citeste parametrul din URL — suporta toate variantele:
   // ?loc_physical_ms=1003853  (Google Ads direct)
@@ -21,6 +21,12 @@
       var meta = document.querySelector('meta[name="description"]');
       if (meta) {
         meta.content = meta.content.replace('Kostenlose Besichtigung', 'in ' + name + ' – Kostenlose Besichtigung');
+      }
+    } else {
+      document.title = 'Dachdecker in Berlin und Brandenburg | Maisterdach – Kostenlose Besichtigung';
+      var meta = document.querySelector('meta[name="description"]');
+      if (meta) {
+        meta.content = meta.content.replace('Kostenlose Besichtigung', 'in Berlin und Brandenburg – Kostenlose Besichtigung');
       }
     }
 
