@@ -42,13 +42,17 @@
 
     // Title si meta
     if (name) {
-      document.title = 'Dachdecker in ' + name + ' und Region | Maisterdach – Kostenlose Besichtigung';
+      // Insereaza orasul in titlul existent al paginii (nu il suprascrie)
+      var currentTitle = document.title;
+      if (currentTitle.indexOf(' | ') !== -1) {
+        document.title = currentTitle.replace(' | ', ' in ' + name + ' | ');
+      } else {
+        document.title = currentTitle + ' in ' + name;
+      }
       var meta = document.querySelector('meta[name="description"]');
       if (meta) {
-        meta.content = meta.content.replace('Kostenlose Besichtigung', 'in ' + name + ' und Region – Kostenlose Besichtigung');
+        meta.content = meta.content.replace('Kostenlose Besichtigung', 'in ' + name + ' – Kostenlose Besichtigung');
       }
-    } else {
-      document.title = 'Dachdecker | Maisterdach – Kostenlose Besichtigung';
     }
 
     // .city
