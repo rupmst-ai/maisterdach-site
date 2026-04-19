@@ -8,6 +8,22 @@
     };
   }
 
+  // Verifica daca valoarea din JSON e un nume de oras valid
+  // (nu un numar, nu un cod scurt, nu un district generic)
+  function isValidCityName(name) {
+    if (!name || name.trim() === '') return false;
+    var n = name.trim();
+    // Respinge daca e doar cifre
+    if (/^\d+$/.test(n)) return false;
+    // Respinge daca e prea scurt (sub 3 caractere)
+    if (n.length < 3) return false;
+    // Respinge daca contine "District" sau "Stadtbezirk" sau similar
+    if (/^district\s*\d+$/i.test(n)) return false;
+    if (/^stadtbezirk/i.test(n)) return false;
+    if (/^stadtbezirke/i.test(n)) return false;
+    return true;
+  }
+
   function sendAnalyticsEvent(city, locId) {
     if (typeof gtag !== 'function') return;
     gtag('event', 'location_detected', {
@@ -19,7 +35,7 @@
   }
 
   function applyCity(name, locId) {
-    name = (name && name.trim()) ? name.trim() : '';
+    name = (name && isValidCityName(name)) ? name.trim() : '';
 
     // Trimite event la Google Analytics
     sendAnalyticsEvent(name, locId);
@@ -40,7 +56,7 @@
       el.textContent = name ? name + ' und Region' : FALLBACK_DISPLAY;
     });
 
-    // .city-full — cu oras: "in Potsdam und Region", fara: ascuns
+    // .city-full — cu oras: afiseaza, fara: ascunde
     document.querySelectorAll('.city-full').forEach(function (el) {
       if (name) {
         el.style.display = '';
