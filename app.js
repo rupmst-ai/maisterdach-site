@@ -30,49 +30,95 @@ function forceOpenFAQ() {
   document.querySelectorAll('.faq-inner').forEach(function(el) { el.style.overflow = 'visible'; });
 }
 
+function buildWhatsAppMsg(formEl) {
+  var name      = (formEl.querySelector('[name="name"]') || {}).value || '';
+  var telefon   = (formEl.querySelector('[name="telefon"]') || {}).value || '';
+  var plz       = (formEl.querySelector('[name="plz"]') || {}).value || '';
+  var nachricht = (formEl.querySelector('[name="nachricht"]') || {}).value || '';
+  var page      = document.title || '';
+
+  return '🏠 *Neue Anfrage – Maisterdach*\n\n'
+    + '👤 Name: ' + name + '\n'
+    + '📞 Telefon: ' + telefon + '\n'
+    + '📍 PLZ: ' + plz + '\n'
+    + (nachricht ? '💬 Nachricht: ' + nachricht + '\n' : '')
+    + '\n📄 Seite: ' + page;
+}
+
+function submitToFormspreeAndWhatsApp(formEl, onSuccess) {
+  if (!formEl.checkValidity()) { formEl.reportValidity(); return; }
+
+  var data = new FormData(formEl);
+
+  // 1. Trimite la Formspree
+  fetch(formEl.action, {
+    method: 'POST',
+    body: data,
+    headers: { 'Accept': 'application/json' }
+  })
+  .then(function(r) {
+    // 2. Indiferent de raspuns, deschide WhatsApp
+    var url = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(buildWhatsAppMsg(formEl));
+    window.open(url, '_blank');
+
+    trackConversion('form_submit');
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'form_submit_whatsapp', { 'event_category': 'Lead', 'event_label': document.title });
+    }
+
+    formEl.reset();
+    if (onSuccess) onSuccess();
+  })
+  .catch(function() {
+    // Chiar daca Formspree esueaza, deschidem WhatsApp — lead-ul nu se pierde
+    var url = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(buildWhatsAppMsg(formEl));
+    window.open(url, '_blank');
+    formEl.reset();
+    if (onSuccess) onSuccess();
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   applyLinks();
   forceOpenFAQ();
 
-  var form = document.getElementById('contact-form');
-  if (form) {
-    form.addEventListener('submit', function(e) {
+  // 1. Formularul principal
+  var mainForm = document.getElementById('contact-form');
+  if (mainForm) {
+    mainForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      var data = new FormData(form);
-      fetch(form.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
-        .then(function(response) {
-          if (response.ok) {
-            if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': GTAG_ID + '/form_submit', 'value': 1.0, 'currency': 'EUR' });
-            var s = document.getElementById('form-success');
-            if (s) s.style.display = 'block';
-            form.reset();
-            var overlay = document.getElementById('formPopupOverlay');
-            if (overlay) overlay.style.display = 'none';
-            localStorage.setItem('popupClosed', 'true');
-          } else { alert('Es gab einen Fehler. Bitte versuchen Sie es erneut.'); }
-        })
-        .catch(function() { alert('Es gab einen Fehler. Bitte versuchen Sie es erneut.'); });
+      submitToFormspreeAndWhatsApp(mainForm, function() {
+        var s = document.getElementById('form-success');
+        if (s) s.style.display = 'block';
+      });
     });
   }
 
-  var popupForm = document.getElementById('popup-form');
+  // 2. Popup exit-intent
+  var popupForm = document.querySelector('#formPopupOverlay form');
   if (popupForm) {
     popupForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      var data = new FormData(popupForm);
-      fetch(popupForm.action, { method: 'POST', body: data, headers: { 'Accept': 'application/json' } })
-        .then(function(r) {
-          if (r.ok) {
-            var s = document.getElementById('popup-success');
-            if (s) s.style.display = 'block';
-            popupForm.reset();
-            setTimeout(function() {
-              var ov = document.getElementById('formPopupOverlay');
-              if (ov) ov.style.display = 'none';
-              localStorage.setItem('popupClosed', 'true');
-            }, 2000);
-          }
-        });
+      submitToFormspreeAndWhatsApp(popupForm, function() {
+        setTimeout(function() {
+          var ov = document.getElementById('formPopupOverlay');
+          if (ov) ov.style.display = 'none';
+          localStorage.setItem('popupClosed', 'true');
+          localStorage.setItem('popupSubmitted', 'true');
+        }, 1500);
+      });
+    });
+  }
+
+  // 3. Sticky modal form
+  var stickyForm = document.getElementById('stickyForm');
+  if (stickyForm) {
+    stickyForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitToFormspreeAndWhatsApp(stickyForm, function() {
+        var s = document.getElementById('stickySuccess');
+        if (s) { s.style.display = 'block'; stickyForm.style.display = 'none'; }
+      });
     });
   }
 });
