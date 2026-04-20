@@ -1,48 +1,43 @@
 (function () {
-  var FALLBACK_DISPLAY = 'in Ihrer Region';
+  var FALLBACK_DISPLAY = 'in Ihrer Nähe';
 
   function getParams() {
     var p = new URLSearchParams(window.location.search);
     return {
-      locId: p.get('loc_physical_ms') || p.get('loc_id') || ''
+      physicalId: p.get('loc_physical_ms') || p.get('loc_id') || '',
+      interestId: p.get('loc_interest_ms') || ''
     };
   }
 
-  // Verifica daca valoarea din JSON e un nume de oras valid
-  // (nu un numar, nu un cod scurt, nu un district generic)
   function isValidCityName(name) {
     if (!name || name.trim() === '') return false;
     var n = name.trim();
-    // Respinge daca e doar cifre
     if (/^\d+$/.test(n)) return false;
-    // Respinge daca e prea scurt (sub 3 caractere)
     if (n.length < 3) return false;
-    // Respinge daca contine "District" sau "Stadtbezirk" sau similar
     if (/^district\s*\d+$/i.test(n)) return false;
     if (/^stadtbezirk/i.test(n)) return false;
     if (/^stadtbezirke/i.test(n)) return false;
     return true;
   }
 
-  function sendAnalyticsEvent(city, locId) {
+  function sendAnalyticsEvent(city, locId, source) {
     if (typeof gtag !== 'function') return;
     gtag('event', 'location_detected', {
       'event_category': 'Dynamic Location',
       'event_label': city || 'fallback',
       'loc_id': locId || 'none',
-      'city_name': city || 'fallback'
+      'city_name': city || 'fallback',
+      'loc_source': source || 'none'
     });
   }
 
-  function applyCity(name, locId) {
+  function applyCity(name, locId, source) {
     name = (name && isValidCityName(name)) ? name.trim() : '';
 
-    // Trimite event la Google Analytics
-    sendAnalyticsEvent(name, locId);
+    sendAnalyticsEvent(name, locId, source);
 
     // Title si meta
     if (name) {
-      // Insereaza orasul in titlul existent al paginii (nu il suprascrie)
       var currentTitle = document.title;
       if (currentTitle.indexOf(' | ') !== -1) {
         document.title = currentTitle.replace(' | ', ' in ' + name + ' | ');
@@ -60,7 +55,7 @@
       el.textContent = name ? name + ' und Region' : FALLBACK_DISPLAY;
     });
 
-    // .city-full — cu oras: afiseaza, fara: ascunde
+    // .city-full
     document.querySelectorAll('.city-full').forEach(function (el) {
       if (name) {
         el.style.display = '';
@@ -86,7 +81,7 @@
       el.textContent = name ? name + ' und Region' : '';
     });
 
-    // Harta — doar cu oras real
+    // Harta
     if (name) {
       var section = document.getElementById('map-section');
       if (section) section.style.display = 'block';
@@ -103,7 +98,7 @@
       }
     }
 
-    // Propaga loc_id in link-urile interne
+    // Propaga loc_id in linkuri interne
     if (locId) {
       document.querySelectorAll('a[href]').forEach(function (el) {
         var href = el.getAttribute('href');
@@ -115,10 +110,13 @@
   }
 
   function run() {
-    var locId = getParams().locId;
+    var params = getParams();
+    var physicalId = params.physicalId;
+    var interestId = params.interestId;
 
-    if (!locId) {
-      applyCity('', '');
+    // Daca nu avem niciun ID -> fallback "in Ihrer Nähe"
+    if (!physicalId && !interestId) {
+      applyCity('', '', 'none');
       return;
     }
 
@@ -128,10 +126,21 @@
         return r.json();
       })
       .then(function (map) {
-        applyCity(map[locId] || '', locId);
+        // 1. Incearca loc_physical_ms primul
+        if (physicalId && map[physicalId] && isValidCityName(map[physicalId])) {
+          applyCity(map[physicalId], physicalId, 'physical');
+          return;
+        }
+        // 2. Fallback la loc_interest_ms
+        if (interestId && map[interestId] && isValidCityName(map[interestId])) {
+          applyCity(map[interestId], interestId, 'interest');
+          return;
+        }
+        // 3. Fallback generic "in Ihrer Nähe"
+        applyCity('', physicalId || interestId, 'none');
       })
       .catch(function () {
-        applyCity('', locId);
+        applyCity('', physicalId || interestId, 'error');
       });
   }
 
