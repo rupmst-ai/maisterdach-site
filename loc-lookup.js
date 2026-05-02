@@ -81,6 +81,14 @@
       el.textContent = name ? name + ' und Region' : '';
     });
 
+    // .city-service (Impressum Servicegebiet)
+    document.querySelectorAll('.city-service').forEach(function (el) {
+      if (name) {
+        el.textContent = name + ' und Umgebung';
+      }
+      // Daca nu e oras, lasa textul default din HTML (Berlin, Brandenburg etc.)
+    });
+
     // Harta
     if (name) {
       var section = document.getElementById('map-section');
@@ -114,7 +122,6 @@
     var physicalId = params.physicalId;
     var interestId = params.interestId;
 
-    // Daca nu avem niciun ID -> fallback "in Ihrer Nähe"
     if (!physicalId && !interestId) {
       applyCity('', '', 'none');
       return;
@@ -126,17 +133,17 @@
         return r.json();
       })
       .then(function (map) {
-        // 1. Incearca loc_physical_ms primul
-        if (physicalId && map[physicalId] && isValidCityName(map[physicalId])) {
-          applyCity(map[physicalId], physicalId, 'physical');
-          return;
-        }
-        // 2. Fallback la loc_interest_ms
+        // 1. Primul: loc_interest_ms — orasul cautat de user
         if (interestId && map[interestId] && isValidCityName(map[interestId])) {
           applyCity(map[interestId], interestId, 'interest');
           return;
         }
-        // 3. Fallback generic "in Ihrer Nähe"
+        // 2. Al doilea: loc_physical_ms — unde e fizic userul
+        if (physicalId && map[physicalId] && isValidCityName(map[physicalId])) {
+          applyCity(map[physicalId], physicalId, 'physical');
+          return;
+        }
+        // 3. Fallback generic
         applyCity('', physicalId || interestId, 'none');
       })
       .catch(function () {
