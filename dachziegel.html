@@ -250,34 +250,64 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 </script>
-<div id="formPopupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;justify-content:center;align-items:center;padding:20px;box-sizing:border-box;">
-  <div style="background:#fff;border-radius:12px;padding:28px 24px;max-width:420px;width:100%;position:relative;max-height:90vh;overflow-y:auto;">
-    <button id="closePopup" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:#555;">✕</button>
-    <h3 style="margin:0 0 6px;font-size:1.3rem;font-weight:900;">Kostenlose Besichtigung</h3>
-    <p style="margin:0 0 18px;color:#666;font-size:.9rem;">Rückmeldung in max. 2 Stunden.</p>
-    <form action="https://formspree.io/f/xvzbwbrj" method="POST">
-      <div style="margin-bottom:12px;"><input type="text" name="name" required placeholder="Ihr Name" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:.95rem;box-sizing:border-box;"/></div>
-      <div style="margin-bottom:12px;"><input type="tel" name="telefon" required placeholder="Telefonnummer" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:.95rem;box-sizing:border-box;"/></div>
-      <div style="margin-bottom:12px;"><input type="text" name="plz" required placeholder="PLZ" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:.95rem;box-sizing:border-box;"/></div>
-      <button type="submit" style="width:100%;padding:14px;background:#F97316;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;">Jetzt anfragen</button>
-    </form>
+<!-- EXIT INTENT POPUP - WhatsApp + Anruf -->
+<div id="formPopupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:9999;justify-content:center;align-items:center;padding:20px;box-sizing:border-box;">
+  <div style="background:#fff;border-radius:16px;padding:32px 24px;max-width:420px;width:100%;position:relative;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+    <button id="closePopup" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.6rem;cursor:pointer;color:#94a3b8;line-height:1;padding:0;width:32px;height:32px;">&times;</button>
+    <div style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-weight:900;font-size:.95rem;padding:8px 16px;border-radius:999px;margin-bottom:14px;box-shadow:0 4px 12px rgba(239,68,68,0.3);letter-spacing:.3px;">🎁 25% RABATT FÜR NEUKUNDEN</div>
+    <h3 style="margin:0 0 8px;font-size:1.4rem;font-weight:900;color:#0f172a;">Einen Moment noch!</h3>
+    <p style="margin:0 0 6px;color:#475569;font-size:1rem;line-height:1.4;font-weight:600;">Antwort innerhalb von 15 Minuten</p>
+    <p style="margin:0 0 22px;color:#94a3b8;font-size:.85rem;">Sichern Sie sich jetzt Ihren Neukundenrabatt.</p>
+    <a href="https://wa.me/4917688087715?text=Hallo" target="_blank" rel="noopener" id="popupWaBtn" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;background:#25D366;color:#fff;border:none;border-radius:10px;font-size:1.05rem;font-weight:800;text-decoration:none;margin-bottom:10px;box-sizing:border-box;">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp Nachricht
+    </a>
+    <a href="tel:+4917688087715" id="popupCallBtn" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;background:#F97316;color:#fff;border:none;border-radius:10px;font-size:1.05rem;font-weight:800;text-decoration:none;box-sizing:border-box;">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+      Jetzt anrufen
+    </a>
+    <p style="margin:18px 0 0;color:#94a3b8;font-size:.78rem;">Meisterbetrieb · 20+ Jahre Erfahrung · 10 Jahre Garantie</p>
   </div>
 </div>
 <script>
 (function() {
-  var SUBMITTED_KEY = 'popupSubmitted';
-  var SHOWN_KEY = 'popupExitShown';
+  // ==================================================================
+  // EXIT INTENT POPUP - 5 trigger-uri + nu apare la navigare interna
+  // ==================================================================
+  var SUBMITTED_KEY = 'popupSubmitted';     // localStorage - daca a trimis form, nu mai apare niciodata
+  var SHOWN_KEY = 'popupShownSession';       // sessionStorage - 1x per sesiune
+  var INTERNAL_NAV_KEY = 'internalNav';      // sessionStorage - flag navigare interna
   var isVisible = false;
+  var scrollWatchActive = false;
+  var lastScrollY = 0;
+  var lastScrollTime = Date.now();
+  var inactivityTimer = null;
 
-  function showPopup() {
+  // Debug mode: ?debug=popup -> arata popup-ul imediat
+  var isDebug = window.location.search.indexOf('debug=popup') !== -1;
+
+  function isInternalNav() {
+    var raw = sessionStorage.getItem(INTERNAL_NAV_KEY);
+    if (!raw) return false;
+    var ts = parseInt(raw, 10);
+    if (!ts || isNaN(ts)) return false;
+    // Daca in ultimele 5 secunde a navigat intern -> da
+    return (Date.now() - ts) < 5000;
+  }
+
+  function showPopup(reason) {
     if (isVisible) return;
+    if (sessionStorage.getItem(SHOWN_KEY)) return;
     if (localStorage.getItem(SUBMITTED_KEY)) return;
-    if (localStorage.getItem(SHOWN_KEY)) return;
+    if (isInternalNav()) return; // nu apare la navigare interna
     var overlay = document.getElementById('formPopupOverlay');
     if (!overlay) return;
     isVisible = true;
     overlay.style.display = 'flex';
-    localStorage.setItem(SHOWN_KEY, 'true');
+    sessionStorage.setItem(SHOWN_KEY, 'true');
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'exit_popup_shown', { 'reason': reason || 'unknown' });
+    }
   }
 
   function closePopup() {
@@ -286,26 +316,136 @@ document.addEventListener('DOMContentLoaded', function() {
     isVisible = false;
   }
 
+  function markSubmitted() {
+    localStorage.setItem(SUBMITTED_KEY, 'true');
+  }
+
+  function markInternalNav() {
+    sessionStorage.setItem(INTERNAL_NAV_KEY, String(Date.now()));
+  }
+
   document.addEventListener('DOMContentLoaded', function() {
+    // Close button
     var btn = document.getElementById('closePopup');
     if (btn) btn.onclick = closePopup;
+
+    // Click pe overlay (afara de popup) -> inchide
     var overlay = document.getElementById('formPopupOverlay');
     if (overlay) overlay.onclick = function(e) { if (e.target === this) closePopup(); };
-    var form = document.querySelector('#formPopupOverlay form');
-    if (form) form.addEventListener('submit', function() { localStorage.setItem(SUBMITTED_KEY, 'true'); });
-    var mainForm = document.querySelector('#contact-form');
-    if (mainForm) mainForm.addEventListener('submit', function() { localStorage.setItem(SUBMITTED_KEY, 'true'); });
 
-    var isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+    // Click pe WhatsApp/Anruf -> marcheaza ca submitted (nu mai apare la urmatoarea sesiune)
+    var waBtn = document.getElementById('popupWaBtn');
+    if (waBtn) waBtn.addEventListener('click', function() {
+      markSubmitted();
+      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': 'AW-17044870869/whatsapp_click' });
+    });
+    var callBtn = document.getElementById('popupCallBtn');
+    if (callBtn) callBtn.addEventListener('click', function() {
+      markSubmitted();
+      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': 'AW-17044870869/phone_call' });
+    });
+
+    // Daca formularele de pe site sunt trimise -> nu mai arata popup vreodata
+    var allForms = document.querySelectorAll('form');
+    allForms.forEach(function(f) { f.addEventListener('submit', markSubmitted); });
+
+    // ==================================================================
+    // DETECTARE NAVIGARE INTERNA - click pe linkuri din site
+    // ==================================================================
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      while (target && target.tagName !== 'A') target = target.parentElement;
+      if (!target) return;
+      var href = target.getAttribute('href') || '';
+      // Daca e link intern (pagina HTML din site sau ancora) -> marcheaza
+      if (href.match(/\.html(#|$|\?)/) ||
+          href.match(/^\/[^\/]/) ||
+          href.indexOf('dachjetz.de') !== -1 ||
+          (href.charAt(0) === '#') ||
+          href === '/') {
+        markInternalNav();
+      }
+    }, true);
+
+    // ==================================================================
+    // DEBUG MODE
+    // ==================================================================
+    if (isDebug) {
+      setTimeout(function() { showPopup('debug'); }, 500);
+      return;
+    }
+
+    // ==================================================================
+    // TRIGGER-URI MOBILE & DESKTOP
+    // ==================================================================
+    var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
     if (isMobile) {
-      history.pushState(null, '', window.location.href);
-      window.addEventListener('popstate', function() {
+      // 1. BACK BUTTON pe mobil
+      try {
         history.pushState(null, '', window.location.href);
-        showPopup();
+        window.addEventListener('popstate', function() {
+          history.pushState(null, '', window.location.href);
+          showPopup('back_button');
+        });
+      } catch(err) {}
+
+      // 2. SCHIMBAREA TAB-ULUI / minimizare aplicatie (visibilitychange)
+      document.addEventListener('visibilitychange', function() {
+        if (document.visibilityState === 'hidden') {
+          // delay mic ca sa fie sigur ca utilizatorul a iesit (nu doar comutare rapida)
+          setTimeout(function() {
+            if (document.visibilityState === 'hidden') {
+              showPopup('visibility_hidden');
+            }
+          }, 100);
+        }
       });
+
+      // 3. INACTIVITATE > 30 secunde dupa ce a scrollat
+      function resetInactivityTimer() {
+        if (inactivityTimer) clearTimeout(inactivityTimer);
+        if (scrollWatchActive) {
+          inactivityTimer = setTimeout(function() {
+            showPopup('inactivity');
+          }, 30000);
+        }
+      }
+      window.addEventListener('scroll', function() {
+        scrollWatchActive = true;
+        resetInactivityTimer();
+      }, { passive: true });
+      ['touchstart', 'touchmove', 'click'].forEach(function(evt) {
+        window.addEventListener(evt, resetInactivityTimer, { passive: true });
+      });
+
+      // 4. SCROLL RAPID IN SUS la inceputul paginii (intentie de iesire URL bar)
+      window.addEventListener('scroll', function() {
+        var currentY = window.pageYOffset || 0;
+        var now = Date.now();
+        var deltaY = lastScrollY - currentY;  // pozitiv = scroll up
+        var deltaT = now - lastScrollTime;
+        // scroll rapid in sus si esti aproape de top
+        if (deltaY > 100 && deltaT < 300 && currentY < 200) {
+          showPopup('fast_scroll_up');
+        }
+        lastScrollY = currentY;
+        lastScrollTime = now;
+      }, { passive: true });
+
+      // 5. WINDOW BLUR (utilizatorul a apasat pe URL bar / a comutat)
+      window.addEventListener('blur', function() {
+        showPopup('window_blur');
+      });
+
     } else {
+      // DESKTOP: mouse spre top of window
       document.addEventListener('mouseleave', function(e) {
-        if (e.clientY < 50) showPopup();
+        if (e.clientY < 50) showPopup('mouse_leave');
+      });
+      // Bonus: si daca da blur pe fereastra (Alt+Tab etc.)
+      window.addEventListener('blur', function() {
+        showPopup('window_blur');
       });
     }
   });
