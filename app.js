@@ -80,7 +80,6 @@ function submitToFormspreeAndWhatsApp(formEl, onSuccess) {
 
 document.addEventListener('DOMContentLoaded', function() {
   applyLinks();
-  forceOpenFAQ();
 
   // 1. Formularul principal
   var mainForm = document.getElementById('contact-form');
