@@ -6,6 +6,7 @@
   <meta name="description" content="Flachdach Sanierung &amp; Abdichtung in Ihrer Nähe – inkl. Material und Montage. Kostenlose Besichtigung."/>
   <title>Flachdach Abdichtung | Maisterdach</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://www.googletagmanager.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/></noscript>
@@ -57,7 +58,7 @@
     <span style="color:#f97316;font-weight:800;font-size:1rem;white-space:nowrap;">&#9990; 0176 88087715</span>
     <span style="color:rgba(255,255,255,.6);font-size:.65rem;font-weight:500;white-space:nowrap;">07–22 Uhr · 7 Tage</span>
   </a>
-  <button class="hamburger" id="hbg" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  <button class="hamburger" id="hbg" onclick="toggleNav()" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <nav class="nav" id="nav">
   <a href="index.html" >Startseite</a>
@@ -132,26 +133,26 @@
 <h2 class="sec-title sec-title-center">Häufige Fragen</h2>
 <div class="faq-list">
 <div class="faq-item open" id="faq1">
-  <button class="faq-trigger" onclick="faq('faq1')">Was bietet eine Flachdach Sanierung von Maisterdach? <span class="faq-chev">▾</span></button>
+  <button class="faq-trigger" onclick="faq(\'faq1\')" aria-expanded="false" aria-controls="faq1">Was bietet eine Flachdach Sanierung von Maisterdach? <span class="faq-chev">▾</span></button>
   <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Komplettsanierung mit hochwertiger Bitumen-Abdichtung – Material direkt aus eigenem Lager. <strong>10 Jahre Garantie auf unsere Arbeiten.</strong> Festpreis nach kostenloser Besichtigung.</div></div></div>
 </div>
 <div class="faq-item" id="faq2">
-  <button class="faq-trigger" onclick="faq('faq2')">Wie lange dauert die Reparatur? <span class="faq-chev">▾</span></button>
+  <button class="faq-trigger" onclick="faq(\'faq2\')" aria-expanded="false" aria-controls="faq2">Wie lange dauert die Reparatur? <span class="faq-chev">▾</span></button>
   <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Kleinere Reparaturen oft in einem Tag. Bei Komplettsanierung 2–3 Arbeitstage, abhängig von der Dachgröße.</div></div></div>
 </div>
 <div class="faq-item" id="faq3">
-  <button class="faq-trigger" onclick="faq('faq3')">Welche Garantie bieten Sie? <span class="faq-chev">▾</span></button>
+  <button class="faq-trigger" onclick="faq(\'faq3\')" aria-expanded="false" aria-controls="faq3">Welche Garantie bieten Sie? <span class="faq-chev">▾</span></button>
   <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Wir geben <strong>10 Jahre Garantie auf unsere Arbeiten.</strong> Die Details werden schriftlich im Angebot festgehalten – als Meisterbetrieb stehen wir voll hinter unserer Qualität.</div></div></div>
 </div>
 <div class="faq-item" id="faq4">
-  <button class="faq-trigger" onclick="faq('faq4')">Arbeiten Sie auch bei schlechtem Wetter? <span class="faq-chev">▾</span></button>
+  <button class="faq-trigger" onclick="faq(\'faq4\')" aria-expanded="false" aria-controls="faq4">Arbeiten Sie auch bei schlechtem Wetter? <span class="faq-chev">▾</span></button>
   <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Bitumenarbeiten erfordern trockene Bedingungen. Bei Regen verschieben wir den Termin und informieren Sie rechtzeitig.</div></div></div>
 </div>
 <div class="faq-item" id="faq5">
-  <button class="faq-trigger" onclick="faq('faq5')">Muss ich zu Hause sein? <span class="faq-chev">▾</span></button>
+  <button class="faq-trigger" onclick="faq(\'faq5\')" aria-expanded="false" aria-controls="faq5">Muss ich zu Hause sein? <span class="faq-chev">▾</span></button>
   <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Für die Besichtigung ja. Während der Ausführung ist Ihre Anwesenheit nach Absprache nicht zwingend notwendig.</div></div></div>
 <div class="faq-item" id="faq6">
-  <button class="faq-trigger" onclick="faq('faq6')">Was beinhaltet eine Dachrinnen-Montage? <span class="faq-chev">▾</span></button>
+  <button class="faq-trigger" onclick="faq(\'faq6\')" aria-expanded="false" aria-controls="faq6">Was beinhaltet eine Dachrinnen-Montage? <span class="faq-chev">▾</span></button>
   <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Komplette Dachrinnen-Systeme inkl. Material und fachgerechter Montage. <strong>10 Jahre Garantie auf unsere Arbeiten.</strong> Festpreis nach kostenloser Besichtigung.</div></div></div>
 </div>
 </div></section>
@@ -248,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- EXIT INTENT POPUP - WhatsApp + Anruf -->
 <div id="formPopupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:9999;justify-content:center;align-items:center;padding:20px;box-sizing:border-box;">
   <div style="background:#fff;border-radius:16px;padding:32px 24px;max-width:420px;width:100%;position:relative;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-    <button id="closePopup" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.6rem;cursor:pointer;color:#94a3b8;line-height:1;padding:0;width:32px;height:32px;">&times;</button>
+    <button id="closePopup" aria-label="Schließen" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.6rem;cursor:pointer;color:#94a3b8;line-height:1;padding:0;width:32px;height:32px;">&times;</button>
     <div style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-weight:900;font-size:.95rem;padding:8px 16px;border-radius:999px;margin-bottom:14px;box-shadow:0 4px 12px rgba(239,68,68,0.3);letter-spacing:.3px;">🎁 25% RABATT FÜR NEUKUNDEN</div>
     <h3 style="margin:0 0 8px;font-size:1.4rem;font-weight:900;color:#0f172a;">Einen Moment noch!</h3>
     <p style="margin:0 0 6px;color:#475569;font-size:1rem;line-height:1.4;font-weight:600;">Antwort innerhalb von 15 Minuten</p>
@@ -464,7 +465,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- STICKY FORM MODAL -->
 <div class="sticky-modal-overlay" id="stickyModal" onclick="if(event.target===this)closeStickyForm()">
   <div class="sticky-modal">
-    <button class="sticky-modal-close" onclick="closeStickyForm()">✕</button>
+    <button class="sticky-modal-close" onclick="closeStickyForm()" aria-label="Formular schließen">✕</button>
     <h3>Kostenlose Anfrage</h3>
     <p class="sticky-modal-sub">Rückmeldung in max. 2 Stunden.</p>
     <form action="https://formspree.io/f/xvzbwbrj" method="POST" id="stickyForm">

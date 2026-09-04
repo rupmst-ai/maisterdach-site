@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Impressum | Maisterdach</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://www.googletagmanager.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
@@ -21,7 +22,7 @@
 <body>
 <header>
   <a href="index.html" class="logo"><img src="logo.png" alt="Maisterdach" height="40"/> <span>Maister<em>dach</em></span></a>
-  <button class="hamburger" id="hbg" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  <button class="hamburger" id="hbg" onclick="toggleNav()" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <nav class="nav" id="nav">
   <a href="index.html">Startseite</a>
@@ -94,7 +95,7 @@
 <!-- STICKY FORM MODAL -->
 <div class="sticky-modal-overlay" id="stickyModal" onclick="if(event.target===this)closeStickyForm()">
   <div class="sticky-modal">
-    <button class="sticky-modal-close" onclick="closeStickyForm()">✕</button>
+    <button class="sticky-modal-close" onclick="closeStickyForm()" aria-label="Formular schließen">✕</button>
     <h3>Kostenlose Anfrage</h3>
     <p class="sticky-modal-sub">Rückmeldung in max. 2 Stunden.</p>
     <form action="https://formspree.io/f/xvzbwbrj" method="POST" id="stickyForm">

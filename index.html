@@ -7,6 +7,7 @@
   
   <title>Dachdecker | Maisterdach – Kostenlose Besichtigung</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://www.googletagmanager.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
   <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/></noscript>
@@ -61,7 +62,7 @@
     <span style="color:#f97316;font-weight:800;font-size:1rem;white-space:nowrap;">&#9990; 0176 88087715</span>
     <span style="color:rgba(255,255,255,.6);font-size:.65rem;font-weight:500;white-space:nowrap;">07–22 Uhr · 7 Tage</span>
   </a>
-  <button class="hamburger" id="hbg" onclick="toggleNav()"><span></span><span></span><span></span></button>
+  <button class="hamburger" id="hbg" onclick="toggleNav()" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <nav class="nav" id="nav">
   <a href="index.html" class='active'>Startseite</a>
@@ -106,7 +107,7 @@
   <div class="svc-cards">
     <a href="flachdach.html" style="text-decoration:none;color:inherit;">
     <div class="svc-card">
-      <img src="card-flachdach.webp" alt="Flachdach Sanierung" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;">
+      <img src="card-flachdach.webp" alt="Flachdach Sanierung" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;" width="600" height="400" loading="lazy" decoding="async">
       <h3>Flachdach &amp; Bitumen</h3>
       <p>Bitumen-Abdichtung vom Meisterbetrieb – Material aus eigenem Lager.</p>
       <div class="qualitaet-line">✓ 10 Jahre Garantie auf unsere Arbeiten</div>
@@ -115,7 +116,7 @@
     </a>
     <a href="blechdach.html" style="text-decoration:none;color:inherit;">
     <div class="svc-card">
-      <img src="card-blechdach-combo.webp" alt="Blechdach Montage" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;">
+      <img src="card-blechdach-combo.webp" alt="Blechdach Montage" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;" width="600" height="400" loading="lazy" decoding="async">
       <h3>Blechdach inkl. Material</h3>
       <p>Trapezblech &amp; Ziegeloptik – Material direkt aus eigenem Lager.</p>
       <div class="qualitaet-line">✓ 10 Jahre Garantie auf unsere Arbeiten</div>
@@ -124,7 +125,7 @@
     </a>
     <a href="sanierung-grosser-daecher.html" style="text-decoration:none;color:inherit;">
     <div class="svc-card">
-      <img src="card-sanierung-gross.webp" alt="Sanierung großer Dächer" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;">
+      <img src="card-sanierung-gross.webp" alt="Sanierung großer Dächer" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;" width="600" height="400" loading="lazy" decoding="async">
       <h3>Sanierung großer Dächer</h3>
       <p>Industrie, Gewerbe &amp; Wohnblöcke</p>
       <span class="svc-link">Jetzt informieren →</span>
@@ -132,7 +133,7 @@
     </a>
     <a href="dachreparatur.html" style="text-decoration:none;color:inherit;">
     <div class="svc-card">
-      <img src="card-dachreparatur.webp" alt="Dachreparatur" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;">
+      <img src="card-dachreparatur.webp" alt="Dachreparatur" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;" width="600" height="400" loading="lazy" decoding="async">
       <h3>Dachreparatur</h3>
       <p>Schnelle Hilfe bei undichten Dächern und Sturmschäden</p>
       <span class="svc-link">Jetzt informieren →</span>
@@ -140,12 +141,12 @@
     </a>
     <a href="dachziegel.html" style="text-decoration:none;color:inherit;">
     <div class="svc-card">
-      <img src="card-dachziegel.webp" alt="Dachziegel Reparatur" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;">
+      <img src="card-dachziegel.webp" alt="Dachziegel Reparatur" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;" width="600" height="400" loading="lazy" decoding="async">
       <h3>🏛️ Dachziegel</h3><p>Reparatur, Reinigung &amp; Beschichtung</p><span class="svc-link">Jetzt informieren →</span></div>
     </a>
     <a href="dachrinne.html" style="text-decoration:none;color:inherit;">
     <div class="svc-card">
-      <img src="card-klempner.webp" alt="Dachrinnen Montage" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;">
+      <img src="card-klempner.webp" alt="Dachrinnen Montage" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;" width="600" height="400" loading="lazy" decoding="async">
       <h3>Dachrinnen Montage</h3>
       <p>Komplette Dachrinnen-Systeme inkl. Material – fachgerecht montiert.</p>
       <div class="qualitaet-line">✓ 10 Jahre Garantie auf unsere Arbeiten</div>
@@ -154,7 +155,7 @@
     </a>
     <a href="dachfenster.html" style="text-decoration:none;color:inherit;">
     <div class="svc-card">
-      <img src="card-dachfenster.webp" alt="Dachfenster Einbau" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;">
+      <img src="card-dachfenster.webp" alt="Dachfenster Einbau" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;" width="600" height="400" loading="lazy" decoding="async">
       <h3>Dachfenster</h3>
       <p>Einbau &amp; Austausch – fachgerecht abgedichtet</p>
       <span class="svc-link">Jetzt informieren →</span>
@@ -162,7 +163,7 @@
     </a>
     <a href="dachkasten.html" style="text-decoration:none;color:inherit;">
     <div class="svc-card">
-      <img src="card-dachkasten.webp" alt="Dachkasten" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;">
+      <img src="card-dachkasten.webp" alt="Dachkasten" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;" width="600" height="400" loading="lazy" decoding="async">
       <h3>Dachkasten</h3>
       <p>Verkleidung aus PVC – langlebig &amp; witterungsbeständig</p>
       <span class="svc-link">Jetzt informieren →</span>
@@ -170,7 +171,7 @@
     </a>
     <a href="schornsteinverkleidung.html" style="text-decoration:none;color:inherit;">
     <div class="svc-card">
-      <img src="card-schornstein.webp" alt="Schornsteinverkleidung" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;">
+      <img src="card-schornstein.webp" alt="Schornsteinverkleidung" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;" width="600" height="400" loading="lazy" decoding="async">
       <h3>Schornsteinverkleidung</h3>
       <p>Verkleidung, Abdichtung &amp; Demontage</p>
       <span class="svc-link">Jetzt informieren →</span>
@@ -178,7 +179,7 @@
     </a>
     <a href="reinigung-beschichtung.html" style="text-decoration:none;color:inherit;">
     <div class="svc-card">
-      <img src="card-reinigung.webp" alt="Reinigung & Beschichtung" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;">
+      <img src="card-reinigung.webp" alt="Reinigung & Beschichtung" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:12px;display:block;" width="600" height="400" loading="lazy" decoding="async">
       <h3>Reinigung &amp; Beschichtung</h3>
       <p>Reinigung &amp; Beschichtung für alle Dacharten</p>
       <span class="svc-link">Jetzt informieren →</span>
@@ -233,31 +234,31 @@
   <h2>Häufige Fragen</h2>
   <div class="faq-list">
     <div class="faq-item open" id="faq1">
-      <button class="faq-trigger" onclick="faq('faq1')">Was bietet eine Dachreparatur von Maisterdach? <span class="faq-chev">▾</span></button>
+      <button class="faq-trigger" onclick="faq(\'faq1\')" aria-expanded="false" aria-controls="faq1">Was bietet eine Dachreparatur von Maisterdach? <span class="faq-chev">▾</span></button>
       <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Bitumen-Montage, Trapezblech, Ziegeloptik und Dachrinnen-Systeme – alles vom Meisterbetrieb mit über 20 Jahren Erfahrung. Festpreis nach kostenloser Besichtigung, mit 10 Jahren Garantie auf unsere Arbeiten.</div></div></div>
     </div>
     <div class="faq-item" id="faq2">
-      <button class="faq-trigger" onclick="faq('faq2')">Was zeichnet ein neues Flachdach von Maisterdach aus? <span class="faq-chev">▾</span></button>
+      <button class="faq-trigger" onclick="faq(\'faq2\')" aria-expanded="false" aria-controls="faq2">Was zeichnet ein neues Flachdach von Maisterdach aus? <span class="faq-chev">▾</span></button>
       <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Bitumen-Abdichtung vom Meisterbetrieb. Hochwertiges Material direkt aus unserem eigenen Lager – beste Konditionen für Sie. <strong>10 Jahre Garantie auf unsere Arbeiten.</strong> Festpreis nach kostenloser Besichtigung.</div></div></div>
     </div>
     <div class="faq-item" id="faq3">
-      <button class="faq-trigger" onclick="faq('faq3')">Was zeichnet ein Blechdach von Maisterdach aus? <span class="faq-chev">▾</span></button>
+      <button class="faq-trigger" onclick="faq(\'faq3\')" aria-expanded="false" aria-controls="faq3">Was zeichnet ein Blechdach von Maisterdach aus? <span class="faq-chev">▾</span></button>
       <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Trapezblech und Ziegeloptik mit Material direkt aus eigenem Lager. Vor Beginn erhalten Sie eine kostenlose Visualisierung in der gewünschten Farbe. <strong>10 Jahre Garantie auf unsere Arbeiten.</strong></div></div></div>
     </div>
     <div class="faq-item" id="faq6">
-      <button class="faq-trigger" onclick="faq('faq6')">Was beinhaltet eine Dachrinnen-Montage? <span class="faq-chev">▾</span></button>
+      <button class="faq-trigger" onclick="faq(\'faq6\')" aria-expanded="false" aria-controls="faq6">Was beinhaltet eine Dachrinnen-Montage? <span class="faq-chev">▾</span></button>
       <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Komplette Dachrinnen-Systeme inkl. Material und fachgerechter Montage. Festpreis nach kostenloser Besichtigung, mit 10 Jahren Garantie auf unsere Arbeiten.</div></div></div>
     </div>
     <div class="faq-item" id="faq4">
-      <button class="faq-trigger" onclick="faq('faq4')">Welche Garantie bieten Sie? <span class="faq-chev">▾</span></button>
+      <button class="faq-trigger" onclick="faq(\'faq4\')" aria-expanded="false" aria-controls="faq4">Welche Garantie bieten Sie? <span class="faq-chev">▾</span></button>
       <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Wir geben <strong>10 Jahre Garantie auf unsere Arbeiten.</strong> Die Details werden schriftlich im Angebot festgehalten – als Meisterbetrieb stehen wir voll hinter unserer Qualität.</div></div></div>
     </div>
     <div class="faq-item" id="faq5">
-      <button class="faq-trigger" onclick="faq('faq5')">Wie schnell können Sie kommen? <span class="faq-chev">▾</span></button>
+      <button class="faq-trigger" onclick="faq(\'faq5\')" aria-expanded="false" aria-controls="faq5">Wie schnell können Sie kommen? <span class="faq-chev">▾</span></button>
       <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Besichtigung meist innerhalb von 1–2 Werktagen. Bei dringenden Schäden versuchen wir einen Termin am selben Tag.</div></div></div>
     </div>
     <div class="faq-item" id="faq7">
-      <button class="faq-trigger" onclick="faq('faq7')">Was passiert mit dem alten Material? <span class="faq-chev">▾</span></button>
+      <button class="faq-trigger" onclick="faq(\'faq7\')" aria-expanded="false" aria-controls="faq7">Was passiert mit dem alten Material? <span class="faq-chev">▾</span></button>
       <div class="faq-panel"><div class="faq-inner"><div class="faq-body">Durch unsere Partner-Entsorgungsfirmen können wir die <strong>Bauschutt-Entsorgung</strong> zum besten Preis anbieten – sauber, schnell und fachgerecht. So bleibt Ihre Baustelle ordentlich.</div></div></div>
     </div>
   </div>
@@ -324,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- EXIT INTENT POPUP - WhatsApp + Anruf -->
 <div id="formPopupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:9999;justify-content:center;align-items:center;padding:20px;box-sizing:border-box;">
   <div style="background:#fff;border-radius:16px;padding:32px 24px;max-width:420px;width:100%;position:relative;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-    <button id="closePopup" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.6rem;cursor:pointer;color:#94a3b8;line-height:1;padding:0;width:32px;height:32px;">&times;</button>
+    <button id="closePopup" aria-label="Schließen" style="position:absolute;top:12px;right:14px;background:none;border:none;font-size:1.6rem;cursor:pointer;color:#94a3b8;line-height:1;padding:0;width:32px;height:32px;">&times;</button>
     <div style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-weight:900;font-size:.95rem;padding:8px 16px;border-radius:999px;margin-bottom:14px;box-shadow:0 4px 12px rgba(239,68,68,0.3);letter-spacing:.3px;">🎁 25% RABATT FÜR NEUKUNDEN</div>
     <h3 style="margin:0 0 8px;font-size:1.4rem;font-weight:900;color:#0f172a;">Einen Moment noch!</h3>
     <p style="margin:0 0 6px;color:#475569;font-size:1rem;line-height:1.4;font-weight:600;">Antwort innerhalb von 15 Minuten</p>
@@ -540,7 +541,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- STICKY FORM MODAL -->
 <div class="sticky-modal-overlay" id="stickyModal" onclick="if(event.target===this)closeStickyForm()">
   <div class="sticky-modal">
-    <button class="sticky-modal-close" onclick="closeStickyForm()">✕</button>
+    <button class="sticky-modal-close" onclick="closeStickyForm()" aria-label="Formular schließen">✕</button>
     <h3>Kostenlose Anfrage</h3>
     <p class="sticky-modal-sub">Rückmeldung in max. 2 Stunden.</p>
     <form action="https://formspree.io/f/xvzbwbrj" method="POST" id="stickyForm">
