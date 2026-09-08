@@ -1,6 +1,14 @@
 (function () {
   var FALLBACK_DISPLAY = 'in Ihrer Nähe';
 
+  function getParams() {
+    var p = new URLSearchParams(window.location.search);
+    return {
+      physicalId: p.get('loc_physical_ms') || p.get('loc_id') || '',
+      interestId: p.get('loc_interest_ms') || ''
+    };
+  }
+
   function isValidCityName(name) {
     if (!name || name.trim() === '') return false;
     var n = name.trim();
@@ -12,21 +20,26 @@
     return true;
   }
 
-  function sendAnalyticsEvent(city, km, source) {
+  function sendAnalyticsEvent(city, locId, source) {
     if (typeof gtag !== 'function') return;
     gtag('event', 'location_detected', {
       'event_category': 'Dynamic Location',
       'event_label': city || 'fallback',
+      'loc_id': locId || 'none',
       'city_name': city || 'fallback',
-      'distance_km': (km === null || km === undefined) ? -1 : km,
       'loc_source': source || 'none'
     });
   }
 
-  function applyCity(name, km, source) {
+  function applyCity(name, locId, source) {
     name = (name && isValidCityName(name)) ? name.trim() : '';
 
-    sendAnalyticsEvent(name, km, source);
+    // expus pentru jurnalul de apeluri
+    window.__LOC_CITY__   = name;
+    window.__LOC_ID__     = locId || '';
+    window.__LOC_SOURCE__ = source || 'none';
+
+    sendAnalyticsEvent(name, locId, source);
 
     // Title si meta
     if (name) {
@@ -97,23 +110,49 @@
         mapDiv.appendChild(iframe);
       }
     }
+
+    // Propaga loc_id in linkuri interne
+    if (locId) {
+      document.querySelectorAll('a[href]').forEach(function (el) {
+        var href = el.getAttribute('href');
+        if (href && href.endsWith('.html') && !href.startsWith('http') && !href.includes('?')) {
+          el.href = href + '?loc_id=' + locId;
+        }
+      });
+    }
   }
 
   function run() {
-    fetch('/geo', { credentials: 'omit' })
+    var params = getParams();
+    var physicalId = params.physicalId;
+    var interestId = params.interestId;
+
+    if (!physicalId && !interestId) {
+      applyCity('', '', 'none');
+      return;
+    }
+
+    fetch('de-cities.json')
       .then(function (r) {
-        if (!r.ok) throw new Error('geo failed');
+        if (!r.ok) throw new Error('fetch failed');
         return r.json();
       })
-      .then(function (geo) {
-        if (geo && geo.erkannt && isValidCityName(geo.stadt)) {
-          applyCity(geo.stadt, geo.km, 'cloudflare');
-        } else {
-          applyCity('', null, 'none');
+      .then(function (map) {
+        // 1. Primul: loc_interest_ms — orasul cautat de user
+        if (interestId && map[interestId] && isValidCityName(map[interestId])) {
+          applyCity(map[interestId], interestId, 'interest');
+          return;
         }
+        // 2. Al doilea: loc_physical_ms — unde e fizic userul
+        if (physicalId && map[physicalId] && isValidCityName(map[physicalId])) {
+          applyCity(map[physicalId], physicalId, 'physical');
+          return;
+        }
+        // 3. Fallback generic
+        applyCity('', physicalId || interestId, 'none');
       })
       .catch(function () {
-        applyCity('', null, 'error');
+        applyCity('', physicalId || interestId, 'error');
       });
   }
 

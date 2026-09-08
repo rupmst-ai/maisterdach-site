@@ -154,3 +154,56 @@ function closeStickyForm() {
   var m = document.getElementById('stickyModal');
   if (m) { m.classList.remove('open'); document.body.style.overflow = ''; }
 }
+
+/* ---- Jurnal apeluri / WhatsApp -> Google Sheet ---- */
+(function () {
+  var LOG_URL = 'https://script.google.com/macros/s/AKfycbxKxU91jmxHQIyEyBzzcuQ7Q3zN1q9wsklPoltXMbpYjF6GybzK2o2ZqforBrD8gBLk/exec';
+  var sent = {};
+
+  function param(n) {
+    try { return new URLSearchParams(window.location.search).get(n) || ''; }
+    catch (e) { return ''; }
+  }
+
+  function logHit(action) {
+    var key = action + '|' + Date.now().toString().slice(0, -4);
+    if (sent[key]) return;
+    sent[key] = 1;
+
+    var data = {
+      action:   action,
+      city:     window.__LOC_CITY__ || '',
+      locId:    window.__LOC_ID__ || param('loc_physical_ms') || param('loc_id'),
+      page:     window.location.pathname,
+      campaign: param('gad_campaignid'),
+      keyword:  param('kw'),
+      device:   /Mobi|Android|iPhone/i.test(navigator.userAgent) ? 'telefon' : 'desktop',
+      referrer: document.referrer || 'direct'
+    };
+
+    try {
+      var blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=UTF-8' });
+      if (navigator.sendBeacon && navigator.sendBeacon(LOG_URL, blob)) return;
+    } catch (e) {}
+
+    try {
+      fetch(LOG_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        keepalive: true,
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body: JSON.stringify(data)
+      });
+    } catch (e) {}
+  }
+
+  document.addEventListener('click', function (ev) {
+    var a = ev.target && ev.target.closest ? ev.target.closest('a[href]') : null;
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    if (href.indexOf('tel:') === 0) logHit('Apel');
+    else if (href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp') !== -1) logHit('WhatsApp');
+  }, true);
+
+  window.logCallHit = logHit;
+})();
