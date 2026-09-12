@@ -173,6 +173,10 @@ function closeStickyForm() {
     var data = {
       action:   action,
       city:     window.__LOC_CITY__ || '',
+      rawCity:  window.__LOC_RAW__ || '',
+      locSrc:   window.__LOC_SOURCE__ || 'none',
+      locPhys:  window.__LOC_PHYS__ || param('loc_physical_ms') || param('loc_id'),
+      locInt:   window.__LOC_INT__ || param('loc_interest_ms'),
       locId:    window.__LOC_ID__ || param('loc_physical_ms') || param('loc_id'),
       page:     window.location.pathname,
       campaign: param('gad_campaignid'),

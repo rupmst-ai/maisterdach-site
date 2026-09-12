@@ -1,11 +1,24 @@
 (function () {
   var FALLBACK_DISPLAY = 'in Ihrer Nähe';
 
+  // Orice ID din blocul sectoarelor Berlinului devine "Berlin".
+  // Plasa de siguranta: daca Google trimite un sector care nu e in de-cities.json,
+  // tot Berlin afisam, nu nimic.
+  var BERLIN_VON = 9061130, BERLIN_BIS = 9061142;
+
+  // Nume care nu sunt localitati, ci cartiere. A doua plasa de siguranta,
+  // in caz ca mai scapa ceva in fisierul de orase.
+  var NICHT_STADT = [
+    'mitte','altstadt','neustadt','nord','süd','sud','ost','west','innenstadt',
+    'zentrum','südstadt','nordstadt','weststadt','oststadt','list','vorstadt'
+  ];
+
   function getParams() {
     var p = new URLSearchParams(window.location.search);
     return {
       physicalId: p.get('loc_physical_ms') || p.get('loc_id') || '',
-      interestId: p.get('loc_interest_ms') || ''
+      interestId: p.get('loc_interest_ms') || '',
+      debug:      p.get('debug') === '1'
     };
   }
 
@@ -16,8 +29,13 @@
     if (n.length < 3) return false;
     if (/^district\s*\d+$/i.test(n)) return false;
     if (/^stadtbezirk/i.test(n)) return false;
-    if (/^stadtbezirke/i.test(n)) return false;
+    if (NICHT_STADT.indexOf(n.toLowerCase()) !== -1) return false;
     return true;
+  }
+
+  function istBerlinId(id) {
+    var n = parseInt(id, 10);
+    return !isNaN(n) && n > BERLIN_VON && n < BERLIN_BIS;
   }
 
   function sendAnalyticsEvent(city, locId, source) {
@@ -31,84 +49,41 @@
     });
   }
 
-
-  // Orase ancora din zona deservita (nume, lat, lon)
-  var ANCHORS = [
-    ['Berlin',52.520,13.405],['Potsdam',52.396,13.059],['Oranienburg',52.755,13.238],
-    ['Cottbus',51.757,14.329],['Frankfurt (Oder)',52.348,14.551],
-    ['Brandenburg an der Havel',52.412,12.556],['Bernau bei Berlin',52.677,13.587],
-    ['Eberswalde',52.834,13.818],['Falkensee',52.560,13.092],
-    ['Koenigs Wusterhausen',52.294,13.626],['Strausberg',52.578,13.887],
-    ['Neuruppin',52.925,12.803],['Rathenow',52.606,12.336],['Schwedt',53.060,14.283],
-    ['Prenzlau',53.316,13.863],['Fuerstenwalde',52.360,14.063],['Luckenwalde',52.089,13.170],
-    ['Jueterbog',51.994,13.075],['Senftenberg',51.524,14.001],['Finsterwalde',51.632,13.708],
-    ['Luebben',51.941,13.892],['Wittenberge',52.995,11.752],['Perleberg',53.073,11.858],
-    ['Pritzwalk',53.150,12.176],['Templin',53.121,13.502],['Angermuende',53.017,13.999],
-    ['Zehdenick',52.981,13.334],['Hennigsdorf',52.638,13.203],['Velten',52.692,13.177],
-    ['Hohen Neuendorf',52.674,13.278],['Teltow',52.401,13.271],['Ludwigsfelde',52.302,13.256],
-    ['Zossen',52.216,13.446],['Nauen',52.607,12.874],['Guben',51.951,14.715],
-    ['Magdeburg',52.131,11.639],['Halle (Saale)',51.482,11.970],['Dessau',51.834,12.247],
-    ['Stendal',52.606,11.858],['Dresden',51.050,13.738],['Leipzig',51.340,12.375],
-    ['Chemnitz',50.833,12.921],['Goerlitz',51.155,14.987],['Bautzen',51.181,14.424],
-    ['Riesa',51.308,13.292],['Schwerin',53.629,11.413],['Rostock',54.092,12.099],
-    ['Neubrandenburg',53.558,13.261],['Stralsund',54.309,13.082],['Greifswald',54.096,13.382],
-    ['Wismar',53.891,11.465],['Guestrow',53.796,12.174],['Waren',53.518,12.681],
-    ['Parchim',53.427,11.849]
-  ];
-
-  var MAX_KM = 30;
-
-  function isAnchor(name) {
-    if (!name) return false;
-    for (var i = 0; i < ANCHORS.length; i++) {
-      if (ANCHORS[i][0].toLowerCase() === name.toLowerCase()) return true;
-    }
-    return false;
+  function zeigeDebug(info) {
+    var box = document.createElement('div');
+    box.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:99999;' +
+      'background:#0f172a;color:#fff;font:12px/1.5 monospace;padding:10px 12px;' +
+      'white-space:pre-wrap;max-height:45vh;overflow:auto;';
+    var t = '';
+    for (var k in info) t += k + ': ' + (info[k] === '' ? '(gol)' : info[k]) + '\n';
+    box.textContent = t;
+    box.addEventListener('click', function () { box.remove(); });
+    document.body.appendChild(box);
   }
 
-  function distKm(a1, o1, a2, o2) {
-    var R = 6371, dLat = (a2 - a1) * Math.PI / 180, dLon = (o2 - o1) * Math.PI / 180;
-    var x = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(a1 * Math.PI / 180) * Math.cos(a2 * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1 - x));
-  }
-
-  function nearestAnchor(lat, lon) {
-    var best = null, bestD = Infinity;
-    for (var i = 0; i < ANCHORS.length; i++) {
-      var d = distKm(lat, lon, ANCHORS[i][1], ANCHORS[i][2]);
-      if (d < bestD) { bestD = d; best = ANCHORS[i][0]; }
-    }
-    return (bestD <= MAX_KM) ? best : '';
-  }
-
-  // Satul detectat de Google nu e oras cunoscut -> cere coordonate de la Cloudflare
-  function resolveViaCloudflare(rawName, locId, source) {
-    fetch('/geo')
-      .then(function (r) { return r.json(); })
-      .then(function (g) {
-        if (g.city && isAnchor(g.city)) { applyCity(g.city, locId, source + '+cf'); return; }
-        if (g.lat && g.lon) {
-          var near = nearestAnchor(g.lat, g.lon);
-          if (near) { applyCity(near, locId, source + '+radius'); return; }
-        }
-        applyCity(rawName, locId, source);
-      })
-      .catch(function () { applyCity(rawName, locId, source); });
-  }
-
-  function applyCity(name, locId, source) {
+  function applyCity(name, locId, source, roh) {
     name = (name && isValidCityName(name)) ? name.trim() : '';
 
-    // expus pentru jurnalul de apeluri
+    // Expus pentru jurnalul de apeluri din app.js
     window.__LOC_CITY__   = name;
     window.__LOC_ID__     = locId || '';
     window.__LOC_SOURCE__ = source || 'none';
+    window.__LOC_RAW__    = roh || '';   // ce a returnat fisierul, chiar daca nu se afiseaza
+    window.__LOC_PHYS__   = window.__LOC_PHYS__ || '';
+    window.__LOC_INT__    = window.__LOC_INT__ || '';
 
     sendAnalyticsEvent(name, locId, source);
 
-    // Title si meta
+    if (window.__LOC_DEBUG__) {
+      zeigeDebug({
+        'loc_physical_ms': window.__LOC_PHYS__,
+        'loc_interest_ms': window.__LOC_INT__,
+        'gasit in fisier': roh || '(nimic)',
+        'afisat': name || '(fallback: ' + FALLBACK_DISPLAY + ')',
+        'sursa': source
+      });
+    }
+
     if (name) {
       var currentTitle = document.title;
       if (currentTitle.indexOf(' | ') !== -1) {
@@ -122,12 +97,10 @@
       }
     }
 
-    // .city
     document.querySelectorAll('.city').forEach(function (el) {
       el.textContent = name ? name + ' und Region' : FALLBACK_DISPLAY;
     });
 
-    // .city-full
     document.querySelectorAll('.city-full').forEach(function (el) {
       if (name) {
         el.style.display = '';
@@ -138,7 +111,6 @@
       }
     });
 
-    // .city-sub
     document.querySelectorAll('.city-sub').forEach(function (el) {
       if (name) {
         el.textContent = 'in ' + name + ' und Region';
@@ -148,20 +120,14 @@
       }
     });
 
-    // .city-map
     document.querySelectorAll('.city-map').forEach(function (el) {
       el.textContent = name ? name + ' und Region' : '';
     });
 
-    // .city-service (Impressum Servicegebiet)
     document.querySelectorAll('.city-service').forEach(function (el) {
-      if (name) {
-        el.textContent = name + ' und Umgebung';
-      }
-      // Daca nu e oras, lasa textul default din HTML (Berlin, Brandenburg etc.)
+      if (name) el.textContent = name + ' und Umgebung';
     });
 
-    // Harta
     if (name) {
       var section = document.getElementById('map-section');
       if (section) section.style.display = 'block';
@@ -178,7 +144,6 @@
       }
     }
 
-    // Propaga loc_id in linkuri interne
     if (locId) {
       document.querySelectorAll('a[href]').forEach(function (el) {
         var href = el.getAttribute('href');
@@ -194,10 +159,18 @@
     var physicalId = params.physicalId;
     var interestId = params.interestId;
 
+    window.__LOC_DEBUG__ = params.debug;
+    window.__LOC_PHYS__  = physicalId;
+    window.__LOC_INT__   = interestId;
+
     if (!physicalId && !interestId) {
-      applyCity('', '', 'none');
+      applyCity('', '', 'none', '');
       return;
     }
+
+    // Berlin inainte de orice cautare: orice sector inseamna Berlin
+    if (istBerlinId(interestId)) { applyCity('Berlin', interestId, 'interest+berlin', 'Berlin'); return; }
+    if (istBerlinId(physicalId)) { applyCity('Berlin', physicalId, 'physical+berlin', 'Berlin'); return; }
 
     fetch('de-cities.json')
       .then(function (r) {
@@ -205,25 +178,19 @@
         return r.json();
       })
       .then(function (map) {
-        // 1. Primul: loc_interest_ms — orasul cautat de user
-        if (interestId && map[interestId] && isValidCityName(map[interestId])) {
-          var ni = map[interestId];
-          if (isAnchor(ni)) { applyCity(ni, interestId, 'interest'); }
-          else { resolveViaCloudflare(ni, interestId, 'interest'); }
-          return;
-        }
-        // 2. Al doilea: loc_physical_ms — unde e fizic userul
-        if (physicalId && map[physicalId] && isValidCityName(map[physicalId])) {
-          var np = map[physicalId];
-          if (isAnchor(np)) { applyCity(np, physicalId, 'physical'); }
-          else { resolveViaCloudflare(np, physicalId, 'physical'); }
-          return;
-        }
-        // 3. Fallback generic
-        applyCity('', physicalId || interestId, 'none');
+        // 1. loc_interest_ms — orasul cautat de utilizator
+        var ni = interestId ? map[interestId] : null;
+        if (ni && isValidCityName(ni)) { applyCity(ni, interestId, 'interest', ni); return; }
+
+        // 2. loc_physical_ms — unde se afla fizic
+        var np = physicalId ? map[physicalId] : null;
+        if (np && isValidCityName(np)) { applyCity(np, physicalId, 'physical', np); return; }
+
+        // 3. Nimic utilizabil. Numele brut ajunge in jurnal, dar nu pe ecran.
+        applyCity('', physicalId || interestId, 'none', ni || np || '');
       })
       .catch(function () {
-        applyCity('', physicalId || interestId, 'error');
+        applyCity('', physicalId || interestId, 'error', '');
       });
   }
 
