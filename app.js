@@ -177,6 +177,7 @@ function closeStickyForm() {
       locSrc:   window.__LOC_SOURCE__ || 'none',
       locPhys:  window.__LOC_PHYS__ || param('loc_physical_ms') || param('loc_id'),
       locInt:   window.__LOC_INT__ || param('loc_interest_ms'),
+      campId:   window.__LOC_CAMP__ || param('gad_campaignid'),
       locId:    window.__LOC_ID__ || param('loc_physical_ms') || param('loc_id'),
       page:     window.location.pathname,
       campaign: param('gad_campaignid'),

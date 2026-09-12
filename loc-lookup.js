@@ -1,6 +1,14 @@
 (function () {
   var FALLBACK_DISPLAY = 'in Ihrer Nähe';
 
+  // Campanii cu tintire geografica fara ambiguitate.
+  // Daca ID-ul de locatie nu se rezolva, campania spune singura unde suntem.
+  // Adauga aici fiecare campanie noua care tinteste UN singur land.
+  var KAMPAGNE_REGION = {
+    '24094491568': 'Berlin'          // SITE FULL – Berlin (tinteste doar Berlin)
+    // '24217884207': 'Brandenburg'  // momentan tinteste 5 landuri, deci ambiguu
+  };
+
   // Orice ID din blocul sectoarelor Berlinului devine "Berlin".
   // Plasa de siguranta: daca Google trimite un sector care nu e in de-cities.json,
   // tot Berlin afisam, nu nimic.
@@ -18,6 +26,7 @@
     return {
       physicalId: p.get('loc_physical_ms') || p.get('loc_id') || '',
       interestId: p.get('loc_interest_ms') || '',
+      campaignId: p.get('gad_campaignid') || '',
       debug:      p.get('debug') === '1'
     };
   }
@@ -78,6 +87,7 @@
       zeigeDebug({
         'loc_physical_ms': window.__LOC_PHYS__,
         'loc_interest_ms': window.__LOC_INT__,
+        'gad_campaignid': window.__LOC_CAMP__,
         'gasit in fisier': roh || '(nimic)',
         'afisat': name || '(fallback: ' + FALLBACK_DISPLAY + ')',
         'sursa': source
@@ -162,9 +172,11 @@
     window.__LOC_DEBUG__ = params.debug;
     window.__LOC_PHYS__  = physicalId;
     window.__LOC_INT__   = interestId;
+    window.__LOC_CAMP__  = params.campaignId;
 
     if (!physicalId && !interestId) {
-      applyCity('', '', 'none', '');
+      var reg0 = KAMPAGNE_REGION[params.campaignId];
+      applyCity(reg0 || '', '', reg0 ? 'kampagne' : 'none', '');
       return;
     }
 
@@ -186,11 +198,16 @@
         var np = physicalId ? map[physicalId] : null;
         if (np && isValidCityName(np)) { applyCity(np, physicalId, 'physical', np); return; }
 
-        // 3. Nimic utilizabil. Numele brut ajunge in jurnal, dar nu pe ecran.
+        // 3. Niciun oras utilizabil (cartier, ID necunoscut). Cade pe regiunea campaniei.
+        var reg = KAMPAGNE_REGION[window.__LOC_CAMP__];
+        if (reg) { applyCity(reg, physicalId || interestId, 'kampagne', ni || np || ''); return; }
+
+        // 4. Nimic sigur. Numele brut ajunge in jurnal, dar nu pe ecran.
         applyCity('', physicalId || interestId, 'none', ni || np || '');
       })
       .catch(function () {
-        applyCity('', physicalId || interestId, 'error', '');
+        var reg = KAMPAGNE_REGION[window.__LOC_CAMP__];
+        applyCity(reg || '', physicalId || interestId, reg ? 'kampagne+error' : 'error', '');
       });
   }
 
