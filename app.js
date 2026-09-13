@@ -11,11 +11,11 @@ function applyLinks() {
   var waURL = 'https://wa.me/' + WA;
   document.querySelectorAll('.wa-l, .whatsapp-link').forEach(function(el) {
     el.href = waURL;
-    el.addEventListener('click', function() { trackConversion('whatsapp_click'); });
+    el.addEventListener('click', function() { trackConversion('oURWCJjz5PYcENWt0L8_'); });
   });
   document.querySelectorAll('.call-l').forEach(function(el) {
     el.href = 'tel:' + PHONE;
-    el.addEventListener('click', function() { trackConversion('phone_call'); });
+    el.addEventListener('click', function() { trackConversion('rrY2CMqh2vYcENWt0L8_'); });
   });
 }
 

@@ -370,17 +370,20 @@ document.addEventListener('DOMContentLoaded', function() {
     var waBtn = document.getElementById('popupWaBtn');
     if (waBtn) waBtn.addEventListener('click', function() {
       markSubmitted();
-      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': 'AW-17044870869/whatsapp_click' });
+      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': 'AW-17044870869/oURWCJjz5PYcENWt0L8_' });
     });
     var callBtn = document.getElementById('popupCallBtn');
     if (callBtn) callBtn.addEventListener('click', function() {
       markSubmitted();
-      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': 'AW-17044870869/phone_call' });
+      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': 'AW-17044870869/rrY2CMqh2vYcENWt0L8_' });
     });
 
     // Daca formularele de pe site sunt trimise -> nu mai arata popup vreodata
     var allForms = document.querySelectorAll('form');
-    allForms.forEach(function(f) { f.addEventListener('submit', markSubmitted); });
+    allForms.forEach(function(f) { f.addEventListener('submit', function() {
+      markSubmitted();
+      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': 'AW-17044870869/zz_4CN-B2_YcENWt0L8_' });
+    }); });
 
     // ==================================================================
     // DETECTARE NAVIGARE INTERNA - click pe linkuri din site
