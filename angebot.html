@@ -25,7 +25,10 @@ header{background:var(--dk);height:58px;display:flex;align-items:center;justify-
 .wrap{max-width:560px;margin:0 auto;background:var(--card);min-height:70vh}
 
 /* progres */
-.prog{background:var(--dk);padding:0 20px 14px}
+.prog{background:var(--dk);padding:10px 20px 14px}
+.versprechen{display:flex;flex-wrap:wrap;gap:6px 16px;margin-bottom:11px}
+.versprechen span{display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;color:var(--or);line-height:1.3}
+.versprechen svg{width:15px;height:15px;flex:none;stroke:var(--or);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .latten{display:flex;gap:4px}
 .latte{height:5px;flex:1;background:rgba(255,255,255,.18);border-radius:2px;transition:background .25s}
 .latte.voll{background:var(--or)}
@@ -84,6 +87,7 @@ h1{font-size:1.75rem;font-weight:900;line-height:1.15;letter-spacing:-.3px;margi
 .fertig{text-align:center;padding:30px 4px 10px}
 .haken{width:64px;height:64px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:2rem;color:#fff}
 .fertig p{color:var(--mid);font-size:.97rem;margin:10px auto 0;max-width:34ch}
+.rufen.wa{background:var(--wa);margin-top:10px}
 .rufen{display:inline-flex;align-items:center;gap:9px;margin-top:22px;background:var(--dk);color:#fff;padding:15px 26px;border-radius:var(--rs);font-size:1rem;font-weight:800}
 
 .vertrauen{border-top:1px solid var(--bdr);padding:16px 20px 22px;display:flex;flex-wrap:wrap;gap:10px 18px;font-size:.85rem;color:var(--mid)}
@@ -129,7 +133,14 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
   <a class="hdr-tel" href="tel:+4917688087715">0176 88087715</a>
 </header>
 
-<div class="prog"><div class="latten" id="latten" aria-hidden="true"></div></div>
+<div class="prog">
+  <div class="versprechen">
+    <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Antwort in ca. 30 Min.</span>
+    <span><svg viewBox="0 0 24 24"><path d="M14 3H7v18h10V8z"/><path d="M14 3v5h5"/></svg>Angebot in 24 Std.</span>
+    <span><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4z"/><path d="M8 3v4M16 3v4M4 11h16"/></svg>07–22 Uhr</span>
+  </div>
+  <div class="latten" id="latten" aria-hidden="true"></div>
+</div>
 
 <div class="wrap">
   <main class="buehne">
@@ -212,8 +223,9 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
       <div class="fertig">
         <div class="haken">✓</div>
         <h1>Anfrage ist da.</h1>
-        <p>Ich melde mich in der Regel noch am selben Werktag telefonisch bei Ihnen.</p>
+        <p>Ich melde mich in der Regel innerhalb von 30 Minuten. Das Angebot folgt binnen 24 Stunden.</p>
         <a class="rufen" href="tel:+4917688087715">📞 Lieber sofort sprechen</a>
+        <a class="rufen wa" id="wa-fallback" href="#" target="_blank" rel="noopener">💬 Anfrage per WhatsApp senden</a>
       </div>
     </section>
 
@@ -297,6 +309,39 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
     b.addEventListener('click', function(){ zeige(aktuell-1); });
   });
 
+  var FORMSPREE = 'https://formspree.io/f/xvzbwbrj';
+  var WA = '4917688087715';
+
+  function waText(){
+    return '\uD83C\uDFE0 *Neue Anfrage \u2013 Maisterdach*\n\n'
+      + '\uD83D\uDD27 Leistung: ' + (daten.leistung||'-') + '\n'
+      + '\u2757 Anlass: ' + (daten.anlass||'-') + '\n'
+      + '\uD83D\uDCD0 Fl\u00e4che: ' + (daten.flaeche||'-') + '\n'
+      + '\uD83D\uDCDE Telefon: ' + (daten.telefon||'-') + '\n'
+      + (daten.name ? '\uD83D\uDC64 Name: ' + daten.name + '\n' : '')
+      + (daten.plz ? '\uD83D\uDCCD PLZ: ' + daten.plz + ' ' + (daten.ort||'') + '\n' : '')
+      + '\n\uD83D\uDCC4 Angebot-Funnel';
+  }
+
+  function waUrl(){ return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(waText()); }
+
+  // Mail instant catre dachgmbh01@gmail.com, prin acelasi Formspree ca restul site-ului
+  function anFormspree(){
+    var fd = new FormData();
+    fd.append('leistung', daten.leistung||'');
+    fd.append('anlass',   daten.anlass||'');
+    fd.append('flaeche',  daten.flaeche||'');
+    fd.append('telefon',  daten.telefon||'');
+    fd.append('name',     daten.name||'');
+    fd.append('plz',      daten.plz||'');
+    fd.append('ort',      daten.ort||'');
+    fd.append('quelle',   'Angebot-Funnel');
+    fd.append('kampagne', param('gad_campaignid'));
+    fd.append('keyword',  param('kw'));
+    fd.append('_subject', 'Neue Anfrage: ' + (daten.leistung||'Dach') + ' \u2013 ' + (daten.telefon||''));
+    return fetch(FORMSPREE, { method:'POST', body:fd, headers:{'Accept':'application/json'} });
+  }
+
   function senden(){
     var teile=[daten.leistung,daten.anlass,daten.flaeche].filter(Boolean);
     var data={
@@ -335,6 +380,16 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
       daten.plz=document.getElementById('plz').value.trim();
       daten.ort=document.getElementById('ort').value.trim();
       senden();
+
+      var link=document.getElementById('wa-fallback');
+      if(link) link.href=waUrl();
+
+      anFormspree().catch(function(){});
+
+      // Deschide WhatsApp pe telefonul clientului, cu mesajul deja scris.
+      // Daca browserul blocheaza, butonul verde de pe ecranul final face acelasi lucru.
+      try { window.open(waUrl(), '_blank'); } catch(e) {}
+
       if(typeof gtag==='function'){
         gtag('event','generate_lead',{'event_category':'Anfrage','event_label':daten.leistung||''});
         /* Cand ai eticheta reala de conversie, decomenteaza:
