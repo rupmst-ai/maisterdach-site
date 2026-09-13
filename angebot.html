@@ -279,7 +279,9 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
     }
   }
 
-  function zeige(nr){
+  // Fiecare pas primeste o intrare in istoric, ca butonul Back al telefonului
+  // sa mearga inapoi un pas in loc sa iasa din pagina.
+  function zeige(nr, ausHistory){
     schritte.forEach(function(s){ s.classList.toggle('an', +s.dataset.nr===nr); });
     if(nr<=4){ latten(nr); } else { lattenBox.innerHTML=''; }
     aktuell=nr;
@@ -288,7 +290,18 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
       document.getElementById('zusammen').textContent =
         [daten.leistung, daten.anlass, daten.flaeche].filter(Boolean).join(' · ');
     }
+    if(!ausHistory){
+      try{
+        if(nr===1) history.replaceState({schritt:1},'');
+        else history.pushState({schritt:nr},'');
+      }catch(e){}
+    }
   }
+
+  window.addEventListener('popstate', function(ev){
+    var nr = (ev.state && ev.state.schritt) ? ev.state.schritt : 1;
+    zeige(nr, true);
+  });
 
   document.querySelectorAll('.ct,.opt').forEach(function(b){
     if(!b.dataset.feld) return;
@@ -301,7 +314,10 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
   });
 
   document.querySelectorAll('.zurueck').forEach(function(b){
-    b.addEventListener('click', function(){ zeige(aktuell-1); });
+    b.addEventListener('click', function(){
+      if(history.state && history.state.schritt) { history.back(); }
+      else { zeige(aktuell-1); }
+    });
   });
 
   var FORMSPREE = 'https://formspree.io/f/xvzbwbrj';
