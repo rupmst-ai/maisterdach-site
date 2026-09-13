@@ -51,7 +51,7 @@ h1{font-size:1.75rem;font-weight:900;line-height:1.15;letter-spacing:-.3px;margi
 .ct img{width:100%;height:78px;object-fit:cover;display:block}
 .ct .noimg{display:flex;align-items:center;justify-content:center;height:78px;background:#f1f5f9;color:#94a3b8;font-size:1.6rem;font-weight:800}
 .ct b{display:block;font-size:.85rem;font-weight:700;color:var(--txt);line-height:1.3;padding:9px 10px 0}
-.opt{font-weight:400;color:#c3c9d1;font-size:.62rem;letter-spacing:.2px;text-transform:lowercase}
+.opt{display:block;margin-top:3px;font-weight:400;color:#b6bcc4;font-size:.68rem;line-height:1.2}
 .hint{font-size:.75rem;color:#9ca3af;margin-top:5px;line-height:1.45}
 .eilig{color:#dc2626 !important;font-weight:600}
 #tel{border-color:var(--or)}
@@ -196,15 +196,15 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
       </div>
 
       <div class="duo">
-        <div class="fgroup"><label for="plz">PLZ <span class="opt">optional</span></label>
-          <input id="plz" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="13597"/></div>
-        <div class="fgroup"><label for="ort">Ort <span class="opt">optional</span></label>
-          <input id="ort" type="text" autocomplete="address-level2" placeholder="Berlin"/></div>
+        <div class="fgroup"><label for="plz">PLZ</label>
+          <input id="plz" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="13597"/><span class="opt">optional</span></div>
+        <div class="fgroup"><label for="ort">Ort</label>
+          <input id="ort" type="text" autocomplete="address-level2" placeholder="Berlin"/><span class="opt">optional</span></div>
       </div>
 
       <div class="fgroup">
-        <label for="name">Name <span class="opt">optional</span></label>
-        <input id="name" type="text" autocomplete="name" placeholder="Vor- und Nachname"/>
+        <label for="name">Name</label>
+        <input id="name" type="text" autocomplete="name" placeholder="Vor- und Nachname"/><span class="opt">optional</span>
       </div>
 
       <div class="dsgvo">
@@ -340,8 +340,10 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
   function senden(){
     var teile=[daten.leistung,daten.anlass,daten.flaeche].filter(Boolean);
     var data={
-      action:'Anfrage: '+teile.join(' | ')+' | TEL '+daten.telefon
-             +(daten.name?' | '+daten.name:'')+(daten.plz?' | '+daten.plz+' '+(daten.ort||''):''),
+      action:'\u260E '+daten.telefon
+             +(daten.name?' | '+daten.name:'')
+             +(daten.plz?' | '+daten.plz+' '+(daten.ort||''):'')
+             +' | '+teile.join(' | '),
       city: window.__LOC_CITY__||daten.ort||'',
       rawCity: window.__LOC_RAW__||'',
       locSrc: window.__LOC_SOURCE__||'none',
