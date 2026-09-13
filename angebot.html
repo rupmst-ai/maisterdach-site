@@ -49,6 +49,8 @@ h1{font-size:1.75rem;font-weight:900;line-height:1.15;letter-spacing:-.3px;margi
 .ct:hover{border-color:var(--or)}
 .ct.gewaehlt{border-color:var(--or);border-width:2.5px;background:#fff8f3}
 .ct img{width:100%;height:78px;object-fit:cover;display:block}
+.ct.breit{grid-column:1 / -1}
+.ct.breit .noimg{height:52px}
 .ct .noimg{display:flex;align-items:center;justify-content:center;height:78px;background:#f1f5f9;color:#94a3b8;font-size:1.6rem;font-weight:800}
 .ct b{display:block;font-size:.85rem;font-weight:700;color:var(--txt);line-height:1.3;padding:9px 10px 0}
 .opt{display:block;margin-top:3px;font-weight:400;color:#b6bcc4;font-size:.68rem;line-height:1.2}
@@ -154,7 +156,8 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
         <button class="ct" data-feld="leistung" data-wert="Blechdach"><img src="card-blechdach-combo.webp" alt="" loading="lazy"><b>Blechdach, Trapezblech</b></button>
         <button class="ct" data-feld="leistung" data-wert="Dachrinne"><img src="card-klempner.webp" alt="" loading="lazy"><b>Dachrinne, Fallrohr</b></button>
         <button class="ct" data-feld="leistung" data-wert="Asbestdach"><img src="card-sanierung-gross.webp" alt="" loading="lazy"><b>Asbestdach neu decken</b></button>
-        <button class="ct" data-feld="leistung" data-wert="Anderes"><span class="noimg">?</span><b>Weiß ich nicht genau</b></button>
+        <button class="ct" data-feld="leistung" data-wert="Reparatur / Dachschaden"><img src="hero-dachreparatur.webp" alt="" loading="lazy"><b>Reparatur, Dachschaden</b></button>
+        <button class="ct breit" data-feld="leistung" data-wert="Anderes"><span class="noimg">?</span><b>Weiß ich nicht genau</b></button>
       </div>
     </section>
 
@@ -251,7 +254,7 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
   // Serviciul preselectat vine din reclama: angebot.html?service=blechdach
   var SERVICE_MAP = {
     flachdach:'Flachdach und Abdichtung', ziegeldach:'Ziegeldach', blechdach:'Blechdach',
-    dachrinne:'Dachrinne', asbestdach:'Asbestdach'
+    dachrinne:'Dachrinne', asbestdach:'Asbestdach', reparatur:'Reparatur / Dachschaden'
   };
 
   var daten = {}, aktuell = 1;
