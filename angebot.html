@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <meta name="description" content="Dachangebot in 6 Schritten anfordern – kostenlos und unverbindlich. Antwort noch am selben Werktag."/>
+  <meta name="description" content="Dachangebot in 4 Schritten anfordern – kostenlos und unverbindlich. Antwort in ca. 30 Minuten, Angebot binnen 24 Stunden."/>
   <meta name="robots" content="noindex,follow"/>
   <title>Kostenloses Dachangebot anfordern | Maisterdach</title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -148,7 +148,7 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
     <!-- 1 Leistung: preselectat din reclama prin ?service= -->
     <section class="schritt an" data-nr="1">
       <div class="zaehler">Schritt 1 von 4</div>
-      <h1>Kostenloses Angebot anfordern</h1>
+      <h1>Kostenloses Angebot<span id="ort-h1"></span> anfordern</h1>
       <p class="unter">Wählen Sie Ihre Leistung. Dauert keine zwei Minuten.</p>
       <div class="grid" id="svc">
         <button class="ct" data-feld="leistung" data-wert="Reparatur / Dachschaden"><img src="hero-dachreparatur.webp" alt="" loading="lazy"><b>Reparatur, Dachschaden</b></button>
@@ -247,7 +247,35 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
   </div>
 </div>
 
-<script src="loc-lookup.js" defer></script>
+<script>
+// Oras in titlu doar din loc_interest_ms, adica orasul scris de utilizator in cautare.
+// Fisierul de 320 KB se incarca DOAR daca parametrul chiar exista.
+(function(){
+  var id;
+  try { id = new URLSearchParams(location.search).get('loc_interest_ms') || ''; } catch(e) { return; }
+  if (!id) return;
+
+  var NICHT_STADT = ['mitte','altstadt','neustadt','nord','sud','süd','ost','west',
+                     'innenstadt','zentrum','list','vorstadt'];
+
+  fetch('de-cities.json')
+    .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+    .then(function(map){
+      var n = map[id];
+      if (!n) return;
+      n = n.trim();
+      if (n.length < 3 || /^\d+$/.test(n)) return;
+      if (NICHT_STADT.indexOf(n.toLowerCase()) !== -1) return;
+
+      var el = document.getElementById('ort-h1');
+      if (el) el.textContent = ' in ' + n + ' und Umgebung';
+      document.title = 'Kostenloses Dachangebot in ' + n + ' und Umgebung | Maisterdach';
+      window.__ORT__ = n;
+    })
+    .catch(function(){});
+})();
+</script>
+
 <script>
 (function(){
   var LOG_URL = 'https://script.google.com/macros/s/AKfycbxKxU91jmxHQIyEyBzzcuQ7Q3zN1q9wsklPoltXMbpYjF6GybzK2o2ZqforBrD8gBLk/exec';
@@ -370,13 +398,10 @@ footer a{color:rgba(255,255,255,.45);margin:0 8px}
              +(daten.name?' | '+daten.name:'')
              +(daten.plz?' | '+daten.plz+' '+(daten.ort||''):'')
              +' | '+teile.join(' | '),
-      city: window.__LOC_CITY__||daten.ort||'',
-      rawCity: window.__LOC_RAW__||'',
-      locSrc: window.__LOC_SOURCE__||'none',
-      locPhys: window.__LOC_PHYS__||param('loc_physical_ms'),
-      locInt: window.__LOC_INT__||param('loc_interest_ms'),
-      campId: window.__LOC_CAMP__||param('gad_campaignid'),
-      locId: window.__LOC_ID__||'',
+      city: daten.ort||window.__ORT__||'',
+      locPhys: param('loc_physical_ms'),
+      locInt: param('loc_interest_ms'),
+      campId: param('gad_campaignid'),
       page: location.pathname+location.search,
       campaign: param('gad_campaignid'),
       keyword: param('kw'),
