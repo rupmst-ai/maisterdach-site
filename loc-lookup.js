@@ -5,8 +5,10 @@
   // Daca ID-ul de locatie nu se rezolva, campania spune singura unde suntem.
   // Adauga aici fiecare campanie noua care tinteste UN singur land.
   var KAMPAGNE_REGION = {
-    '24094491568': 'Berlin'          // SITE FULL – Berlin (tinteste doar Berlin)
-    // '24217884207': 'Brandenburg'  // momentan tinteste 5 landuri, deci ambiguu
+    '24094491568': 'Berlin',        // SITE FULL – Berlin
+    '24217884207': 'Brandenburg'    // SITE FULL – Brandenburg (necesita geo doar Brandenburg)
+    // Flachdach 24219701426 si Asbestdach 24235344397 tintesc 5 landuri:
+    // fara zona unica, deci raman fara titlu de regiune.
   };
 
   // Orice ID din blocul sectoarelor Berlinului devine "Berlin".
@@ -108,14 +110,14 @@
     }
 
     document.querySelectorAll('.city').forEach(function (el) {
-      el.textContent = name ? name + ' und Region' : FALLBACK_DISPLAY;
+      el.textContent = name ? name + ' und Umgebung' : FALLBACK_DISPLAY;
     });
 
     document.querySelectorAll('.city-full').forEach(function (el) {
       if (name) {
         el.style.display = '';
         var cn = el.querySelector('.city-name');
-        if (cn) cn.textContent = name + ' und Region';
+        if (cn) cn.textContent = name + ' und Umgebung';
       } else {
         el.style.display = 'none';
       }
@@ -123,7 +125,7 @@
 
     document.querySelectorAll('.city-sub').forEach(function (el) {
       if (name) {
-        el.textContent = 'in ' + name + ' und Region';
+        el.textContent = 'in ' + name + ' und Umgebung';
         el.style.display = '';
       } else {
         el.style.display = 'none';
@@ -131,7 +133,7 @@
     });
 
     document.querySelectorAll('.city-map').forEach(function (el) {
-      el.textContent = name ? name + ' und Region' : '';
+      el.textContent = name ? name + ' und Umgebung' : '';
     });
 
     document.querySelectorAll('.city-service').forEach(function (el) {
@@ -180,9 +182,19 @@
       return;
     }
 
-    // Berlin inainte de orice cautare: orice sector inseamna Berlin
+    // PRIORITATE 1: campania. Targetingul il stabilesti tu, deci nu poate gresi.
+    // Google a livrat deja localitati din alt land pe campanii cu targeting strict,
+    // asa ca pozitia fizica trece pe locul doi.
+    var regK = KAMPAGNE_REGION[params.campaignId];
+    if (regK) { applyCity(regK, physicalId || interestId, 'kampagne', ''); return; }
+
+    // Sectoarele Berlinului, doar pe interes
     if (istBerlinId(interestId)) { applyCity('Berlin', interestId, 'interest+berlin', 'Berlin'); return; }
-    if (istBerlinId(physicalId)) { applyCity('Berlin', physicalId, 'physical+berlin', 'Berlin'); return; }
+
+    // loc_physical_ms nu mai decide nimic. Google a livrat Schenkenhorst
+    // pentru un utilizator aflat in Spandau, deci nu e de incredere.
+    // Ramane doar in jurnal, pentru masuratori.
+    if (!interestId) { applyCity('', physicalId, 'none', ''); return; }
 
     fetch('de-cities.json')
       .then(function (r) {
@@ -194,16 +206,8 @@
         var ni = interestId ? map[interestId] : null;
         if (ni && isValidCityName(ni)) { applyCity(ni, interestId, 'interest', ni); return; }
 
-        // 2. loc_physical_ms — unde se afla fizic
-        var np = physicalId ? map[physicalId] : null;
-        if (np && isValidCityName(np)) { applyCity(np, physicalId, 'physical', np); return; }
-
-        // 3. Niciun oras utilizabil (cartier, ID necunoscut). Cade pe regiunea campaniei.
-        var reg = KAMPAGNE_REGION[window.__LOC_CAMP__];
-        if (reg) { applyCity(reg, physicalId || interestId, 'kampagne', ni || np || ''); return; }
-
-        // 4. Nimic sigur. Numele brut ajunge in jurnal, dar nu pe ecran.
-        applyCity('', physicalId || interestId, 'none', ni || np || '');
+        // 2. Nimic sigur. Numele brut ajunge in jurnal, dar nu pe ecran.
+        applyCity('', interestId, 'none', ni || '');
       })
       .catch(function () {
         var reg = KAMPAGNE_REGION[window.__LOC_CAMP__];

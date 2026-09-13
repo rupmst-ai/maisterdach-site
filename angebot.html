@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="description" content="Dachangebot in 6 Schritten anfordern – kostenlos und unverbindlich. Antwort noch am selben Werktag."/>
+  <meta name="robots" content="noindex,follow"/>
+  <title>Kostenloses Dachangebot anfordern | Maisterdach</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/></noscript>
+  <link rel="canonical" href="https://dachjetz.de/angebot.html"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--or:#F97316;--or-h:#EA6C0A;--wa:#22C55E;--dk:#1a1f2e;--dk2:#1e2435;--bg:#f1f5f9;--card:#fff;--txt:#111827;--mid:#6b7280;--bdr:#e5e7eb;--r:16px;--rs:12px}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--txt);line-height:1.6;-webkit-font-smoothing:antialiased;padding-bottom:96px}
+a{text-decoration:none;color:inherit}
+
+header{background:var(--dk);height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:300}
+.logo{display:flex;align-items:center;gap:10px}
+.logo img{height:40px;width:auto}
+.logo span{font-size:1.1rem;font-weight:800;color:#fff}
+.hdr-tel{font-size:.95rem;font-weight:800;color:var(--or)}
+
+.wrap{max-width:560px;margin:0 auto;background:var(--card);min-height:70vh}
+
+/* progres */
+.prog{background:var(--dk);padding:0 20px 14px}
+.latten{display:flex;gap:4px}
+.latte{height:5px;flex:1;background:rgba(255,255,255,.18);border-radius:2px;transition:background .25s}
+.latte.voll{background:var(--or)}
+
+.buehne{padding:24px 20px 30px}
+.schritt{display:none}
+.schritt.an{display:block;animation:auf .22s ease-out}
+@keyframes auf{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.schritt.an{animation:none}}
+
+.zaehler{font-size:.78rem;font-weight:700;color:var(--mid);letter-spacing:.4px;text-transform:uppercase;margin-bottom:6px}
+h1{font-size:1.75rem;font-weight:900;line-height:1.15;letter-spacing:-.3px;margin-bottom:8px}
+.unter{font-size:.95rem;color:var(--mid);margin-bottom:20px}
+
+.optionen{display:flex;flex-direction:column;gap:10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ct{background:var(--card);border:1.5px solid var(--bdr);border-radius:var(--rs);padding:0 0 10px;cursor:pointer;text-align:left;overflow:hidden;display:block;font-family:inherit;transition:border-color .15s}
+.ct:hover{border-color:var(--or)}
+.ct.gewaehlt{border-color:var(--or);border-width:2.5px;background:#fff8f3}
+.ct img{width:100%;height:78px;object-fit:cover;display:block}
+.ct .noimg{display:flex;align-items:center;justify-content:center;height:78px;background:#f1f5f9;color:#94a3b8;font-size:1.6rem;font-weight:800}
+.ct b{display:block;font-size:.85rem;font-weight:700;color:var(--txt);line-height:1.3;padding:9px 10px 0}
+.opt{font-weight:400;color:#9ca3af;font-size:.75rem}
+.hint{font-size:.75rem;color:#9ca3af;margin-top:5px;line-height:1.45}
+.eilig{color:#dc2626 !important;font-weight:600}
+#tel{border-color:var(--or)}
+.opt{display:flex;align-items:center;gap:14px;width:100%;background:var(--card);border:1.5px solid var(--bdr);border-left:4px solid var(--bdr);border-radius:var(--rs);padding:16px;min-height:64px;font-family:inherit;font-size:1rem;font-weight:600;color:var(--txt);text-align:left;cursor:pointer;transition:border-color .15s,background .15s}
+.opt:hover{border-color:var(--or);border-left-color:var(--or);background:#fff8f3}
+.opt:focus-visible{outline:3px solid var(--or);outline-offset:2px}
+.opt.gewaehlt{border-color:var(--or);border-left-color:var(--or);background:#fff8f3}
+.opt .emo{font-size:1.6rem;flex:none;line-height:1}
+.opt small{display:block;font-size:.82rem;font-weight:500;color:var(--mid);margin-top:1px}
+
+.fgroup{margin-bottom:14px}
+.fgroup label{display:block;font-size:.8rem;font-weight:700;color:var(--mid);margin-bottom:5px}
+.fgroup input{width:100%;padding:14px;border:1.5px solid var(--bdr);border-radius:var(--rs);font-family:inherit;font-size:1rem;color:var(--txt);outline:none;background:#fff}
+.fgroup input:focus{border-color:var(--or)}
+.duo{display:flex;gap:10px}
+.duo .fgroup:first-child{flex:0 0 38%}
+.duo .fgroup:last-child{flex:1}
+
+.zusammen{background:var(--bg);border-left:3px solid var(--or);border-radius:0 var(--rs) var(--rs) 0;padding:13px 15px;margin-bottom:18px;font-size:.9rem;color:var(--mid)}
+.zusammen b{color:var(--txt);font-weight:700}
+
+.dsgvo{display:flex;gap:11px;align-items:flex-start;margin:4px 0 16px}
+.dsgvo input{margin-top:3px;width:19px;height:19px;flex:none;accent-color:var(--or)}
+.dsgvo label{font-size:.82rem;color:var(--mid);line-height:1.5}
+.dsgvo a{color:var(--or);font-weight:600}
+
+.weiter{width:100%;padding:17px;border:none;border-radius:var(--rs);background:var(--or);color:#fff;font-family:inherit;font-size:1.05rem;font-weight:800;cursor:pointer;transition:filter .18s}
+.weiter:hover{filter:brightness(1.07)}
+.zurueck{background:none;border:none;font-family:inherit;font-size:.88rem;color:var(--mid);padding:14px 2px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.fehler{color:#dc2626;font-size:.85rem;font-weight:600;margin-top:8px;display:none}
+.hinweis{font-size:.8rem;color:var(--mid);margin-top:12px;text-align:center}
+
+.fertig{text-align:center;padding:30px 4px 10px}
+.haken{width:64px;height:64px;border-radius:50%;background:var(--wa);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:2rem;color:#fff}
+.fertig p{color:var(--mid);font-size:.97rem;margin:10px auto 0;max-width:34ch}
+.rufen{display:inline-flex;align-items:center;gap:9px;margin-top:22px;background:var(--dk);color:#fff;padding:15px 26px;border-radius:var(--rs);font-size:1rem;font-weight:800}
+
+.vertrauen{border-top:1px solid var(--bdr);padding:16px 20px 22px;display:flex;flex-wrap:wrap;gap:10px 18px;font-size:.85rem;color:var(--mid)}
+.vertrauen div{display:flex;gap:7px;align-items:center}
+
+.sticky-bar{position:fixed;bottom:0;left:0;right:0;z-index:500;background:var(--dk);border-top:1px solid rgba(255,255,255,.1);padding:10px 16px 14px;box-shadow:0 -4px 24px rgba(0,0,0,.35)}
+.sticky-in{display:flex;gap:8px;max-width:560px;margin:0 auto}
+.sticky-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:10px;font-family:inherit;font-size:.95rem;font-weight:800;color:#fff;line-height:1}
+.sb-call{background:var(--or)}
+.sb-wa{background:var(--wa)}
+
+footer{background:var(--dk);padding:24px 20px;text-align:center;font-size:.78rem;color:rgba(255,255,255,.3);line-height:2}
+footer a{color:rgba(255,255,255,.45);margin:0 8px}
+</style>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-17044870869');
+  gtag('config', 'G-E40WQHWM7V');
+  (function(){
+    var loaded=false;
+    function loadGtag(){ if(loaded) return; loaded=true;
+      var s=document.createElement('script');
+      s.src='https://www.googletagmanager.com/gtag/js?id=AW-17044870869'; s.async=true;
+      document.head.appendChild(s); }
+    ['touchstart','scroll','mousemove','keydown','click'].forEach(function(e){
+      window.addEventListener(e, loadGtag, {passive:true, once:true}); });
+    window.addEventListener('load', function(){
+      if('requestIdleCallback' in window){ requestIdleCallback(loadGtag,{timeout:6000}); }
+      else { setTimeout(loadGtag,5000); }
+    },{once:true});
+  })();
+</script>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="index.html">
+    <img src="logo.png" alt="Maisterdach" width="40" height="40"/>
+    <span>Maisterdach</span>
+  </a>
+  <a class="hdr-tel" href="tel:+4917688087715">0176 88087715</a>
+</header>
+
+<div class="prog"><div class="latten" id="latten" aria-hidden="true"></div></div>
+
+<div class="wrap">
+  <main class="buehne">
+
+    <!-- 1 Leistung: preselectat din reclama prin ?service= -->
+    <section class="schritt an" data-nr="1">
+      <div class="zaehler">Schritt 1 von 4</div>
+      <h1>Worum geht es?</h1>
+      <p class="unter">Aus Ihrer Anzeige vorausgewählt. Einfach ändern, falls es etwas anderes ist.</p>
+      <div class="grid" id="svc">
+        <button class="ct" data-feld="leistung" data-wert="Flachdach und Abdichtung"><img src="card-flachdach.webp" alt="" loading="lazy"><b>Flachdach, Abdichtung</b></button>
+        <button class="ct" data-feld="leistung" data-wert="Ziegeldach"><img src="card-dachziegel.webp" alt="" loading="lazy"><b>Ziegeldach</b></button>
+        <button class="ct" data-feld="leistung" data-wert="Blechdach"><img src="card-blechdach-combo.webp" alt="" loading="lazy"><b>Blechdach, Trapezblech</b></button>
+        <button class="ct" data-feld="leistung" data-wert="Dachrinne"><img src="card-klempner.webp" alt="" loading="lazy"><b>Dachrinne, Fallrohr</b></button>
+        <button class="ct" data-feld="leistung" data-wert="Asbestdach"><img src="card-sanierung-gross.webp" alt="" loading="lazy"><b>Asbestdach neu decken</b></button>
+        <button class="ct" data-feld="leistung" data-wert="Anderes"><span class="noimg">?</span><b>Weiß ich nicht genau</b></button>
+      </div>
+    </section>
+
+    <!-- 2 Anlass, cu urgenta inclusa -->
+    <section class="schritt" data-nr="2">
+      <div class="zaehler">Schritt 2 von 4</div>
+      <h1>Was ist der Anlass?</h1>
+      <div class="optionen">
+        <button class="opt" data-feld="anlass" data-wert="Wasser dringt ein, eilig">Es dringt Wasser ein<small class="eilig">eilig</small></button>
+        <button class="opt" data-feld="anlass" data-wert="Sanierung">Altes Dach soll erneuert werden</button>
+        <button class="opt" data-feld="anlass" data-wert="Rohbau ohne Dach">Rohbau steht, Dach fehlt noch</button>
+        <button class="opt" data-feld="anlass" data-wert="Prüfung oder Wartung">Prüfung oder Wartung</button>
+      </div>
+    </section>
+
+    <!-- 3 Flaeche, fara sugestii de marime -->
+    <section class="schritt" data-nr="3">
+      <div class="zaehler">Schritt 3 von 4</div>
+      <h1>Wie groß ist die Fläche?</h1>
+      <p class="unter">Eine Schätzung genügt. Genau gemessen wird vor Ort.</p>
+      <div class="optionen">
+        <button class="opt" data-feld="flaeche" data-wert="unter 50 m²">Unter 50 m²</button>
+        <button class="opt" data-feld="flaeche" data-wert="50 bis 150 m²">50 bis 150 m²</button>
+        <button class="opt" data-feld="flaeche" data-wert="über 150 m²">Über 150 m²</button>
+        <button class="opt" data-feld="flaeche" data-wert="unbekannt">Weiß ich nicht</button>
+      </div>
+    </section>
+
+    <!-- 4 Contact: doar telefonul e obligatoriu -->
+    <section class="schritt" data-nr="4">
+      <div class="zaehler">Letzter Schritt</div>
+      <h1>Wie erreiche ich Sie?</h1>
+      <div class="zusammen" id="zusammen"></div>
+
+      <div class="fgroup">
+        <label for="tel">Telefon</label>
+        <input id="tel" type="tel" inputmode="tel" autocomplete="tel" placeholder="0176 12345678"/>
+        <p class="hint">Nur das brauche ich. Alles Weitere klären wir am Telefon.</p>
+      </div>
+
+      <div class="duo">
+        <div class="fgroup"><label for="plz">PLZ <span class="opt">optional</span></label>
+          <input id="plz" type="text" inputmode="numeric" maxlength="5" autocomplete="postal-code" placeholder="13597"/></div>
+        <div class="fgroup"><label for="ort">Ort <span class="opt">optional</span></label>
+          <input id="ort" type="text" autocomplete="address-level2" placeholder="Berlin"/></div>
+      </div>
+
+      <div class="fgroup">
+        <label for="name">Name <span class="opt">optional</span></label>
+        <input id="name" type="text" autocomplete="name" placeholder="Vor- und Nachname"/>
+      </div>
+
+      <div class="dsgvo">
+        <input id="ok" type="checkbox"/>
+        <label for="ok">Ich bin damit einverstanden, dass meine Angaben zur Bearbeitung meiner Anfrage gespeichert und verwendet werden. <a href="datenschutz.html">Datenschutzerklärung</a></label>
+      </div>
+      <p class="fehler" id="f-kontakt"></p>
+      <button class="weiter" data-ziel="5">Kostenloses Angebot anfordern</button>
+      <button class="zurueck">Zurück</button>
+    </section>
+
+    <!-- 5 Danke -->
+    <section class="schritt" data-nr="5">
+      <div class="fertig">
+        <div class="haken">✓</div>
+        <h1>Anfrage ist da.</h1>
+        <p>Ich melde mich in der Regel noch am selben Werktag telefonisch bei Ihnen.</p>
+        <a class="rufen" href="tel:+4917688087715">📞 Lieber sofort sprechen</a>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="vertrauen">
+    <div>✓ Nur Dach: Konstruktion, Eindeckung, Abdichtung</div>
+    <div>✓ Berlin, Brandenburg, Sachsen-Anhalt</div>
+  </div>
+</div>
+
+<footer>
+  <a href="index.html">Startseite</a> · <a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a>
+</footer>
+
+<div class="sticky-bar">
+  <div class="sticky-in">
+    <a class="sticky-btn sb-call" href="tel:+4917688087715">📞 Anrufen</a>
+    <a class="sticky-btn sb-wa" href="https://wa.me/4917688087715" target="_blank" rel="noopener">💬 WhatsApp</a>
+  </div>
+</div>
+
+<script src="loc-lookup.js" defer></script>
+<script>
+(function(){
+  var LOG_URL = 'https://script.google.com/macros/s/AKfycbxKxU91jmxHQIyEyBzzcuQ7Q3zN1q9wsklPoltXMbpYjF6GybzK2o2ZqforBrD8gBLk/exec';
+
+  // Serviciul preselectat vine din reclama: angebot.html?service=blechdach
+  var SERVICE_MAP = {
+    flachdach:'Flachdach und Abdichtung', ziegeldach:'Ziegeldach', blechdach:'Blechdach',
+    dachrinne:'Dachrinne', asbestdach:'Asbestdach'
+  };
+
+  var daten = {}, aktuell = 1;
+  var schritte = document.querySelectorAll('.schritt');
+  var lattenBox = document.getElementById('latten');
+
+  function param(n){ try{ return new URLSearchParams(location.search).get(n)||''; }catch(e){ return ''; } }
+
+  function preselect(){
+    var key = (param('service')||'').toLowerCase();
+    var val = SERVICE_MAP[key];
+    if(!val) return;
+    daten.leistung = val;
+    document.querySelectorAll('#svc .ct').forEach(function(c){
+      c.classList.toggle('gewaehlt', c.dataset.wert === val);
+    });
+  }
+
+  function latten(nr){
+    lattenBox.innerHTML='';
+    for(var i=1;i<=4;i++){
+      var l=document.createElement('div');
+      l.className='latte'+(i<=nr?' voll':'');
+      lattenBox.appendChild(l);
+    }
+  }
+
+  function zeige(nr){
+    schritte.forEach(function(s){ s.classList.toggle('an', +s.dataset.nr===nr); });
+    if(nr<=4){ latten(nr); } else { lattenBox.innerHTML=''; }
+    aktuell=nr;
+    window.scrollTo({top:0,behavior:'instant'});
+    if(nr===4){
+      document.getElementById('zusammen').textContent =
+        [daten.leistung, daten.anlass, daten.flaeche].filter(Boolean).join(' · ');
+    }
+  }
+
+  document.querySelectorAll('.ct,.opt').forEach(function(b){
+    if(!b.dataset.feld) return;
+    b.addEventListener('click', function(){
+      daten[b.dataset.feld]=b.dataset.wert;
+      b.parentNode.querySelectorAll('.ct,.opt').forEach(function(x){ x.classList.remove('gewaehlt'); });
+      b.classList.add('gewaehlt');
+      setTimeout(function(){ zeige(aktuell+1); },130);
+    });
+  });
+
+  document.querySelectorAll('.zurueck').forEach(function(b){
+    b.addEventListener('click', function(){ zeige(aktuell-1); });
+  });
+
+  function senden(){
+    var teile=[daten.leistung,daten.anlass,daten.flaeche].filter(Boolean);
+    var data={
+      action:'Anfrage: '+teile.join(' | ')+' | TEL '+daten.telefon
+             +(daten.name?' | '+daten.name:'')+(daten.plz?' | '+daten.plz+' '+(daten.ort||''):''),
+      city: window.__LOC_CITY__||daten.ort||'',
+      rawCity: window.__LOC_RAW__||'',
+      locSrc: window.__LOC_SOURCE__||'none',
+      locPhys: window.__LOC_PHYS__||param('loc_physical_ms'),
+      locInt: window.__LOC_INT__||param('loc_interest_ms'),
+      campId: window.__LOC_CAMP__||param('gad_campaignid'),
+      locId: window.__LOC_ID__||'',
+      page: location.pathname+location.search,
+      campaign: param('gad_campaignid'),
+      keyword: param('kw'),
+      device: /Mobi|Android|iPhone/i.test(navigator.userAgent)?'telefon':'desktop',
+      referrer: document.referrer||'direct'
+    };
+    try{ var b=new Blob([JSON.stringify(data)],{type:'text/plain;charset=UTF-8'});
+      if(navigator.sendBeacon&&navigator.sendBeacon(LOG_URL,b)) return; }catch(e){}
+    try{ fetch(LOG_URL,{method:'POST',mode:'no-cors',keepalive:true,
+      headers:{'Content-Type':'text/plain;charset=UTF-8'},body:JSON.stringify(data)}); }catch(e){}
+  }
+
+  document.querySelectorAll('.weiter').forEach(function(b){
+    b.addEventListener('click', function(){
+      var tel=document.getElementById('tel').value.trim();
+      var err=document.getElementById('f-kontakt');
+      if(tel.replace(/\D/g,'').length<6){
+        err.textContent='Bitte eine Telefonnummer angeben'; err.style.display='block'; return; }
+      if(!document.getElementById('ok').checked){
+        err.textContent='Bitte die Einwilligung bestätigen'; err.style.display='block'; return; }
+      err.style.display='none';
+      daten.telefon=tel;
+      daten.name=document.getElementById('name').value.trim();
+      daten.plz=document.getElementById('plz').value.trim();
+      daten.ort=document.getElementById('ort').value.trim();
+      senden();
+      if(typeof gtag==='function'){
+        gtag('event','generate_lead',{'event_category':'Anfrage','event_label':daten.leistung||''});
+        /* Cand ai eticheta reala de conversie, decomenteaza:
+           gtag('event','conversion',{'send_to':'AW-17044870869/ETICHETA'}); */
+      }
+      zeige(5);
+    });
+  });
+
+  ['tel','plz','ort','name'].forEach(function(id){
+    var e=document.getElementById(id);
+    if(e) e.addEventListener('input',function(){ document.getElementById('f-kontakt').style.display='none'; });
+  });
+  document.getElementById('ok').addEventListener('change',function(){
+    document.getElementById('f-kontakt').style.display='none'; });
+
+  preselect();
+  zeige(1);
+})();
+</script>
+
+</body>
+</html>
