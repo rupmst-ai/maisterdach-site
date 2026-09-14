@@ -16,22 +16,13 @@
     gtag('js', new Date());
     gtag('config', 'AW-17044870869');
     gtag('config', 'G-E40WQHWM7V');
+    // Se incarca imediat, nu la prima atingere. Altfel pierdem vizitatorii
+    // care pleaca in primele secunde - si conversiile lor.
     (function(){
-      var loaded = false;
-      function loadGtag(){
-        if (loaded) return; loaded = true;
-        var s = document.createElement('script');
-        s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17044870869';
-        s.async = true;
-        document.head.appendChild(s);
-      }
-      ['touchstart','scroll','mousemove','keydown','click'].forEach(function(e){
-        window.addEventListener(e, loadGtag, {passive:true, once:true});
-      });
-      window.addEventListener('load', function(){
-        if ('requestIdleCallback' in window) { requestIdleCallback(loadGtag, {timeout:6000}); }
-        else { setTimeout(loadGtag, 5000); }
-      }, {once:true});
+      var s = document.createElement('script');
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17044870869';
+      s.async = true;
+      document.head.appendChild(s);
     })();
   </script>
   <meta name="description" content="Sanierung großer Dachflächen in Ihrer Nähe – Industrie, Gewerbe & Privatkunden. Kostenlose Besichtigung."/>
