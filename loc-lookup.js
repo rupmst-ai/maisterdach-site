@@ -7,8 +7,15 @@
   var KAMPAGNE_REGION = {
     '24094491568': 'Berlin',        // SITE FULL – Berlin
     '24217884207': 'Brandenburg'    // SITE FULL – Brandenburg (necesita geo doar Brandenburg)
-    // Flachdach 24219701426 si Asbestdach 24235344397 tintesc 5 landuri:
-    // fara zona unica, deci raman fara titlu de regiune.
+  };
+
+  // Campanii cu doua zone (Berlin + Brandenburg).
+  // Prioritatea ramane loc_interest_ms: daca utilizatorul a cautat un oras,
+  // se afiseaza orasul lui. Doar cand nu vine niciun oras se foloseste
+  // regiunea de mai jos. Valoarea 1 inseamna text de rezerva generic.
+  var KAMPAGNE_MEHRZONE = {
+    '24219701426': 'Brandenburg',   // Flachdach & Abdichtung
+    '24235344397': 1                // Asbestdach – Neueindeckung
   };
 
   // Orice ID din blocul sectoarelor Berlinului devine "Berlin".
@@ -72,7 +79,14 @@
     document.body.appendChild(box);
   }
 
-  function applyCity(name, locId, source, roh) {
+  // Returneaza regiunea implicita a unei campanii cu doua zone,
+  // sau '' daca acea campanie are doar text de rezerva generic.
+  function mehrzoneName(campId) {
+    var v = KAMPAGNE_MEHRZONE[campId];
+    return (typeof v === 'string') ? v : '';
+  }
+
+  function applyCity(name, locId, source, roh, weich) {
     name = (name && isValidCityName(name)) ? name.trim() : '';
 
     // Expus pentru jurnalul de apeluri din app.js
@@ -96,16 +110,17 @@
       });
     }
 
-    if (name) {
+    var titelZusatz = name ? ('in ' + name) : (weich ? FALLBACK_DISPLAY : '');
+    if (titelZusatz) {
       var currentTitle = document.title;
       if (currentTitle.indexOf(' | ') !== -1) {
-        document.title = currentTitle.replace(' | ', ' in ' + name + ' | ');
+        document.title = currentTitle.replace(' | ', ' ' + titelZusatz + ' | ');
       } else {
-        document.title = currentTitle + ' in ' + name;
+        document.title = currentTitle + ' ' + titelZusatz;
       }
       var meta = document.querySelector('meta[name="description"]');
       if (meta) {
-        meta.content = meta.content.replace('Kostenlose Besichtigung', 'in ' + name + ' – Kostenlose Besichtigung');
+        meta.content = meta.content.replace('Kostenlose Besichtigung', titelZusatz + ' – Kostenlose Besichtigung');
       }
     }
 
@@ -126,6 +141,9 @@
     document.querySelectorAll('.city-sub').forEach(function (el) {
       if (name) {
         el.textContent = 'in ' + name + ' und Umgebung';
+        el.style.display = '';
+      } else if (weich) {
+        el.textContent = FALLBACK_DISPLAY;
         el.style.display = '';
       } else {
         el.style.display = 'none';
@@ -177,8 +195,9 @@
     window.__LOC_CAMP__  = params.campaignId;
 
     if (!physicalId && !interestId) {
-      var reg0 = KAMPAGNE_REGION[params.campaignId];
-      applyCity(reg0 || '', '', reg0 ? 'kampagne' : 'none', '');
+      var reg0 = KAMPAGNE_REGION[params.campaignId] || mehrzoneName(params.campaignId);
+      var weich0 = !reg0 && !!KAMPAGNE_MEHRZONE[params.campaignId];
+      applyCity(reg0 || '', '', reg0 ? 'kampagne' : (weich0 ? 'mehrzone' : 'none'), '', weich0);
       return;
     }
 
@@ -194,7 +213,13 @@
     // loc_physical_ms nu mai decide nimic. Google a livrat Schenkenhorst
     // pentru un utilizator aflat in Spandau, deci nu e de incredere.
     // Ramane doar in jurnal, pentru masuratori.
-    if (!interestId) { applyCity('', physicalId, 'none', ''); return; }
+    if (!interestId) {
+      var mz1 = mehrzoneName(params.campaignId);
+      if (mz1) { applyCity(mz1, physicalId, 'mehrzone', '', false); return; }
+      var weich1 = !!KAMPAGNE_MEHRZONE[params.campaignId];
+      applyCity('', physicalId, weich1 ? 'mehrzone' : 'none', '', weich1);
+      return;
+    }
 
     fetch('de-cities.json')
       .then(function (r) {
@@ -207,7 +232,10 @@
         if (ni && isValidCityName(ni)) { applyCity(ni, interestId, 'interest', ni); return; }
 
         // 2. Nimic sigur. Numele brut ajunge in jurnal, dar nu pe ecran.
-        applyCity('', interestId, 'none', ni || '');
+        var mz2 = mehrzoneName(params.campaignId);
+        if (mz2) { applyCity(mz2, interestId, 'mehrzone', ni || '', false); return; }
+        var weich2 = !!KAMPAGNE_MEHRZONE[params.campaignId];
+        applyCity('', interestId, weich2 ? 'mehrzone' : 'none', ni || '', weich2);
       })
       .catch(function () {
         var reg = KAMPAGNE_REGION[window.__LOC_CAMP__];
