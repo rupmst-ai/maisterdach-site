@@ -503,7 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!overlay) return;
     isVisible = true;
     overlay.style.display = 'flex';
-    sessionStorage.setItem(SHOWN_KEY, 'true');
+    if (!isDebug) sessionStorage.setItem(SHOWN_KEY, 'true');
     if (typeof gtag !== 'undefined') {
       gtag('event', 'exit_popup_shown', { 'reason': reason || 'unknown' });
     }
@@ -524,13 +524,22 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // --- Butonul Inapoi: prima apasare arata popup-ul, a doua chiar pleaca ---
+  // Chrome ignora pushState daca omul n-a atins inca pagina (protectie anti-hijack),
+  // deci punem intrarea in istoric abia dupa prima interactiune reala.
   var backArmed = false;
-  try {
-    if (!sessionStorage.getItem(SHOWN_KEY) && !localStorage.getItem(SUBMITTED_KEY)) {
+  function armBack() {
+    if (backArmed) return;
+    try {
+      if (sessionStorage.getItem(SHOWN_KEY) || localStorage.getItem(SUBMITTED_KEY)) return;
       history.pushState({qfBack:1}, '', location.href);
       backArmed = true;
-    }
-  } catch(e){}
+    } catch(e){}
+  }
+  ['touchstart','mousedown','scroll','keydown','pointerdown'].forEach(function(ev){
+    window.addEventListener(ev, armBack, {once:true, passive:true});
+  });
+  // plasa de siguranta: daca nu atinge nimic, incercam oricum dupa 3 secunde
+  setTimeout(armBack, 3000);
   window.addEventListener('popstate', function() {
     if (!backArmed) return;
     backArmed = false;
