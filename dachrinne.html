@@ -390,6 +390,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var lastScrollY = 0;
   var lastScrollTime = Date.now();
   var inactivityTimer = null;
+  var maxScrolled = 0;
+  var upAccum = 0;   // cat a derulat in sus, cumulat
 
   // Debug mode: ?debug=popup -> arata popup-ul imediat
   var isDebug = window.location.search.indexOf('debug=popup') !== -1;
@@ -519,14 +521,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // 1. BACK BUTTON pe mobil
-      try {
-        history.pushState(null, '', window.location.href);
-        window.addEventListener('popstate', function() {
-          history.pushState(null, '', window.location.href);
-          showPopup('back_button');
-        });
-      } catch(err) {}
+      // 1. BACK BUTTON: tratat mai sus, dupa prima interactiune (armBack).
+      //    Chrome pe Android ignora pushState daca omul n-a atins pagina.
 
       // 2. SCHIMBAREA TAB-ULUI / minimizare aplicatie (visibilitychange)
       document.addEventListener('visibilitychange', function() {
@@ -564,9 +560,19 @@ document.addEventListener('DOMContentLoaded', function() {
         var deltaY = lastScrollY - currentY;  // pozitiv = scroll up
         var deltaT = now - lastScrollTime;
         // scroll rapid in sus si esti aproape de top
-        if (deltaY > 100 && deltaT < 300 && currentY < 200) {
-          showPopup('fast_scroll_up');
+        // REGULA: orice derulare in sus mai lunga decat o sectiune (un ecran)
+        // declanseaza popup-ul, indiferent cat de repede o face.
+        if (deltaY > 0) {
+          upAccum += deltaY;            // aduna cat a urcat
+        } else if (deltaY < -30) {
+          upAccum = 0;                  // a coborat din nou -> o luam de la capat
         }
+        var oSectiune = Math.max(window.innerHeight || 600, 400);
+        if (upAccum >= oSectiune) {
+          upAccum = 0;
+          showPopup('scroll_up_section');
+        }
+        if (currentY > maxScrolled) maxScrolled = currentY;
         lastScrollY = currentY;
         lastScrollTime = now;
       }, { passive: true });
