@@ -10,7 +10,9 @@
     '24252892304': 'Berlin',        // Flachdach – Berlin
     '24255295121': 'Berlin',        // Solar-Montage – Berlin
     '24249787428': 'Brandenburg',   // Solar-Montage – Brandenburg
-    '24219701426': 'Brandenburg'    // Flachdach – Brandenburg (acum doar Brandenburg)
+    '24219701426': 'Brandenburg',   // Flachdach – Brandenburg (acum doar Brandenburg)
+    '24264541414': 'Berlin',        // Dachsanierung – Berlin
+    '24258974144': 'Brandenburg'    // Dachsanierung – Brandenburg
   };
 
   // Campanii cu doua zone (Berlin + Brandenburg).
