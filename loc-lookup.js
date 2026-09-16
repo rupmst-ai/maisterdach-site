@@ -6,7 +6,11 @@
   // Adauga aici fiecare campanie noua care tinteste UN singur land.
   var KAMPAGNE_REGION = {
     '24094491568': 'Berlin',        // SITE FULL – Berlin
-    '24217884207': 'Brandenburg'    // SITE FULL – Brandenburg (necesita geo doar Brandenburg)
+    '24217884207': 'Brandenburg',   // SITE FULL – Brandenburg
+    '24252892304': 'Berlin',        // Flachdach – Berlin
+    '24255295121': 'Berlin',        // Solar-Montage – Berlin
+    '24249787428': 'Brandenburg',   // Solar-Montage – Brandenburg
+    '24219701426': 'Brandenburg'    // Flachdach – Brandenburg (acum doar Brandenburg)
   };
 
   // Campanii cu doua zone (Berlin + Brandenburg).

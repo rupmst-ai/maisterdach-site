@@ -259,7 +259,7 @@
 
 <section class="contact-sec" id="kontakt">
   <h2>Jetzt <em>kostenlos</em><br/>anfragen</h2>
-  <p class="contact-desc">Füllen Sie das Formular aus oder kontaktieren Sie uns direkt. Rückmeldung in max. 2 Stunden.</p>
+  <p class="contact-desc">Füllen Sie das Formular aus oder kontaktieren Sie uns direkt. Rückmeldung in 30 Minuten.</p>
   <div class="contact-btns">
     <a class="btn btn-or call-l" href="#">&#9990;&nbsp; +49 176 88087715</a>
     <a class="btn btn-wa wa-l" href="#">&#128172;&nbsp; Angebot per WhatsApp</a>
@@ -268,7 +268,7 @@
   <div class="qf-box qf-unit">
     <div class="qf-form">
       <h2>Jetzt anfragen</h2>
-      <p class="qf-sub">Nur Ihre Telefonnummer. R&uuml;ckmeldung in max. 2 Stunden.</p>
+      <p class="qf-sub">Nur Ihre Telefonnummer. R&uuml;ckmeldung in 30 Minuten.</p>
 
       <div class="qf-dsgvo">
         <input type="checkbox" class="qf-ok"/>
@@ -346,9 +346,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="formPopupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:9999;justify-content:center;align-items:flex-start;overflow-y:auto;padding:16px 14px;box-sizing:border-box;">
   <div style="background:#fff;border-radius:16px;padding:20px 18px;max-width:420px;width:100%;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
     <button id="closePopup" aria-label="Schließen" style="position:sticky;float:right;top:0;z-index:2;margin:-6px -4px 0 0;background:none;border:none;font-size:1.6rem;cursor:pointer;color:#94a3b8;line-height:1;padding:0;width:32px;height:32px;">&times;</button>
-    <div style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-weight:900;font-size:.8rem;padding:6px 13px;border-radius:999px;margin-bottom:10px;box-shadow:0 4px 12px rgba(239,68,68,0.3);letter-spacing:.3px;">🎁 25% RABATT FÜR NEUKUNDEN</div>
+    <div style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-weight:900;font-size:.8rem;padding:6px 13px;border-radius:999px;margin-bottom:10px;box-shadow:0 4px 12px rgba(239,68,68,0.3);letter-spacing:.3px;">⚡ Rückmeldung in 30 Minuten</div>
     <h3 style="margin:0 0 6px;font-size:1.2rem;font-weight:900;color:#0f172a;">Einen Moment noch!</h3>
-    <p style="margin:0 0 16px;color:#475569;font-size:.92rem;line-height:1.4;font-weight:600;">Nur Ihre Telefonnummer &ndash; Antwort innerhalb von 15 Minuten</p>
+    <p style="margin:0 0 16px;color:#475569;font-size:.92rem;line-height:1.4;font-weight:600;">Nur Ihre Telefonnummer &ndash; Antwort innerhalb von 30 Minuten</p>
     <div class="qf-box qf-unit" style="box-shadow:none;padding:0;margin:0 0 14px;text-align:left;">
       <div class="qf-form">
         <div class="qf-dsgvo">
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function() {
           <input type="text" class="qf-adr" autocomplete="street-address"/>
         </div>
         <p class="qf-err"></p>
-        <button class="qf-btn" type="button">Rabatt sichern &amp; Angebot anfordern</button>
+        <button class="qf-btn" type="button">Kostenloses Angebot anfordern</button>
       </div>
       <div class="qf-danke">
         <b>Anfrage ist da.</b>
@@ -442,32 +442,6 @@ document.addEventListener('DOMContentLoaded', function() {
     sessionStorage.setItem(INTERNAL_NAV_KEY, String(Date.now()));
   }
 
-  // --- Butonul Inapoi: prima apasare arata popup-ul, a doua chiar pleaca ---
-  // Chrome ignora pushState daca omul n-a atins inca pagina (protectie anti-hijack),
-  // deci punem intrarea in istoric abia dupa prima interactiune reala.
-  var backArmed = false;
-  function armBack() {
-    if (backArmed) return;
-    try {
-      if (sessionStorage.getItem(SHOWN_KEY) || localStorage.getItem(SUBMITTED_KEY)) return;
-      history.pushState({qfBack:1}, '', location.href);
-      backArmed = true;
-    } catch(e){}
-  }
-  ['touchstart','mousedown','scroll','keydown','pointerdown'].forEach(function(ev){
-    window.addEventListener(ev, armBack, {once:true, passive:true});
-  });
-  // plasa de siguranta: daca nu atinge nimic, incercam oricum dupa 3 secunde
-  setTimeout(armBack, 3000);
-  window.addEventListener('popstate', function() {
-    if (!backArmed) return;
-    backArmed = false;
-    if (sessionStorage.getItem(SHOWN_KEY) || localStorage.getItem(SUBMITTED_KEY) || isInternalNav()) {
-      history.back();   // nimic de aratat, lasa-l sa plece
-      return;
-    }
-    showPopup('back_button');
-  });
 
   document.addEventListener('DOMContentLoaded', function() {
     // Close button
@@ -529,20 +503,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 
     if (isMobile) {
-      // 1. BACK BUTTON: tratat mai sus, dupa prima interactiune (armBack).
-      //    Chrome pe Android ignora pushState daca omul n-a atins pagina.
 
-      // 2. SCHIMBAREA TAB-ULUI / minimizare aplicatie (visibilitychange)
-      document.addEventListener('visibilitychange', function() {
-        if (document.visibilityState === 'hidden') {
-          // delay mic ca sa fie sigur ca utilizatorul a iesit (nu doar comutare rapida)
-          setTimeout(function() {
-            if (document.visibilityState === 'hidden') {
-              showPopup('visibility_hidden');
-            }
-          }, 100);
-        }
-      });
 
       // 3. INACTIVITATE > 30 secunde dupa ce a scrollat
       function resetInactivityTimer() {
@@ -585,19 +546,11 @@ document.addEventListener('DOMContentLoaded', function() {
         lastScrollTime = now;
       }, { passive: true });
 
-      // 5. WINDOW BLUR (utilizatorul a apasat pe URL bar / a comutat)
-      window.addEventListener('blur', function() {
-        showPopup('window_blur');
-      });
 
     } else {
       // DESKTOP: mouse spre top of window
       document.addEventListener('mouseleave', function(e) {
         if (e.clientY < 50) showPopup('mouse_leave');
-      });
-      // Bonus: si daca da blur pe fereastra (Alt+Tab etc.)
-      window.addEventListener('blur', function() {
-        showPopup('window_blur');
       });
     }
   });
@@ -623,7 +576,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="sticky-modal">
     <button class="sticky-modal-close" onclick="closeStickyForm()" aria-label="Formular schließen">✕</button>
     <h3>Kostenlose Anfrage</h3>
-    <p class="sticky-modal-sub">Nur Ihre Telefonnummer. Rückmeldung in max. 2 Stunden.</p>
+    <p class="sticky-modal-sub">Nur Ihre Telefonnummer. Rückmeldung in 30 Minuten.</p>
     <div class="qf-modal">
   <div class="qf-box qf-unit">
     <div class="qf-form">
@@ -678,13 +631,13 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
       var fd=new FormData();
       fd.append('leistung',LEISTUNG); fd.append('telefon',t); fd.append('adresse',a);
       fd.append('quelle','Schnell-Anfrage '+LEISTUNG);
-      fd.append('kampagne',p('gad_campaignid')); fd.append('keyword',p('kw'));
+      fd.append('kampagne',p('gad_campaignid')); fd.append('keyword',p('kw')); fd.append('gclid',p('gclid')||p('gbraid')||p('wbraid'));
       fd.append('_subject','Neue Anfrage: '+LEISTUNG+' \u2013 '+t);
       try{fetch(FS,{method:'POST',body:fd,headers:{'Accept':'application/json'}});}catch(e){}
       var d={action:'\u260E '+t+(a?' | '+a:'')+' | '+LEISTUNG,
         city:a||window.__ORT__||'', locPhys:p('loc_physical_ms'), locInt:p('loc_interest_ms'),
         campId:p('gad_campaignid'), page:location.pathname+location.search,
-        campaign:p('gad_campaignid'), keyword:p('kw'),
+        campaign:p('gad_campaignid'), keyword:p('kw'), gclid:p('gclid')||p('gbraid')||p('wbraid'),
         device:/Mobi|Android|iPhone/i.test(navigator.userAgent)?'telefon':'desktop',
         referrer:document.referrer||'direct'};
       try{var b=new Blob([JSON.stringify(d)],{type:'text/plain;charset=UTF-8'});

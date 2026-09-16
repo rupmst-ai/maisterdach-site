@@ -144,7 +144,7 @@
   <div class="sticky-modal">
     <button class="sticky-modal-close" onclick="closeStickyForm()" aria-label="Formular schließen">✕</button>
     <h3>Kostenlose Anfrage</h3>
-    <p class="sticky-modal-sub">Nur Ihre Telefonnummer. Rückmeldung in max. 2 Stunden.</p>
+    <p class="sticky-modal-sub">Nur Ihre Telefonnummer. Rückmeldung in 30 Minuten.</p>
     <div class="qf-modal">
   <div class="qf-box qf-unit">
     <div class="qf-form">
@@ -199,13 +199,13 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
       var fd=new FormData();
       fd.append('leistung',LEISTUNG); fd.append('telefon',t); fd.append('adresse',a);
       fd.append('quelle','Schnell-Anfrage '+LEISTUNG);
-      fd.append('kampagne',p('gad_campaignid')); fd.append('keyword',p('kw'));
+      fd.append('kampagne',p('gad_campaignid')); fd.append('keyword',p('kw')); fd.append('gclid',p('gclid')||p('gbraid')||p('wbraid'));
       fd.append('_subject','Neue Anfrage: '+LEISTUNG+' \u2013 '+t);
       try{fetch(FS,{method:'POST',body:fd,headers:{'Accept':'application/json'}});}catch(e){}
       var d={action:'\u260E '+t+(a?' | '+a:'')+' | '+LEISTUNG,
         city:a||window.__ORT__||'', locPhys:p('loc_physical_ms'), locInt:p('loc_interest_ms'),
         campId:p('gad_campaignid'), page:location.pathname+location.search,
-        campaign:p('gad_campaignid'), keyword:p('kw'),
+        campaign:p('gad_campaignid'), keyword:p('kw'), gclid:p('gclid')||p('gbraid')||p('wbraid'),
         device:/Mobi|Android|iPhone/i.test(navigator.userAgent)?'telefon':'desktop',
         referrer:document.referrer||'direct'};
       try{var b=new Blob([JSON.stringify(d)],{type:'text/plain;charset=UTF-8'});
