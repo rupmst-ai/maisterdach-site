@@ -71,7 +71,7 @@
   <button class="hamburger" id="hbg" onclick="toggleNav()" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <style id="ber-css">
-.topbar{position:sticky;top:0;z-index:300}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:300}body{padding-top:90px}@media(min-width:768px){body{padding-top:104px}}
 .topbar header{position:static;top:auto}
 .topbar header{height:auto;min-height:58px;padding-top:6px;padding-bottom:6px;overflow:visible}@media(min-width:768px){.topbar header{min-height:68px}}
 
@@ -732,6 +732,6 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
   if(test) setTimeout(show,300);
 })();
 </script>
-<script id="ber-nav">(function(){function f(){var h=document.querySelector(".topbar"),b=document.getElementById("berBar"),n=document.getElementById("nav");if(!h||!b||!n)return;n.style.top=h.offsetHeight+"px";}window.addEventListener("load",f);window.addEventListener("resize",f);f();})();</script>
+<script id="ber-nav">(function(){function f(){var h=document.querySelector(".topbar"),n=document.getElementById("nav");if(!h)return;var H=h.offsetHeight;document.body.style.paddingTop=H+"px";if(n)n.style.top=H+"px";}window.addEventListener("load",f);window.addEventListener("resize",f);window.addEventListener("orientationchange",f);document.addEventListener("DOMContentLoaded",f);f();})();</script>
 </body>
 </html>
