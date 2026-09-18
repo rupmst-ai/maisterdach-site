@@ -721,7 +721,13 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
   b.querySelector('.wab-x').addEventListener('click',hide);
   b.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){if(typeof gtag==='function')gtag('event','wa_bubble_click',{'typ':a.className});setTimeout(hide,300);});});
   window.addEventListener('resize',place);
-  setTimeout(show,test?300:45000);
+  var KEY='wabTime',T=35000;
+  function elapsed(){try{return parseInt(sessionStorage.getItem(KEY)||'0',10);}catch(e){return 0;}}
+  function save(v){try{sessionStorage.setItem(KEY,String(v));}catch(e){}}
+  var start=Date.now(), base=elapsed();
+  var tick=setInterval(function(){var t=base+(Date.now()-start);save(t);if(t>=T){clearInterval(tick);show();}},1000);
+  window.addEventListener('pagehide',function(){save(base+(Date.now()-start));});
+  if(test) setTimeout(show,300);
 })();
 </script>
 <script id="ber-nav">(function(){function f(){var h=document.querySelector(".topbar"),b=document.getElementById("berBar"),n=document.getElementById("nav");if(!h||!b||!n)return;n.style.top=h.offsetHeight+"px";}window.addEventListener("load",f);window.addEventListener("resize",f);f();})();</script>
