@@ -64,6 +64,7 @@
 <!-- ClickCease.com tracking-->
 </head>
 <body>
+<div class="topbar">
 <header>
   <a href="index.html" class="logo"><img src="logo.png" alt="Maisterdach" width="80" height="40" loading="eager"/> <span>Maister<em>dach</em></span></a>
   <a href="tel:+49305445357103" class="hd-call">
@@ -73,20 +74,24 @@
   <button class="hamburger" id="hbg" onclick="toggleNav()" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <style id="ber-css">
-.ber-bar{position:sticky;top:58px;z-index:299;background:#161b28;border-bottom:1px solid rgba(249,115,22,.35);padding:0 8px;display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch}
-.ber-bar a{display:flex;align-items:center;gap:5px;padding:8px 7px;font-size:.68rem;font-weight:600;letter-spacing:.01em;color:rgba(255,255,255,.66);text-decoration:none;white-space:nowrap;min-width:0;transition:color .15s}
+.topbar{position:sticky;top:0;z-index:300}
+.topbar header{position:static;top:auto}
+.ber-bar{background:#161b28;border-bottom:1px solid rgba(249,115,22,.35);padding:0 6px;display:flex;flex-wrap:nowrap;justify-content:center;align-items:stretch}
+.ber-bar a{display:flex;align-items:center;gap:5px;padding:7px 8px;font-size:.66rem;font-weight:600;color:rgba(255,255,255,.66);text-decoration:none;white-space:nowrap;min-width:0;transition:color .15s}
 .ber-bar a:hover{color:#fff}
 .ber-bar a+a{border-left:1px solid rgba(255,255,255,.09)}
-.ber-bar a span{overflow:hidden;text-overflow:ellipsis}@media(max-width:379px){.ber-bar a{width:100%;justify-content:center;padding:5px 6px}.ber-bar a+a{border-left:0;border-top:1px solid rgba(255,255,255,.07)}}
-.ber-bar svg{flex:none;width:13px;height:13px;stroke:#F97316;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.ber-bar a span{overflow:hidden;text-overflow:ellipsis}
+.ber-bar svg{flex:none;width:12px;height:12px;stroke:#F97316;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .hd-call{display:flex;flex-direction:column;align-items:flex-end;text-decoration:none;line-height:1.15}
-.hd-call b{font-size:1rem;font-weight:800;color:#F97316;white-space:nowrap;letter-spacing:.01em}
+.hd-call b{display:flex;align-items:center;gap:6px;font-size:1rem;font-weight:800;color:#F97316;white-space:nowrap}
+.hd-ph{width:15px;height:15px;fill:#F97316;stroke:none;flex:none}
 .hd-call i{font-style:normal;display:flex;align-items:center;gap:5px;font-size:.64rem;font-weight:600;color:rgba(255,255,255,.5);white-space:nowrap;margin-top:2px}
 .hd-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;box-shadow:0 0 0 3px rgba(34,197,94,.18)}
-@media(min-width:768px){.ber-bar{top:68px}.ber-bar a{font-size:.85rem;padding:9px 18px}.ber-bar svg{width:15px;height:15px}.hd-call b{font-size:1.15rem}}
-.hd-call b{display:flex;align-items:center;gap:6px}.hd-ph{width:15px;height:15px;fill:#F97316;stroke:none;flex:none}
+@media(min-width:420px){.ber-bar a{font-size:.74rem;padding:8px 12px}.ber-bar svg{width:13px;height:13px}}
+@media(min-width:768px){.ber-bar a{font-size:.85rem;padding:9px 18px}.hd-call b{font-size:1.15rem}}
 </style>
-<div class="ber-bar" id="berBar"><a href="mailto:dachjetz@mail.de"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg><span>dachjetz@mail.de</span></a><a href="https://maps.google.com/?q=Wuhlestra%C3%9Fe+7a+12683+Berlin" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Büro: Wuhlestraße 7a, 12683 Berlin</span></a></div>
+<div class="ber-bar" id="berBar"><a href="mailto:dachjetz@mail.de"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg><span>dachjetz@mail.de</span></a><a href="https://maps.google.com/?q=Wuhlestra%C3%9Fe+7a+12683+Berlin" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Wuhlestraße 7a, 12683 Berlin</span></a></div>
+</div>
 
 <nav class="nav" id="nav">
   <a href="index.html" >Startseite</a>
@@ -721,6 +726,6 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
   setTimeout(show,test?300:25000);
 })();
 </script>
-<script id="ber-nav">(function(){function f(){var h=document.querySelector("header"),b=document.getElementById("berBar"),n=document.getElementById("nav");if(!h||!b||!n)return;n.style.top=(h.offsetHeight+b.offsetHeight)+"px";}window.addEventListener("load",f);window.addEventListener("resize",f);f();})();</script>
+<script id="ber-nav">(function(){function f(){var h=document.querySelector(".topbar"),b=document.getElementById("berBar"),n=document.getElementById("nav");if(!h||!b||!n)return;n.style.top=h.offsetHeight+"px";}window.addEventListener("load",f);window.addEventListener("resize",f);f();})();</script>
 </body>
 </html>
