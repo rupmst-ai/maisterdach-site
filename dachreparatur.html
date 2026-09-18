@@ -63,12 +63,28 @@
 <body>
 <header>
   <a href="index.html" class="logo"><img src="logo.png" alt="Maisterdach" width="80" height="40" loading="eager"/> <span>Maister<em>dach</em></span></a>
-  <a href="tel:+4917688087715" style="text-decoration:none;display:flex;flex-direction:column;align-items:center;line-height:1.2;">
-    <span style="color:#f97316;font-weight:800;font-size:1rem;white-space:nowrap;">&#9990; 0176 88087715</span>
-    <span style="color:rgba(255,255,255,.6);font-size:.65rem;font-weight:500;white-space:nowrap;">07–22 Uhr · 7 Tage</span>
+  <a href="tel:+49305445357103" class="hd-call">
+    <b><svg class="hd-ph" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1.2 1.2 0 0 1 1.2-.3c1.3.4 2.7.7 4.1.7.7 0 1.2.5 1.2 1.2V20c0 .7-.5 1.2-1.2 1.2C10.9 21.2 2.8 13.1 2.8 3.2 2.8 2.5 3.3 2 4 2h3.2c.7 0 1.2.5 1.2 1.2 0 1.4.2 2.8.7 4.1.1.4 0 .9-.3 1.2l-2.2 2.3z"/></svg>030 5445357103</b>
+    <i><span class="hd-dot"></span>07–20 Uhr · 7 Tage</i>
   </a>
   <button class="hamburger" id="hbg" onclick="toggleNav()" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
+<style id="ber-css">
+.ber-bar{position:sticky;top:58px;z-index:299;background:#161b28;border-bottom:1px solid rgba(249,115,22,.35);padding:0 8px;display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch}
+.ber-bar a{display:flex;align-items:center;gap:5px;padding:8px 7px;font-size:.68rem;font-weight:600;letter-spacing:.01em;color:rgba(255,255,255,.66);text-decoration:none;white-space:nowrap;min-width:0;transition:color .15s}
+.ber-bar a:hover{color:#fff}
+.ber-bar a+a{border-left:1px solid rgba(255,255,255,.09)}
+.ber-bar a span{overflow:hidden;text-overflow:ellipsis}@media(max-width:379px){.ber-bar a{width:100%;justify-content:center;padding:5px 6px}.ber-bar a+a{border-left:0;border-top:1px solid rgba(255,255,255,.07)}}
+.ber-bar svg{flex:none;width:13px;height:13px;stroke:#F97316;stroke-width:1.8;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.hd-call{display:flex;flex-direction:column;align-items:flex-end;text-decoration:none;line-height:1.15}
+.hd-call b{font-size:1rem;font-weight:800;color:#F97316;white-space:nowrap;letter-spacing:.01em}
+.hd-call i{font-style:normal;display:flex;align-items:center;gap:5px;font-size:.64rem;font-weight:600;color:rgba(255,255,255,.5);white-space:nowrap;margin-top:2px}
+.hd-dot{width:6px;height:6px;border-radius:50%;background:#22C55E;box-shadow:0 0 0 3px rgba(34,197,94,.18)}
+@media(min-width:768px){.ber-bar{top:68px}.ber-bar a{font-size:.85rem;padding:9px 18px}.ber-bar svg{width:15px;height:15px}.hd-call b{font-size:1.15rem}}
+.hd-call b{display:flex;align-items:center;gap:6px}.hd-ph{width:15px;height:15px;fill:#F97316;stroke:none;flex:none}
+</style>
+<div class="ber-bar" id="berBar"><a href="mailto:dachjetz@mail.de"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="19" height="14" rx="2.5"/><path d="M3 7l9 6 9-6"/></svg><span>dachjetz@mail.de</span></a><a href="https://maps.google.com/?q=Wuhlestra%C3%9Fe+7a+12683+Berlin" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/></svg><span>Büro: Wuhlestraße 7a, 12683 Berlin</span></a></div>
+
 <nav class="nav" id="nav">
   <a href="index.html">Startseite</a>
   <a href="flachdach.html">Flachdach</a>
@@ -94,7 +110,7 @@
       <a class="btn btn-or call-l" href="#">&#9990;&nbsp; Jetzt anrufen</a>
       <a class="btn btn-wa wa-l" href="#">&#128172;&nbsp; Angebot per WhatsApp</a>
     </div>
-    <p style="text-align:center;font-size:.78rem;color:rgba(255,255,255,0.85);margin-top:10px;margin-bottom:0;font-weight:400;">Telefon: 07–22 Uhr · WhatsApp: 24/7 erreichbar</p>
+    <p style="text-align:center;font-size:.78rem;color:rgba(255,255,255,0.85);margin-top:10px;margin-bottom:0;font-weight:400;">Telefon: 07–20 Uhr · WhatsApp: 24/7 erreichbar</p>
     <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;">
       <div style="background:rgba(255,255,255,0.95);border-radius:8px;padding:7px 14px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,0.15);">
         <span style="color:#FBBC04;font-size:1rem;letter-spacing:1px;">★★★★★</span>
@@ -255,7 +271,7 @@
   <h2>Jetzt <em>kostenlos</em><br/>anfragen</h2>
   <p class="contact-desc">Füllen Sie das Formular aus oder kontaktieren Sie uns direkt. Rückmeldung in 30 Minuten.</p>
   <div class="contact-btns">
-    <a class="btn btn-or call-l" href="#">&#9990;&nbsp; +49 176 88087715</a>
+    <a class="btn btn-or call-l" href="#">&#9990;&nbsp; +49 30 5445357103</a>
     <a class="btn btn-wa wa-l" href="#">&#128172;&nbsp; Angebot per WhatsApp</a>
   </div>
   <div class="qf-dark">
@@ -306,6 +322,12 @@
   <div class="footer-logo"><img src="logo.png" alt="Maisterdach" width="72" height="36" loading="lazy" decoding="async" style="vertical-align:middle;margin-right:8px;"/>Maister<em>dach</em></div>
   <p class="footer-desc">Ihr Ansprechpartner für Dacharbeiten in Ihrer Region. Kostenlose Besichtigung &amp; unverbindliches Angebot.</p>
   <div class="footer-sec">
+    <h4>Kontakt</h4>
+    <div class="f-contact"><em>📞</em> <a href="tel:+49305445357103" style="color:rgba(255,255,255,.5)">+49 30 5445357103</a></div>
+    <div class="f-contact"><em>📍</em> <span style="color:rgba(255,255,255,.5)">Büro: Wuhlestraße 7a, 12683 Berlin</span></div>
+    <div class="f-contact"><em>✉️</em> <a href="mailto:dachjetz@mail.de" style="color:rgba(255,255,255,.5)">dachjetz@mail.de</a></div>
+  </div>
+  <div class="footer-sec">
     <h4>Leistungen</h4>
     <a href="flachdach.html">Flachdach &amp; Bitumen</a>
     <a href="blechdach.html">Blechdach Montage</a>
@@ -314,10 +336,6 @@
     <a href="dachreparatur.html">Dachreparatur</a>
     <a href="schornsteinverkleidung.html">Schornsteinverkleidung</a>
     <a href="sanierung-grosser-daecher.html">Sanierung großer Dächer</a>
-  </div>
-  <div class="footer-sec">
-    <h4>Kontakt</h4>
-    <div class="f-contact"><em>📞</em> <a href="tel:+4917688087715" style="color:rgba(255,255,255,.5)">+49 176 88087715</a></div>
   </div>
   <div class="footer-sec footer-service" style="text-align:center;padding:12px 16px;background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.08);margin-top:8px;">
     <p style="margin:0;font-size:.9rem;color:rgba(255,255,255,.7);">📍 <strong>Servicegebiet:</strong> Mobil vor Ort in <span class="city-service" style="color:#f97316;">Berlin und Brandenburg</span>. Anfahrt, Besichtigung und Angebot kostenlos und unverbindlich.</p>
@@ -379,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function() {
       <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       WhatsApp Nachricht
     </a>
-    <a href="tel:+4917688087715" id="popupCallBtn" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;background:#F97316;color:#fff;border:none;border-radius:10px;font-size:1.05rem;font-weight:800;text-decoration:none;box-sizing:border-box;">
+    <a href="tel:+49305445357103" id="popupCallBtn" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:15px;background:#F97316;color:#fff;border:none;border-radius:10px;font-size:1.05rem;font-weight:800;text-decoration:none;box-sizing:border-box;">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
       Jetzt anrufen
     </a>
@@ -560,7 +578,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!-- STICKY BOTTOM BAR -->
 <div class="sticky-bar">
   <div class="sticky-bar-top">
-    <a class="sticky-btn sticky-btn-call call-l" href="tel:+4917688087715">
+    <a class="sticky-btn sticky-btn-call call-l" href="tel:+49305445357103">
       <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
       Anrufen
     </a>
@@ -663,5 +681,51 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
 })();
 </script>
 
+<!-- WA-BUBBLE -->
+<style id="wab-css">
+.wab{position:fixed;right:12px;left:12px;z-index:9990;max-width:360px;margin-left:auto;background:#fff;border-radius:16px;box-shadow:0 10px 32px rgba(0,0,0,.28);padding:14px 14px 12px;transform:translateY(20px);opacity:0;pointer-events:none;transition:all .3s ease;font-family:inherit}
+.wab.on{transform:none;opacity:1;pointer-events:auto}
+.wab-x{position:absolute;top:6px;right:8px;background:none;border:0;font-size:22px;line-height:1;color:#9ca3af;padding:4px 6px;cursor:pointer}
+.wab-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding-right:22px}
+.wab-av{position:relative;flex:none;width:44px;height:44px;border-radius:50%;background:#0f172a;display:flex;align-items:center;justify-content:center;overflow:visible}
+.wab-av img{width:34px;height:auto;border-radius:50%}
+.wab-av:after{content:"";position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;background:#22c55e;border:2px solid #fff}
+.wab-name{font-weight:800;font-size:.95rem;color:#111827;line-height:1.2}
+.wab-st{font-size:.74rem;color:#16a34a;font-weight:600}
+.wab-msg{background:#f1f5f9;border-radius:4px 14px 14px 14px;padding:10px 12px;font-size:.9rem;color:#1f2937;line-height:1.45;margin:0 0 12px}
+.wab-btns{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}
+.wab-btns a{display:flex;align-items:center;justify-content:center;gap:6px;border-radius:11px;padding:12px 8px;font-weight:800;font-size:.9rem;text-decoration:none;color:#fff}
+.wab-wa{background:#25D366}.wab-call{background:#F97316}
+</style>
+<div class="wab" id="wab" role="dialog" aria-label="Nachricht vom Dachdecker">
+  <button class="wab-x" type="button" aria-label="Schließen">&times;</button>
+  <div class="wab-head">
+    <div class="wab-av"><img src="logo.png" alt="Maisterdach" width="34" height="17"/></div>
+    <div><div class="wab-name">Robert – Dachdecker</div><div class="wab-st">● jetzt erreichbar</div></div>
+  </div>
+  <p class="wab-msg">Hallo! 👋 Probleme mit dem Dach? Schreiben oder rufen Sie jetzt an – kostenloses Angebot, Antwort in 30 Minuten.</p>
+  <div class="wab-btns">
+    <a class="wab-wa" href="https://wa.me/4917688087715" target="_blank" rel="noopener">WhatsApp öffnen</a>
+    <a class="wab-call" href="tel:+49305445357103">Anrufen</a>
+  </div>
+</div>
+<script id="wab-js">
+(function(){
+  var b=document.getElementById('wab'); if(!b) return;
+  var test=/[?&]bubbletest/.test(location.search);
+  function done(){try{return localStorage.getItem('popupSubmitted')==='true'||sessionStorage.getItem('wabClosed')==='1'||sessionStorage.getItem('popupShownSession')==='true';}catch(e){return false;}}
+  var st=b.querySelector('.wab-st');
+  try{var h=parseInt(new Intl.DateTimeFormat('de-DE',{hour:'numeric',hour12:false,timeZone:'Europe/Berlin'}).format(new Date()),10);
+    if(h<7||h>=22){st.textContent='antwortet ab 7 Uhr';st.style.color='#6b7280';}}catch(e){}
+  function place(){var bar=document.querySelector('.sticky-bar');var h=0;if(bar){var cs=getComputedStyle(bar);if(cs.display!=='none'){h=bar.getBoundingClientRect().height||bar.scrollHeight||0;}}if(!h&&window.innerWidth<768)h=110;b.style.bottom=(h+10)+'px';}
+  function show(){if(done()&&!test)return;if(window.waHref)b.querySelector('.wab-wa').href=window.waHref();var m=document.querySelector('.qf-modal.visible,.popup-overlay.visible');if(m&&!test)return;place();b.classList.add('on');if(typeof gtag==='function')gtag('event','wa_bubble_shown');}
+  function hide(){b.classList.remove('on');try{sessionStorage.setItem('wabClosed','1');}catch(e){}}
+  b.querySelector('.wab-x').addEventListener('click',hide);
+  b.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){if(typeof gtag==='function')gtag('event','wa_bubble_click',{'typ':a.className});setTimeout(hide,300);});});
+  window.addEventListener('resize',place);
+  setTimeout(show,test?300:25000);
+})();
+</script>
+<script id="ber-nav">(function(){function f(){var h=document.querySelector("header"),b=document.getElementById("berBar"),n=document.getElementById("nav");if(!h||!b||!n)return;n.style.top=(h.offsetHeight+b.offsetHeight)+"px";}window.addEventListener("load",f);window.addEventListener("resize",f);f();})();</script>
 </body>
 </html>

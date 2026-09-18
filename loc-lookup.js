@@ -157,7 +157,7 @@
     });
 
     document.querySelectorAll('.city-map').forEach(function (el) {
-      el.textContent = name ? name + ' und Umgebung' : '';
+      el.textContent = name || '';
     });
 
     document.querySelectorAll('.city-service').forEach(function (el) {

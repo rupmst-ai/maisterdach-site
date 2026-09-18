@@ -1,4 +1,4 @@
-const WA = '4917688087715', PHONE = '+4917688087715';
+const WA = '4917688087715', PHONE = '+49305445357103';
 const GTAG_ID = 'AW-17044870869';
 
 function trackConversion(label) {
@@ -7,12 +7,23 @@ function trackConversion(label) {
   }
 }
 
+var WA_LEISTUNG = {'flachdach':'eine Flachdach-Abdichtung','sanierung-grosser-daecher':'eine Dachsanierung','dachreparatur':'eine Dachreparatur','blechdach':'ein Blechdach','solarmontage':'eine Solar-Montage','dachrinne':'eine Dachrinne','dachziegel':'neue Dachziegel','dachfenster':'ein Dachfenster','dachkasten':'einen Dachkasten','schornsteinverkleidung':'eine Schornsteinverkleidung','reinigung-beschichtung':'eine Dachreinigung','asbest':'eine Asbestdach-Sanierung'};
+function waText() {
+  var key = (location.pathname.split('/').pop() || '').replace('.html', '');
+  var was = WA_LEISTUNG[key] || 'Arbeiten an meinem Dach';
+  var ort = window.__LOC_CITY__ ? ' in ' + window.__LOC_CITY__ : '';
+  return 'Hallo, ich brauche ein Angebot für ' + was + ort + '. Adresse/PLZ: ';
+}
+function waHref() { return 'https://wa.me/' + WA + '?text=' + encodeURIComponent(waText()); }
+window.waHref = waHref;
+
 function applyLinks() {
-  var waURL = 'https://wa.me/' + WA;
   document.querySelectorAll('.wa-l, .whatsapp-link').forEach(function(el) {
-    el.href = waURL;
-    el.addEventListener('click', function() { trackConversion('oURWCJjz5PYcENWt0L8_'); });
+    el.href = waHref();
+    el.addEventListener('click', function() { el.href = waHref(); trackConversion('oURWCJjz5PYcENWt0L8_'); });
   });
+  var pw = document.getElementById('popupWaBtn');
+  if (pw) { pw.href = waHref(); pw.addEventListener('click', function() { pw.href = waHref(); }); }
   document.querySelectorAll('.call-l').forEach(function(el) {
     el.href = 'tel:' + PHONE;
     el.addEventListener('click', function() { trackConversion('rrY2CMqh2vYcENWt0L8_'); });
