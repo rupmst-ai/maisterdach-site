@@ -671,29 +671,29 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
 
 <!-- WA-BUBBLE -->
 <style id="wab-css">
-.wab{position:fixed;right:12px;left:12px;z-index:9990;max-width:360px;margin-left:auto;background:#fff;border-radius:16px;box-shadow:0 10px 32px rgba(0,0,0,.28);padding:14px 14px 12px;transform:translateY(20px);opacity:0;pointer-events:none;transition:all .3s ease;font-family:inherit}
+.wab{position:fixed;right:10px;left:auto;z-index:9990;width:min(74vw,300px);background:#fff;border-radius:14px;box-shadow:0 12px 34px rgba(0,0,0,.3);padding:11px 12px 12px;transform:translateX(112%);opacity:0;pointer-events:none;transition:transform .45s cubic-bezier(.22,.9,.3,1),opacity .3s;font-family:inherit}
 .wab.on{transform:none;opacity:1;pointer-events:auto}
-.wab-x{position:absolute;top:6px;right:8px;background:none;border:0;font-size:22px;line-height:1;color:#9ca3af;padding:4px 6px;cursor:pointer}
-.wab-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;padding-right:22px}
-.wab-av{position:relative;flex:none;width:44px;height:44px;border-radius:50%;background:#0f172a;display:flex;align-items:center;justify-content:center;overflow:visible}
-.wab-av img{width:34px;height:auto;border-radius:50%}
-.wab-av:after{content:"";position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;background:#22c55e;border:2px solid #fff}
-.wab-name{font-weight:800;font-size:.95rem;color:#111827;line-height:1.2}
-.wab-st{font-size:.74rem;color:#16a34a;font-weight:600}
-.wab-msg{background:#f1f5f9;border-radius:4px 14px 14px 14px;padding:10px 12px;font-size:.9rem;color:#1f2937;line-height:1.45;margin:0 0 12px}
-.wab-btns{display:grid;grid-template-columns:1.4fr 1fr;gap:8px}
-.wab-btns a{display:flex;align-items:center;justify-content:center;gap:6px;border-radius:11px;padding:12px 8px;font-weight:800;font-size:.9rem;text-decoration:none;color:#fff}
+.wab-x{position:absolute;top:4px;right:6px;background:none;border:0;font-size:19px;line-height:1;color:#b6bcc6;padding:4px 6px;cursor:pointer}
+.wab-head{display:flex;align-items:center;gap:9px;margin-bottom:7px;padding-right:18px}
+.wab-av{position:relative;flex:none;width:36px;height:36px;border-radius:50%;background:#0f172a;display:flex;align-items:center;justify-content:center}
+.wab-av img{width:28px;height:auto;border-radius:50%}
+.wab-av:after{content:"";position:absolute;right:-1px;bottom:0;width:10px;height:10px;border-radius:50%;background:#22c55e;border:2px solid #fff}
+.wab-name{font-weight:800;font-size:.86rem;color:#111827;line-height:1.15}
+.wab-st{display:flex;align-items:center;gap:5px;font-size:.7rem;color:#16a34a;font-weight:600}
+.wab-msg{background:#f1f5f9;border-radius:3px 12px 12px 12px;padding:9px 11px;font-size:.81rem;color:#1f2937;line-height:1.45;margin:0 0 10px}
+.wab-btns{display:grid;grid-template-columns:1.35fr 1fr;gap:7px}
+.wab-btns a{display:flex;align-items:center;justify-content:center;gap:5px;border-radius:10px;padding:10px 6px;font-weight:800;font-size:.8rem;text-decoration:none;color:#fff}
 .wab-wa{background:#25D366}.wab-call{background:#F97316}
 </style>
-<div class="wab" id="wab" role="dialog" aria-label="Nachricht vom Dachdecker">
+<div class="wab" id="wab" role="dialog" aria-label="Nachricht">
   <button class="wab-x" type="button" aria-label="Schließen">&times;</button>
   <div class="wab-head">
-    <div class="wab-av"><img src="logo.png" alt="Maisterdach" width="34" height="17"/></div>
-    <div><div class="wab-name">Robert – Dachdecker</div><div class="wab-st">● jetzt erreichbar</div></div>
+    <div class="wab-av"><img src="logo.png" alt="Maisterdach" width="28" height="14"/></div>
+    <div><div class="wab-name">Maisterdach</div><div class="wab-st">Wir sind online</div></div>
   </div>
-  <p class="wab-msg">Hallo! 👋 Probleme mit dem Dach? Schreiben oder rufen Sie jetzt an – kostenloses Angebot, Antwort in 30 Minuten.</p>
+  <p class="wab-msg">Probleme mit dem Dach? Schreiben oder rufen Sie an – Antwort in 30 Minuten.</p>
   <div class="wab-btns">
-    <a class="wab-wa" href="https://wa.me/4917688087715" target="_blank" rel="noopener">WhatsApp öffnen</a>
+    <a class="wab-wa" href="https://wa.me/4917688087715" target="_blank" rel="noopener">WhatsApp</a>
     <a class="wab-call" href="tel:+49305445357103">Anrufen</a>
   </div>
 </div>
@@ -702,9 +702,6 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
   var b=document.getElementById('wab'); if(!b) return;
   var test=/[?&]bubbletest/.test(location.search);
   function done(){try{return localStorage.getItem('popupSubmitted')==='true'||sessionStorage.getItem('wabClosed')==='1'||sessionStorage.getItem('popupShownSession')==='true';}catch(e){return false;}}
-  var st=b.querySelector('.wab-st');
-  try{var h=parseInt(new Intl.DateTimeFormat('de-DE',{hour:'numeric',hour12:false,timeZone:'Europe/Berlin'}).format(new Date()),10);
-    if(h<7||h>=22){st.textContent='antwortet ab 7 Uhr';st.style.color='#6b7280';}}catch(e){}
   function place(){var bar=document.querySelector('.sticky-bar');var h=0;if(bar){var cs=getComputedStyle(bar);if(cs.display!=='none'){h=bar.getBoundingClientRect().height||bar.scrollHeight||0;}}if(!h&&window.innerWidth<768)h=110;b.style.bottom=(h+10)+'px';}
   function show(){if(done()&&!test)return;if(window.waHref)b.querySelector('.wab-wa').href=window.waHref();var m=document.querySelector('.qf-modal.visible,.popup-overlay.visible');if(m&&!test)return;place();b.classList.add('on');if(typeof gtag==='function')gtag('event','wa_bubble_shown');}
   function hide(){b.classList.remove('on');try{sessionStorage.setItem('wabClosed','1');}catch(e){}}
