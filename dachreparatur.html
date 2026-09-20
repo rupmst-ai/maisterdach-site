@@ -65,7 +65,7 @@
 <header>
   <a href="index.html" class="logo"><img src="logo.png" alt="Maisterdach" width="80" height="40" loading="eager"/> <span>Maister<em>dach</em></span></a>
   <a href="tel:+49305445357103" class="hd-call">
-    <b><svg class="hd-ph" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1.2 1.2 0 0 1 1.2-.3c1.3.4 2.7.7 4.1.7.7 0 1.2.5 1.2 1.2V20c0 .7-.5 1.2-1.2 1.2C10.9 21.2 2.8 13.1 2.8 3.2 2.8 2.5 3.3 2 4 2h3.2c.7 0 1.2.5 1.2 1.2 0 1.4.2 2.8.7 4.1.1.4 0 .9-.3 1.2l-2.2 2.3z"/></svg>030 5445357103</b>
+    <b><svg class="hd-ph" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1.2 1.2 0 0 1 1.2-.3c1.3.4 2.7.7 4.1.7.7 0 1.2.5 1.2 1.2V20c0 .7-.5 1.2-1.2 1.2C10.9 21.2 2.8 13.1 2.8 3.2 2.8 2.5 3.3 2 4 2h3.2c.7 0 1.2.5 1.2 1.2 0 1.4.2 2.8.7 4.1.1.4 0 .9-.3 1.2l-2.2 2.3z"/></svg><span class="hd-num">030 5445357103</span></b>
     <i><span class="hd-dot"></span>07–20 Uhr · 7 Tage</i>
   </a>
   <button class="hamburger" id="hbg" onclick="toggleNav()" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -733,5 +733,18 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
 })();
 </script>
 <script id="ber-nav">(function(){function f(){var h=document.querySelector(".topbar"),n=document.getElementById("nav");if(!h)return;var H=h.offsetHeight;document.body.style.paddingTop=H+"px";if(n)n.style.top=H+"px";}window.addEventListener("load",f);window.addEventListener("resize",f);window.addEventListener("orientationchange",f);document.addEventListener("DOMContentLoaded",f);f();})();</script>
+<script id="bbg-switch">(function(){
+ var BBG={'24217884207':1,'24219701426':1,'24249787428':1,'24258974144':1};
+ try{var c=new URLSearchParams(location.search).get('gad_campaignid');if(!c||!BBG[c])return;}catch(e){return;}
+ var MOB='+49 176 88087715', HREF='tel:+4917688087715';
+ document.querySelectorAll('a[href="tel:+49305445357103"]').forEach(function(a){
+   a.setAttribute('href',HREF);
+   a.querySelectorAll('.hd-num,span,b').forEach(function(el){if(el.children.length===0&&/5445357103/.test(el.textContent))el.textContent='0176 88087715';});
+   if(/5445357103/.test(a.textContent)&&!a.querySelector('b,span'))a.textContent=a.textContent.replace(/\+?49 ?30 ?5445357103|030 5445357103/,MOB);
+ });
+ var bar=document.getElementById('berBar');
+ if(bar)bar.querySelectorAll('a').forEach(function(a){if(/Wuhlestra/.test(a.textContent))a.style.display='none';});
+ document.querySelectorAll('footer .f-contact').forEach(function(d){if(/Wuhlestra/.test(d.textContent))d.style.display='none';});
+})();</script>
 </body>
 </html>
