@@ -1,5 +1,8 @@
 (function () {
   var FALLBACK_DISPLAY = 'in Ihrer Nähe';
+  var LAND = {'Brandenburg':1,'Berlin':1,'Sachsen':1,'Sachsen-Anhalt':1,'Mecklenburg-Vorpommern':1,'Th\u00fcringen':1};
+  function disp(name){ return LAND[name] ? name : name + ' und Umgebung'; }
+
 
   // Campanii cu tintire geografica fara ambiguitate.
   // Daca ID-ul de locatie nu se rezolva, campania spune singura unde suntem.
@@ -131,14 +134,14 @@
     }
 
     document.querySelectorAll('.city').forEach(function (el) {
-      el.textContent = name ? name + ' und Umgebung' : FALLBACK_DISPLAY;
+      el.textContent = name ? disp(name) : FALLBACK_DISPLAY;
     });
 
     document.querySelectorAll('.city-full').forEach(function (el) {
       if (name) {
         el.style.display = '';
         var cn = el.querySelector('.city-name');
-        if (cn) cn.textContent = name + ' und Umgebung';
+        if (cn) cn.textContent = disp(name);
       } else {
         el.style.display = 'none';
       }
@@ -146,7 +149,7 @@
 
     document.querySelectorAll('.city-sub').forEach(function (el) {
       if (name) {
-        el.textContent = 'in ' + name + ' und Umgebung';
+        el.textContent = 'in ' + disp(name);
         el.style.display = '';
       } else if (weich) {
         el.textContent = FALLBACK_DISPLAY;
@@ -161,7 +164,7 @@
     });
 
     document.querySelectorAll('.city-service').forEach(function (el) {
-      if (name) el.textContent = name + ' und Umgebung';
+      if (name) el.textContent = disp(name);
     });
 
     if (name) {
