@@ -1,6 +1,7 @@
 (function () {
-  var FALLBACK_DISPLAY = 'in Ihrer Nähe';
-  var LAND = {'Brandenburg':1,'Berlin':1,'Sachsen':1,'Sachsen-Anhalt':1,'Mecklenburg-Vorpommern':1,'Th\u00fcringen':1};
+  var FALLBACK_REGION = 'Berlin & Brandenburg';
+  var FALLBACK_DISPLAY = 'in ' + FALLBACK_REGION;
+  var LAND = {'Berlin & Brandenburg':1,'Brandenburg':1,'Berlin':1,'Sachsen':1,'Sachsen-Anhalt':1,'Mecklenburg-Vorpommern':1,'Th\u00fcringen':1};
   function disp(name){ return LAND[name] ? name : name + ' und Umgebung'; }
 
 
@@ -119,7 +120,9 @@
       });
     }
 
-    var titelZusatz = name ? ('in ' + name) : (weich ? FALLBACK_DISPLAY : '');
+    // Fara oras (vizita directa, fara campanie): afisam regiunea noastra.
+    var shown = name || FALLBACK_REGION;
+    var titelZusatz = 'in ' + shown;
     if (titelZusatz) {
       var currentTitle = document.title;
       if (currentTitle.indexOf(' | ') !== -1) {
@@ -134,37 +137,26 @@
     }
 
     document.querySelectorAll('.city').forEach(function (el) {
-      el.textContent = name ? disp(name) : FALLBACK_DISPLAY;
+      el.textContent = disp(shown);
     });
 
     document.querySelectorAll('.city-full').forEach(function (el) {
-      if (name) {
-        el.style.display = '';
-        var cn = el.querySelector('.city-name');
-        if (cn) cn.textContent = disp(name);
-      } else {
-        el.style.display = 'none';
-      }
+      el.style.display = '';
+      var cn = el.querySelector('.city-name');
+      if (cn) cn.textContent = disp(shown);
     });
 
     document.querySelectorAll('.city-sub').forEach(function (el) {
-      if (name) {
-        el.textContent = 'in ' + disp(name);
-        el.style.display = '';
-      } else if (weich) {
-        el.textContent = FALLBACK_DISPLAY;
-        el.style.display = '';
-      } else {
-        el.style.display = 'none';
-      }
+      el.textContent = 'in ' + disp(shown);
+      el.style.display = '';
     });
 
     document.querySelectorAll('.city-map').forEach(function (el) {
-      el.textContent = name || '';
+      el.textContent = shown;
     });
 
     document.querySelectorAll('.city-service').forEach(function (el) {
-      if (name) el.textContent = disp(name);
+      el.textContent = disp(shown);
     });
 
     if (name) {
