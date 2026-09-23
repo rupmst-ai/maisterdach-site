@@ -715,7 +715,7 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
 <script id="ber-nav">(function(){function f(){var h=document.querySelector(".topbar"),n=document.getElementById("nav");if(!h)return;var H=h.offsetHeight;document.body.style.paddingTop=H+"px";if(n)n.style.top=H+"px";}window.addEventListener("load",f);window.addEventListener("resize",f);window.addEventListener("orientationchange",f);document.addEventListener("DOMContentLoaded",f);f();})();</script>
 <script id="bbg-switch">(function(){
  var BBG={'24217884207':1,'24219701426':1,'24249787428':1,'24258974144':1};
- try{var c=new URLSearchParams(location.search).get('gad_campaignid');if(!c||!BBG[c])return;}catch(e){return;}
+ try{var c=new URLSearchParams(location.search).get('gad_campaignid');if(!c){try{c=sessionStorage.getItem('dj_camp');}catch(e){}}if(!c||!BBG[c])return;}catch(e){return;}
  var MOB='+49 176 88087715', HREF='tel:+4917688087715';
  document.querySelectorAll('a[href="tel:+49305445357103"]').forEach(function(a){
    a.setAttribute('href',HREF);

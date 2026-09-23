@@ -42,10 +42,22 @@
 
   function getParams() {
     var p = new URLSearchParams(window.location.search);
+    // Campania si orasul cautat se pastreaza pe paginile urmatoare (aceeasi sesiune).
+    var camp = p.get('gad_campaignid') || '';
+    var intr = p.get('loc_interest_ms') || '';
+    try {
+      if (camp) {
+        sessionStorage.setItem('dj_camp', camp);
+        sessionStorage.setItem('dj_int', intr);
+      } else {
+        camp = sessionStorage.getItem('dj_camp') || '';
+        intr = intr || sessionStorage.getItem('dj_int') || '';
+      }
+    } catch (e) {}
     return {
       physicalId: p.get('loc_physical_ms') || p.get('loc_id') || '',
-      interestId: p.get('loc_interest_ms') || '',
-      campaignId: p.get('gad_campaignid') || '',
+      interestId: intr,
+      campaignId: camp,
       debug:      p.get('debug') === '1'
     };
   }
@@ -206,6 +218,24 @@
     // Google a livrat deja localitati din alt land pe campanii cu targeting strict,
     // asa ca pozitia fizica trece pe locul doi.
     var regK = KAMPAGNE_REGION[params.campaignId];
+
+    // Brandenburg: daca in cautare era un oras (loc_interest_ms), il afisam.
+    // Berlin ramane neschimbat. loc_physical_ms nu se foloseste.
+    if (regK === 'Brandenburg' && interestId && !istBerlinId(interestId)) {
+      fetch('de-cities.json')
+        .then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
+        .then(function (map) {
+          var ni = map[interestId];
+          if (ni && isValidCityName(ni) && ni !== 'Berlin') {
+            applyCity(ni.trim(), interestId, 'interest', ni);
+          } else {
+            applyCity('Brandenburg', interestId, 'kampagne', ni || '');
+          }
+        })
+        .catch(function () { applyCity('Brandenburg', interestId, 'kampagne+error', ''); });
+      return;
+    }
+
     if (regK) { applyCity(regK, physicalId || interestId, 'kampagne', ''); return; }
 
     // Sectoarele Berlinului, doar pe interes
