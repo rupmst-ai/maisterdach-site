@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <link rel="preload" as="image" href="hero-index.webp" type="image/webp" fetchpriority="high"/>
+  <link rel="preload" as="image" href="hero-video-poster.webp" type="image/webp" fetchpriority="high"/>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <meta name="description" content="Ihr Dachdecker in Ihrer Nähe – Flachdach, Blechdach, Dachreparatur & Dachrinne. Kostenlose Besichtigung."/>
   
@@ -112,7 +112,25 @@
 </nav>
 <main>
 <section class="hero-index" style="min-height:clamp(320px, 100vw, 520px);">
-  <div class="hero-index-bg" style="background-image:url('hero-index.webp');"></div>
+  <div class="hero-index-bg" style="background-image:url('hero-video-poster.webp');position:relative;overflow:hidden;">
+    <video id="hero-video" muted loop playsinline preload="none" aria-hidden="true" poster="hero-video-poster.webp" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s"></video>
+  </div>
+  <script>
+  /* Video in hero: se incarca abia dupa ce pagina e gata; nu la Save-Data / reduced-motion. */
+  (function(){
+    var v=document.getElementById('hero-video'); if(!v) return;
+    var c=navigator.connection||{};
+    if(c.saveData || /(^|-)2g$/.test(c.effectiveType||'')) return;
+    if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    function start(){
+      v.src='hero-video.mp4';
+      v.addEventListener('playing',function(){v.style.opacity='1';},{once:true});
+      var p=v.play(); if(p&&p.catch) p.catch(function(){});
+    }
+    if(document.readyState==='complete') setTimeout(start,300);
+    else window.addEventListener('load',function(){setTimeout(start,300);});
+  })();
+  </script>
   <div class="hero-index-content">
     <h1>Maisterdach –&nbsp;Ihr&nbsp;Dachdecker<span class="city-full" style="display:none"> in <span class="city-name"></span></span></h1>
     <p class="hero-index-sub">Kostenlose Besichtigung und unverbindliches Angebot.</p>
@@ -821,7 +839,7 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
 </script>
 <script id="ber-nav">(function(){function f(){var h=document.querySelector(".topbar"),n=document.getElementById("nav");if(!h)return;var H=h.offsetHeight;document.body.style.paddingTop=H+"px";if(n)n.style.top=H+"px";}window.addEventListener("load",f);window.addEventListener("resize",f);window.addEventListener("orientationchange",f);document.addEventListener("DOMContentLoaded",f);f();})();</script>
 <script id="bbg-switch">(function(){
- var BBG={'24217884207':1,'24219701426':1,'24249787428':1,'24258974144':1};
+ var BBG={'24217884207':1,'24219701426':1,'24249787428':1,'24258974144':1,'24288079807':1};
  try{var c=new URLSearchParams(location.search).get('gad_campaignid');if(!c){try{c=sessionStorage.getItem('dj_camp');}catch(e){}}if(!c||!BBG[c])return;}catch(e){return;}
  var MOB='+49 176 88087715', HREF='tel:+4917688087715';
  document.querySelectorAll('a[href="tel:+49305445357103"]').forEach(function(a){
