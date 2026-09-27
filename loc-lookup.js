@@ -18,7 +18,8 @@
     '24264541414': 'Berlin',        // Dachsanierung – Berlin
     '24258974144': 'Brandenburg',   // Dachsanierung – Brandenburg
     '24288722376': 'Brandenburg',   // Neues Dach – Brandenburg (v41)
-    '24294161033': 'Mecklenburg-Vorpommern' // Neues Dach – Mecklenburg-Vorpommern (v41)
+    '24294161033': 'Mecklenburg-Vorpommern', // Neues Dach – Mecklenburg-Vorpommern (v41)
+    '24300425899': 'Berlin'         // Neues Dach – Berlin (v43)
   };
 
   // Campanii cu doua zone (Berlin + Brandenburg).
