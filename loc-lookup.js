@@ -16,7 +16,9 @@
     '24249787428': 'Brandenburg',   // Solar-Montage – Brandenburg
     '24219701426': 'Brandenburg',   // Flachdach – Brandenburg (acum doar Brandenburg)
     '24264541414': 'Berlin',        // Dachsanierung – Berlin
-    '24258974144': 'Brandenburg'    // Dachsanierung – Brandenburg
+    '24258974144': 'Brandenburg',   // Dachsanierung – Brandenburg
+    '24288722376': 'Brandenburg',   // Neues Dach – Brandenburg (v41)
+    '24294161033': 'Mecklenburg-Vorpommern' // Neues Dach – Mecklenburg-Vorpommern (v41)
   };
 
   // Campanii cu doua zone (Berlin + Brandenburg).
@@ -221,7 +223,8 @@
 
     // Brandenburg: daca in cautare era un oras (loc_interest_ms), il afisam.
     // Berlin ramane neschimbat. loc_physical_ms nu se foloseste.
-    if (regK === 'Brandenburg' && interestId && !istBerlinId(interestId)) {
+    // Brandenburg si Mecklenburg-Vorpommern: orasul cautat (loc_interest_ms), altfel landul.
+    if ((regK === 'Brandenburg' || regK === 'Mecklenburg-Vorpommern') && interestId && !istBerlinId(interestId)) {
       fetch('de-cities.json')
         .then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
         .then(function (map) {
@@ -229,10 +232,10 @@
           if (ni && isValidCityName(ni) && ni !== 'Berlin') {
             applyCity(ni.trim(), interestId, 'interest', ni);
           } else {
-            applyCity('Brandenburg', interestId, 'kampagne', ni || '');
+            applyCity(regK, interestId, 'kampagne', ni || '');
           }
         })
-        .catch(function () { applyCity('Brandenburg', interestId, 'kampagne+error', ''); });
+        .catch(function () { applyCity(regK, interestId, 'kampagne+error', ''); });
       return;
     }
 
