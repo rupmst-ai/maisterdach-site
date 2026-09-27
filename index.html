@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <link rel="preload" as="image" href="hero-video-poster.webp" type="image/webp" fetchpriority="high"/>
+  <link rel="preload" as="image" href="hero-video-poster-v42.webp" type="image/webp" fetchpriority="high"/>
   <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <meta name="description" content="Ihr Dachdecker in Ihrer Nähe – Flachdach, Blechdach, Dachreparatur & Dachrinne. Kostenlose Besichtigung."/>
   
@@ -112,8 +112,8 @@
 </nav>
 <main>
 <section class="hero-index">
-  <div class="hero-index-bg" style="background-image:url('hero-video-poster.webp');position:relative;overflow:hidden;">
-    <video id="hero-video" muted loop playsinline preload="none" aria-hidden="true" poster="hero-video-poster.webp" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s"></video>
+  <div class="hero-index-bg" style="background-image:url('hero-video-poster-v42.webp');position:relative;overflow:hidden;">
+    <video id="hero-video" muted loop playsinline preload="none" aria-hidden="true" poster="hero-video-poster-v42.webp" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .6s"></video>
   </div>
   <script>
   /* Video in hero: se incarca abia dupa ce pagina e gata; nu la Save-Data / reduced-motion. */
@@ -123,7 +123,7 @@
     if(c.saveData || /(^|-)2g$/.test(c.effectiveType||'')) return;
     if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     function start(){
-      v.src='hero-video.mp4';
+      v.src='hero-video-v42.mp4';
       v.addEventListener('playing',function(){v.style.opacity='1';},{once:true});
       var p=v.play(); if(p&&p.catch) p.catch(function(){});
     }
