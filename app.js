@@ -7,7 +7,7 @@ function trackConversion(label) {
   }
 }
 
-var WA_LEISTUNG = {'flachdach':'eine Flachdach-Abdichtung','sanierung-grosser-daecher':'eine Dachsanierung','dachreparatur':'eine Dachreparatur','blechdach':'ein Blechdach','solarmontage':'eine Solar-Montage','dachrinne':'eine Dachrinne','dachziegel':'neue Dachziegel','dachfenster':'ein Dachfenster','dachkasten':'einen Dachkasten','schornsteinverkleidung':'eine Schornsteinverkleidung','reinigung-beschichtung':'eine Dachreinigung','asbest':'eine Asbestdach-Sanierung'};
+var WA_LEISTUNG = {'flachdach':'eine Flachdach-Abdichtung','sanierung-grosser-daecher':'eine Dachsanierung','dachreparatur':'eine Dachreparatur','blechdach':'ein Blechdach','solarmontage':'eine Solar-Montage','dachrinne':'eine Dachrinne','dachziegel':'neue Dachziegel','dachfenster':'ein Dachfenster','dachkasten':'einen Dachkasten','schornsteinverkleidung':'eine Schornsteinverkleidung','reinigung-beschichtung':'eine Dachreinigung','asbest':'eine Asbestdach-Sanierung','entruempelung':'eine Entrümpelung','dachdaemmung':'eine Dachdämmung'};
 function waText() {
   var key = (location.pathname.split('/').pop() || '').replace('.html', '');
   var was = WA_LEISTUNG[key] || 'Arbeiten an meinem Dach';
