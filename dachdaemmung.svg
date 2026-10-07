@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <linearGradient id="room" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b2a1a"/>
+      <stop offset="1" stop-color="#1a1f2e"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="600" cy="640" r="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F97316" stop-opacity=".55"/>
+      <stop offset="1" stop-color="#F97316" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="wool" width="60" height="34" patternUnits="userSpaceOnUse">
+      <rect width="60" height="34" fill="#f5c542"/>
+      <path d="M0 17 Q15 4 30 17 T60 17" fill="none" stroke="#d99a1e" stroke-width="3"/>
+      <path d="M0 31 Q15 22 30 31 T60 31" fill="none" stroke="#e8b030" stroke-width="2"/>
+    </pattern>
+    <pattern id="tiles" width="70" height="36" patternUnits="userSpaceOnUse">
+      <rect width="70" height="36" fill="#c2410c"/>
+      <path d="M0 36 Q35 14 70 36" fill="#ea580c"/>
+      <path d="M0 36 Q35 14 70 36" fill="none" stroke="#9a3412" stroke-width="3"/>
+    </pattern>
+    <clipPath id="roofClip"><path d="M600 120 L1260 640 L-60 640 Z"/></clipPath>
+  </defs>
+
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  <g fill="#fff" opacity=".5">
+    <circle cx="120" cy="90" r="2"/><circle cx="260" cy="160" r="1.6"/><circle cx="980" cy="80" r="2"/>
+    <circle cx="1080" cy="190" r="1.5"/><circle cx="860" cy="130" r="1.4"/><circle cx="380" cy="70" r="1.5"/>
+  </g>
+
+  <!-- interior -->
+  <rect x="0" y="640" width="1200" height="160" fill="url(#room)"/>
+  <path d="M600 120 L1260 640 L-60 640 Z" fill="url(#room)"/>
+  <rect width="1200" height="800" fill="url(#glow)"/>
+
+  <!-- roof build-up: tiles, battens, insulation between rafters, vapour barrier -->
+  <g clip-path="url(#roofClip)">
+    <path d="M600 120 L1260 640 L1180 640 L600 182 L20 640 L-60 640 Z" fill="url(#tiles)"/>
+    <path d="M600 182 L1180 640 L1150 640 L600 206 L50 640 L20 640 Z" fill="#78350f"/>
+    <path d="M600 206 L1150 640 L1050 640 L600 285 L150 640 L50 640 Z" fill="url(#wool)"/>
+    <g fill="#92400e">
+      <path d="M600 206 L626 226 L626 300 L600 285 L574 300 L574 226 Z"/>
+      <path d="M760 332 L786 352 L786 430 L760 412 Z"/><path d="M440 332 L414 352 L414 430 L440 412 Z"/>
+      <path d="M920 459 L946 479 L946 555 L920 538 Z"/><path d="M280 459 L254 479 L254 555 L280 538 Z"/>
+    </g>
+    <path d="M600 285 L1050 640 M600 285 L150 640" stroke="#38bdf8" stroke-width="5" fill="none"/>
+  </g>
+
+  <!-- heat kept inside -->
+  <g fill="none" stroke="#fdba74" stroke-width="6" stroke-linecap="round" opacity=".9">
+    <path d="M540 600 q-18 -30 0 -60 q18 -30 0 -60"/>
+    <path d="M600 610 q-18 -30 0 -60 q18 -30 0 -60 q-18 -30 0 -60"/>
+    <path d="M660 600 q-18 -30 0 -60 q18 -30 0 -60"/>
+  </g>
+  <rect x="0" y="636" width="1200" height="8" fill="#0f172a" opacity=".6"/>
+</svg>
