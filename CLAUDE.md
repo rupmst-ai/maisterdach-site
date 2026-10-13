@@ -4,15 +4,15 @@ Static site (HTML/CSS/JS, no build step) deployed on Cloudflare Pages. `_headers
 
 ## Model roles
 
-- **Main session (Sonnet, set in `.claude/settings.json`)** plans, decides and writes all code.
+- **Main session (`opusplan`, set in `.claude/settings.json`)**: Opus in plan mode, Sonnet when executing. For any task beyond a small edit, start in plan mode (Shift+Tab) so Opus writes the plan; Sonnet then implements it. Switch to `/model opus` for the whole task when the code itself is delicate (`app.js`, `loc-lookup.js`, tracking, structured data).
 - **`explorer` / `researcher` subagents (Haiku)** do the reading: finding where things are in the pages, looking up docs. Run several in parallel when the questions are independent. Use them instead of reading many large HTML files into the main context.
 - **`advisor` subagent (Opus)** is on call, not in the loop. Call it only:
-  1. before executing a plan that touches more than one or two files,
+  1. before executing a multi-file plan that was made without plan mode,
   2. when the same error or failed attempt happens a second time,
-  3. before saying a multi-file change is done (give it the summary; it reads `git diff`).
+  3. before saying a multi-file change is done (give it the original request and a summary; it reads `git diff`).
   Never call it for routine single edits. It never writes code — apply its advice yourself.
 
-Plan on high effort, delegate the reading, keep Opus for decisions.
+Opus plans and reviews, Sonnet writes, Haiku reads.
 
 ## Site conventions
 
