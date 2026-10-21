@@ -226,21 +226,32 @@
     // asa ca pozitia fizica trece pe locul doi.
     var regK = KAMPAGNE_REGION[params.campaignId];
 
-    // Brandenburg: daca in cautare era un oras (loc_interest_ms), il afisam.
-    // Berlin ramane neschimbat. loc_physical_ms nu se foloseste.
-    // Brandenburg si Mecklenburg-Vorpommern: orasul cautat (loc_interest_ms), altfel landul.
-    if ((regK === 'Brandenburg' || regK === 'Mecklenburg-Vorpommern') && interestId && !istBerlinId(interestId)) {
+    // Brandenburg si Mecklenburg-Vorpommern:
+    //   1. orasul cautat (loc_interest_ms)
+    //   2. altfel orasul fizic (loc_physical_ms) — campaniile tintesc doar
+    //      oamenii aflati in land, deci aici pozitia fizica e de folosit
+    //   3. altfel landul.
+    // Berlin (ca oras sau sector) nu se afiseaza niciodata pe aceste campanii.
+    // Campaniile Berlin raman neschimbate: acolo loc_physical_ms nu se foloseste.
+    var intOk  = interestId && !istBerlinId(interestId);
+    var physOk = physicalId && !istBerlinId(physicalId);
+    if ((regK === 'Brandenburg' || regK === 'Mecklenburg-Vorpommern') && (intOk || physOk)) {
       fetch('de-cities.json')
         .then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
         .then(function (map) {
-          var ni = map[interestId];
+          var ni = intOk ? map[interestId] : null;
           if (ni && isValidCityName(ni) && ni !== 'Berlin') {
             applyCity(ni.trim(), interestId, 'interest', ni);
-          } else {
-            applyCity(regK, interestId, 'kampagne', ni || '');
+            return;
           }
+          var np = physOk ? map[physicalId] : null;
+          if (np && isValidCityName(np) && np !== 'Berlin') {
+            applyCity(np.trim(), physicalId, 'physical', np);
+            return;
+          }
+          applyCity(regK, interestId || physicalId, 'kampagne', ni || np || '');
         })
-        .catch(function () { applyCity(regK, interestId, 'kampagne+error', ''); });
+        .catch(function () { applyCity(regK, interestId || physicalId, 'kampagne+error', ''); });
       return;
     }
 
@@ -249,7 +260,7 @@
     // Sectoarele Berlinului, doar pe interes
     if (istBerlinId(interestId)) { applyCity('Berlin', interestId, 'interest+berlin', 'Berlin'); return; }
 
-    // loc_physical_ms nu mai decide nimic. Google a livrat Schenkenhorst
+    // In afara campaniilor BB/MV, loc_physical_ms nu decide nimic. Google a livrat Schenkenhorst
     // pentru un utilizator aflat in Spandau, deci nu e de incredere.
     // Ramane doar in jurnal, pentru masuratori.
     if (!interestId) {
