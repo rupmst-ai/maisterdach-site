@@ -78,7 +78,7 @@
       'Szczegóły w <a href="/pl/polityka-prywatnosci/">polityce prywatności</a>.</p>' +
       '<div class="ck-set" id="ckSet">' +
         '<label><input type="checkbox" checked disabled> <span><b>Niezbędne</b> – potrzebne do działania strony.</span></label>' +
-        '<label><input type="checkbox" id="ckAn"> <span><b>Analityczne</b> – anonimowe statystyki odwiedzin.</span></label>' +
+        '<label><input type="checkbox" id="ckAn"> <span><b>Analityczne</b> – statystyki odwiedzin strony.</span></label>' +
         '<label><input type="checkbox" id="ckMk"> <span><b>Marketingowe</b> – pomiar i dopasowanie reklam Google Ads.</span></label>' +
       '</div>' +
       '<div class="ck-btns">' +
@@ -147,8 +147,10 @@
       var a = e.target.closest('a[href]');
       if (!a) return;
       var h = a.getAttribute('href');
-      if (h.indexOf('https://wa.me/') === 0) { loadGtag(); conv(LABEL.whatsapp); }
-      else if (h.indexOf('tel:') === 0) { loadGtag(); conv(LABEL.tel); }
+      // na stronie podziękowania lead jest już policzony (PL_FORM) – nie liczymy go drugi raz
+      var thanks = document.body.getAttribute('data-page') === 'dziekujemy';
+      if (h.indexOf('https://wa.me/') === 0) { if (!thanks) { loadGtag(); conv(LABEL.whatsapp); } }
+      else if (h.indexOf('tel:') === 0) { if (!thanks) { loadGtag(); conv(LABEL.tel); } }
       else if (a.hasAttribute('data-cookies')) { e.preventDefault(); showBanner(true); }
     });
   }
