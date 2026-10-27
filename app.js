@@ -24,8 +24,15 @@ function applyLinks() {
   });
   var pw = document.getElementById('popupWaBtn');
   if (pw) { pw.href = waHref(); pw.addEventListener('click', function() { pw.href = waHref(); }); }
+  // Campaniile din afara Berlinului (Brandenburg, Hamburg...) folosesc mobilul:
+  // scriptul bbg-switch din pagina pune window.__DJ_PHONE__.
+  var phone = window.__DJ_PHONE__ || PHONE;
   document.querySelectorAll('.call-l').forEach(function(el) {
-    el.href = 'tel:' + PHONE;
+    el.href = 'tel:' + phone;
+    if (window.__DJ_PHONE__) {
+      var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
+      while ((n = w.nextNode())) n.nodeValue = n.nodeValue.replace(/\+?49 ?30 ?5445357103|030 ?5445357103/, '0163 0138072');
+    }
     el.addEventListener('click', function() { trackConversion('rrY2CMqh2vYcENWt0L8_'); });
   });
 }
