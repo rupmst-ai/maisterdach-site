@@ -26,6 +26,21 @@
     '24328097681': 'Berlin'         // Entrümpelung – Berlin (v45)
   };
 
+  // Campanii pe o raza in jurul unui oras (ex. Hamburg + 30 km).
+  // In Google Ads, la Sufixul URL final al campaniei se pune region=hamburg.
+  // Vizitatorul vede mereu "<Oras> und Umgebung", indiferent din ce
+  // localitate din jur vine: loc_interest_ms / loc_physical_ms nu se folosesc
+  // (raman doar in jurnal). Merge si fara ID-ul campaniei.
+  var REGION_PARAM = {
+    'hamburg': 'Hamburg'
+  };
+
+  // Acelasi lucru dupa ID-ul campaniei (optional, plasa de siguranta
+  // daca sufixul lipseste). Adauga ID-ul dupa ce creezi campania.
+  var KAMPAGNE_REGION_RADIUS = {
+    // 'ID_CAMPANIE': 'Hamburg'     // SITE FULL – Hamburg + 30 km
+  };
+
   // Campanii cu doua zone (Berlin + Brandenburg).
   // Prioritatea ramane loc_interest_ms: daca utilizatorul a cautat un oras,
   // se afiseaza orasul lui. Doar cand nu vine niciun oras se foloseste
@@ -52,19 +67,24 @@
     // Campania si orasul cautat se pastreaza pe paginile urmatoare (aceeasi sesiune).
     var camp = p.get('gad_campaignid') || '';
     var intr = p.get('loc_interest_ms') || '';
+    var reg  = (p.get('region') || '').toLowerCase();
     try {
       if (camp) {
         sessionStorage.setItem('dj_camp', camp);
         sessionStorage.setItem('dj_int', intr);
+        sessionStorage.setItem('dj_reg', reg);
       } else {
         camp = sessionStorage.getItem('dj_camp') || '';
         intr = intr || sessionStorage.getItem('dj_int') || '';
+        if (reg) sessionStorage.setItem('dj_reg', reg);
+        else reg = sessionStorage.getItem('dj_reg') || '';
       }
     } catch (e) {}
     return {
       physicalId: p.get('loc_physical_ms') || p.get('loc_id') || '',
       interestId: intr,
       campaignId: camp,
+      region:     REGION_PARAM[reg] || '',
       debug:      p.get('debug') === '1'
     };
   }
@@ -133,6 +153,7 @@
         'loc_physical_ms': window.__LOC_PHYS__,
         'loc_interest_ms': window.__LOC_INT__,
         'gad_campaignid': window.__LOC_CAMP__,
+        'region': window.__LOC_REG__ || '',
         'gasit in fisier': roh || '(nimic)',
         'afisat': name || '(fallback: ' + FALLBACK_DISPLAY + ')',
         'sursa': source
@@ -213,6 +234,11 @@
     window.__LOC_PHYS__  = physicalId;
     window.__LOC_INT__   = interestId;
     window.__LOC_CAMP__  = params.campaignId;
+    window.__LOC_REG__   = params.region;
+
+    // PRIORITATE 0: campanie pe raza unui oras (region=... in URL).
+    var regR = params.region || KAMPAGNE_REGION_RADIUS[params.campaignId];
+    if (regR) { applyCity(regR, physicalId || interestId, 'region', ''); return; }
 
     if (!physicalId && !interestId) {
       var reg0 = KAMPAGNE_REGION[params.campaignId] || mehrzoneName(params.campaignId);
