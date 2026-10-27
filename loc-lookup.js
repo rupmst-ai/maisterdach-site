@@ -38,7 +38,7 @@
   // Acelasi lucru dupa ID-ul campaniei (optional, plasa de siguranta
   // daca sufixul lipseste). Adauga ID-ul dupa ce creezi campania.
   var KAMPAGNE_REGION_RADIUS = {
-    // 'ID_CAMPANIE': 'Hamburg'     // SITE FULL – Hamburg + 30 km
+    '24406866367': 'Hamburg'        // Entrümpelung – Hamburg + 30 km
   };
 
   // Campanii cu doua zone (Berlin + Brandenburg).
