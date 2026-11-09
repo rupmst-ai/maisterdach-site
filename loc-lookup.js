@@ -32,7 +32,8 @@
   // localitate din jur vine: loc_interest_ms / loc_physical_ms nu se folosesc
   // (raman doar in jurnal). Merge si fara ID-ul campaniei.
   var REGION_PARAM = {
-    'hamburg': 'Hamburg'
+    'hamburg': 'Hamburg',
+    'dresden': 'Dresden'
   };
 
   // Acelasi lucru dupa ID-ul campaniei (optional, plasa de siguranta
