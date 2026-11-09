@@ -23,7 +23,8 @@
     '24331784104': 'Berlin',        // Dämmung – Berlin (v44)
     '24331785094': 'Brandenburg',   // Dämmung – Brandenburg (v44)
     '24320584788': 'Mecklenburg-Vorpommern', // Dämmung – MV (v44)
-    '24328097681': 'Berlin'         // Entrümpelung – Berlin (v45)
+    '24328097681': 'Berlin',        // Entrümpelung – Berlin (v45)
+    '24455198059': 'Sachsen'        // Neues Dach – Sachsen (v51)
   };
 
   // Campanii pe o raza in jurul unui oras (ex. Hamburg + 30 km).
@@ -32,7 +33,8 @@
   // localitate din jur vine: loc_interest_ms / loc_physical_ms nu se folosesc
   // (raman doar in jurnal). Merge si fara ID-ul campaniei.
   var REGION_PARAM = {
-    'hamburg': 'Hamburg'
+    'hamburg': 'Hamburg',
+    'dresden': 'Dresden'
   };
 
   // Acelasi lucru dupa ID-ul campaniei (optional, plasa de siguranta
@@ -253,7 +255,7 @@
     // asa ca pozitia fizica trece pe locul doi.
     var regK = KAMPAGNE_REGION[params.campaignId];
 
-    // Brandenburg si Mecklenburg-Vorpommern:
+    // Brandenburg, Mecklenburg-Vorpommern si Sachsen:
     //   1. orasul cautat (loc_interest_ms)
     //   2. altfel orasul fizic (loc_physical_ms) — campaniile tintesc doar
     //      oamenii aflati in land, deci aici pozitia fizica e de folosit
@@ -262,7 +264,7 @@
     // Campaniile Berlin raman neschimbate: acolo loc_physical_ms nu se foloseste.
     var intOk  = interestId && !istBerlinId(interestId);
     var physOk = physicalId && !istBerlinId(physicalId);
-    if ((regK === 'Brandenburg' || regK === 'Mecklenburg-Vorpommern') && (intOk || physOk)) {
+    if ((regK === 'Brandenburg' || regK === 'Mecklenburg-Vorpommern' || regK === 'Sachsen') && (intOk || physOk)) {
       fetch('de-cities.json')
         .then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
         .then(function (map) {
