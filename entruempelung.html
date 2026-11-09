@@ -63,6 +63,7 @@
 <noscript><iframe src="https://ob.sornavellon.com/ns/9ecb19efa41e197013c250de410b2348.html?ch=" width="0" height="0" style="display:none"></iframe></noscript>
 <!-- ClickCease.com tracking-->
 <style id="cro-css">
+.qf-hinweis{font-size:.74rem;color:#6b7280;text-align:center;margin:8px 0 0;line-height:1.4}.qf-hinweis a{color:#F97316;font-weight:600;text-decoration:none}.qf-dark .qf-hinweis{color:rgba(255,255,255,.55)}
 .trust-row{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;max-width:560px;margin:0 auto 12px;padding:0;list-style:none;font-size:.8rem;font-weight:700;color:#fff}
 .trust-row li::before{content:"\2713\00a0";color:#22c55e}
 .qf-form .qf-dsgvo{margin:2px 0 12px}
@@ -173,13 +174,9 @@ section[id]{scroll-margin-top:96px}@media(min-width:768px){section[id]{scroll-ma
         <label>Ort oder Adresse <span class="qf-opt">optional</span></label>
         <input type="text" class="qf-adr" autocomplete="street-address"/>
       </div>
-
-      <div class="qf-dsgvo">
-        <input type="checkbox" class="qf-ok"/>
-        <label>Meine Angaben d&uuml;rfen zur Bearbeitung der Anfrage gespeichert werden. <a href="datenschutz.html">Datenschutz</a></label>
-      </div>
       <p class="qf-err"></p>
       <button class="qf-btn" type="button">Kostenloses Angebot anfordern</button>
+        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="datenschutz.html">Datenschutz</a></p>
       <p class="qf-sicher">Kostenlos und unverbindlich &middot; Keine Weitergabe Ihrer Daten</p>
     </div>
     <div class="qf-danke">
@@ -304,13 +301,9 @@ section[id]{scroll-margin-top:96px}@media(min-width:768px){section[id]{scroll-ma
         <label>Ort oder Adresse <span class="qf-opt">optional</span></label>
         <input type="text" class="qf-adr" autocomplete="street-address"/>
       </div>
-
-      <div class="qf-dsgvo">
-        <input type="checkbox" class="qf-ok"/>
-        <label>Meine Angaben d&uuml;rfen zur Bearbeitung der Anfrage gespeichert werden. <a href="datenschutz.html">Datenschutz</a></label>
-      </div>
       <p class="qf-err"></p>
       <button class="qf-btn" type="button">Kostenloses Angebot anfordern</button>
+        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="datenschutz.html">Datenschutz</a></p>
       <p class="qf-sicher">Kostenlos und unverbindlich &middot; Keine Weitergabe Ihrer Daten</p>
     </div>
     <div class="qf-danke">
@@ -369,12 +362,9 @@ document.addEventListener('DOMContentLoaded', function() {
           <label>Ort oder Adresse <span class="qf-opt">optional</span></label>
           <input type="text" class="qf-adr" autocomplete="street-address"/>
         </div>
-        <div class="qf-dsgvo">
-          <input type="checkbox" class="qf-ok"/>
-          <label>Meine Angaben d&uuml;rfen zur Bearbeitung der Anfrage gespeichert werden. <a href="datenschutz.html">Datenschutz</a></label>
-        </div>
         <p class="qf-err"></p>
         <button class="qf-btn" type="button">Kostenloses Angebot anfordern</button>
+        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="datenschutz.html">Datenschutz</a></p>
       </div>
       <div class="qf-danke">
         <b>Anfrage ist da.</b>
@@ -598,13 +588,9 @@ document.addEventListener('DOMContentLoaded', function() {
         <label>Ort oder Adresse <span class="qf-opt">optional</span></label>
         <input type="text" class="qf-adr" autocomplete="street-address"/>
       </div>
-
-      <div class="qf-dsgvo">
-        <input type="checkbox" class="qf-ok"/>
-        <label>Meine Angaben d&uuml;rfen zur Bearbeitung der Anfrage gespeichert werden. <a href="datenschutz.html">Datenschutz</a></label>
-      </div>
       <p class="qf-err"></p>
       <button class="qf-btn" type="button">Kostenloses Angebot anfordern</button>
+        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="datenschutz.html">Datenschutz</a></p>
       <p class="qf-sicher">Kostenlos und unverbindlich &middot; Keine Weitergabe Ihrer Daten</p>
     </div>
     <div class="qf-danke">
@@ -634,9 +620,7 @@ function closeStickyForm(){document.getElementById("stickyModal").classList.remo
     tel.addEventListener('input',function(){btn.classList.toggle('qf-bereit',valid());});
     btn.addEventListener('click',function(){
       if(!valid()){err.textContent='Bitte eine Telefonnummer angeben';err.style.display='block';return;}
-      if(!ok.checked){err.textContent='Bitte die Einwilligung best\u00e4tigen';err.style.display='block';
-        box.classList.add('qf-blink');try{box.scrollIntoView({block:'center',behavior:'smooth'});}catch(e){}return;}
-      box.classList.remove('qf-blink'); err.style.display='none';
+      err.style.display='none';
       var t=tel.value.trim(), a=adr.value.trim();
       var fd=new FormData();
       fd.append('leistung',LEISTUNG); fd.append('telefon',t); fd.append('adresse',a);
