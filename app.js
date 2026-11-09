@@ -1,4 +1,4 @@
-const WA = '491630138072', PHONE = '+49305445357103';
+const WA = '491630138072', PHONE = '+491630138072';
 const GTAG_ID = 'AW-17044870869';
 
 function trackConversion(label) {
