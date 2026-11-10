@@ -7,8 +7,25 @@ const ALLOWED_ORIGINS = ['https://dachjetz.de', 'https://www.dachjetz.de'];
 
 // Adauga aici fiecare campanie noua: ID -> nume.
 const CAMPAIGNS = {
+  '24094491568': 'SITE FULL – Berlin',
+  '24217884207': 'SITE FULL – Brandenburg',
+  '24252892304': 'Flachdach – Berlin',
+  '24219701426': 'Flachdach – Brandenburg',
+  '24255295121': 'Solar-Montage – Berlin',
+  '24249787428': 'Solar-Montage – Brandenburg',
+  '24264541414': 'Dachsanierung – Berlin',
+  '24258974144': 'Dachsanierung – Brandenburg',
+  '24300425899': 'Neues Dach – Berlin',
   '24288722376': 'Neues Dach – Brandenburg',
-  '24455198059': 'Neues Dach – Sachsen'
+  '24455198059': 'Neues Dach – Sachsen',
+  '24294161033': 'Neues Dach – Mecklenburg-Vorpommern',
+  '24395874225': 'Neues Dach – Hamburg',
+  '24331784104': 'Dämmung – Berlin',
+  '24331785094': 'Dämmung – Brandenburg',
+  '24320584788': 'Dämmung – Mecklenburg-Vorpommern',
+  '24328097681': 'Entrümpelung – Berlin',
+  '24406866367': 'Entrümpelung – Hamburg',
+  '24235344397': 'Asbestdach – Neueindeckung'
 };
 
 const TYPES = {
@@ -100,30 +117,4 @@ export async function onRequestPost({ request, env }) {
   }
   if (!res.ok) return json({ ok: false, error: 'telegram ' + res.status }, 502);
   return json({ ok: true }, 200);
-}
-
-// Diagnostic: deschide https://dachjetz.de/notify?test=1 in browser.
-// Arata daca secretele exista si ce raspunde Telegram. Nu afiseaza tokenul.
-export async function onRequestGet({ request, env }) {
-  const out = [
-    'notify: functia este activa',
-    'TG_TOKEN: ' + (env.TG_TOKEN ? 'setat (' + String(env.TG_TOKEN).length + ' caractere)' : 'LIPSESTE'),
-    'TG_CHAT_ID: ' + (env.TG_CHAT_ID ? 'setat' : 'LIPSESTE')
-  ];
-  if (env.TG_TOKEN && env.TG_CHAT_ID && new URL(request.url).searchParams.get('test') === '1') {
-    try {
-      const res = await fetch('https://api.telegram.org/bot' + String(env.TG_TOKEN).trim() + '/sendMessage', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: String(env.TG_CHAT_ID).trim(), text: '✅ Test dachjetz.de – notificările funcționează.' })
-      });
-      const j = await res.json().catch(function () { return {}; });
-      out.push('Telegram: ' + (j.ok ? 'OK, mesaj trimis' : 'EROARE ' + res.status + ' – ' + (j.description || 'fara detalii')));
-    } catch (e) {
-      out.push('Telegram: nu se poate contacta');
-    }
-  }
-  return new Response(out.join('\n'), {
-    headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' }
-  });
 }
