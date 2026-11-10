@@ -65,6 +65,7 @@ function buildWhatsAppMsg(formEl) {
 
 function submitToFormspreeAndWhatsApp(formEl, onSuccess) {
   if (!formEl.checkValidity()) { formEl.reportValidity(); return; }
+  if (window.djNotify) window.djNotify('form');
 
   var data = new FormData(formEl);
 
@@ -229,4 +230,80 @@ function closeStickyForm() {
   }, true);
 
   window.logCallHit = logHit;
+})();
+
+/* ---- Notificare instant pe Telegram (functions/notify.js) ---- */
+(function () {
+  var last = {};
+
+  // kw / campanie / device / gclid vin doar in URL-ul paginii de intrare:
+  // le pastram pe sesiune, ca sa mearga si de pe paginile urmatoare.
+  function val(n, key) {
+    var v = '';
+    try { v = new URLSearchParams(window.location.search).get(n) || ''; } catch (e) {}
+    try {
+      if (v) sessionStorage.setItem(key, v);
+      else v = sessionStorage.getItem(key) || '';
+    } catch (e) {}
+    return v;
+  }
+  var ctx = {
+    kw:       val('kw', 'dj_kw'),
+    campaign: val('gad_campaignid', 'dj_camp_n'),
+    device:   val('device', 'dj_dev'),
+    gclid:    val('gclid', 'dj_gclid') || val('gbraid', 'dj_gbraid') || val('wbraid', 'dj_wbraid'),
+    source:   val('utm_source', 'dj_src')
+  };
+  if (!ctx.source) {
+    try {
+      var h = document.referrer ? new URL(document.referrer).hostname : '';
+      if (h && h.indexOf('dachjetz.de') === -1) { ctx.source = h; sessionStorage.setItem('dj_src', h); }
+    } catch (e) {}
+  }
+
+  function notify(type) {
+    var now = Date.now();
+    if (last[type] && now - last[type] < 10000) return;   // fara dubluri la dublu-click
+    last[type] = now;
+
+    var ua = navigator.userAgent;
+    var body = JSON.stringify({
+      type:     type,
+      // doar un oras real; "Brandenburg" din campanie nu ajuta, atunci decide IP-ul
+      town:     /^(interest|physical)/.test(window.__LOC_SOURCE__ || '') ? (window.__LOC_CITY__ || '') : '',
+      kw:       ctx.kw,
+      campaign: ctx.campaign || window.__LOC_CAMP__ || '',
+      device:   ctx.device || (/iPad|Tablet/i.test(ua) ? 't' : /Mobi|Android|iPhone/i.test(ua) ? 'm' : 'c'),
+      gclid:    ctx.gclid,
+      page:     window.location.pathname,
+      source:   ctx.source
+    });
+
+    try {
+      fetch('/notify', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: body })
+        .catch(function () {});
+    } catch (e) {
+      try { navigator.sendBeacon('/notify', new Blob([body], { type: 'text/plain;charset=UTF-8' })); } catch (e2) {}
+    }
+  }
+
+  document.addEventListener('click', function (ev) {
+    var t = ev.target && ev.target.closest ? ev.target : null;
+    if (!t) return;
+    var a = t.closest('a[href]');
+    if (a) {
+      var href = a.getAttribute('href') || '';
+      if (href.indexOf('tel:') === 0) notify('call');
+      else if (href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp') !== -1) notify('whatsapp');
+      return;
+    }
+    // Formularul rapid (.qf-unit): doar daca numarul e valid, ca in scriptul din pagina.
+    var b = t.closest('.qf-btn');
+    if (b) {
+      var u = b.closest('.qf-unit'), tel = u && u.querySelector('.qf-tel');
+      if (tel && tel.value.replace(/\D/g, '').length >= 6) notify('form');
+    }
+  }, true);
+
+  window.djNotify = notify;
 })();
