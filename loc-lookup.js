@@ -24,7 +24,9 @@
     '24331785094': 'Brandenburg',   // Dämmung – Brandenburg (v44)
     '24320584788': 'Mecklenburg-Vorpommern', // Dämmung – MV (v44)
     '24328097681': 'Berlin',        // Entrümpelung – Berlin (v45)
-    '24455198059': 'Sachsen'        // Neues Dach – Sachsen (v51)
+    '24455198059': 'Sachsen',       // Neues Dach – Sachsen (v51)
+    '24445972740': 'Brandenburg',   // Dachdecker Stadt – Brandenburg (v52)
+    '24445974156': 'Sachsen'        // Dachdecker Stadt – Sachsen (v52)
   };
 
   // Campanii pe o raza in jurul unui oras (ex. Hamburg + 30 km).

@@ -18,6 +18,8 @@ const CAMPAIGNS = {
   '24300425899': 'Neues Dach – Berlin',
   '24288722376': 'Neues Dach – Brandenburg',
   '24455198059': 'Neues Dach – Sachsen',
+  '24445972740': 'Dachdecker Stadt – Brandenburg',
+  '24445974156': 'Dachdecker Stadt – Sachsen',
   '24294161033': 'Neues Dach – Mecklenburg-Vorpommern',
   '24395874225': 'Neues Dach – Hamburg',
   '24331784104': 'Dämmung – Berlin',
