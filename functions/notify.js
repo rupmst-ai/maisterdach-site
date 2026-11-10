@@ -86,11 +86,11 @@ export async function onRequestPost({ request, env }) {
 
   let res;
   try {
-    res = await fetch('https://api.telegram.org/bot' + env.TG_TOKEN + '/sendMessage', {
+    res = await fetch('https://api.telegram.org/bot' + String(env.TG_TOKEN).trim() + '/sendMessage', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        chat_id: env.TG_CHAT_ID,
+        chat_id: String(env.TG_CHAT_ID).trim(),
         text: lines.join('\n'),
         disable_web_page_preview: true
       })
@@ -100,4 +100,30 @@ export async function onRequestPost({ request, env }) {
   }
   if (!res.ok) return json({ ok: false, error: 'telegram ' + res.status }, 502);
   return json({ ok: true }, 200);
+}
+
+// Diagnostic: deschide https://dachjetz.de/notify?test=1 in browser.
+// Arata daca secretele exista si ce raspunde Telegram. Nu afiseaza tokenul.
+export async function onRequestGet({ request, env }) {
+  const out = [
+    'notify: functia este activa',
+    'TG_TOKEN: ' + (env.TG_TOKEN ? 'setat (' + String(env.TG_TOKEN).length + ' caractere)' : 'LIPSESTE'),
+    'TG_CHAT_ID: ' + (env.TG_CHAT_ID ? 'setat' : 'LIPSESTE')
+  ];
+  if (env.TG_TOKEN && env.TG_CHAT_ID && new URL(request.url).searchParams.get('test') === '1') {
+    try {
+      const res = await fetch('https://api.telegram.org/bot' + String(env.TG_TOKEN).trim() + '/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: String(env.TG_CHAT_ID).trim(), text: '✅ Test dachjetz.de – notificările funcționează.' })
+      });
+      const j = await res.json().catch(function () { return {}; });
+      out.push('Telegram: ' + (j.ok ? 'OK, mesaj trimis' : 'EROARE ' + res.status + ' – ' + (j.description || 'fara detalii')));
+    } catch (e) {
+      out.push('Telegram: nu se poate contacta');
+    }
+  }
+  return new Response(out.join('\n'), {
+    headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' }
+  });
 }
