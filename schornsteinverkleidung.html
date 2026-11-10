@@ -41,7 +41,12 @@
       try{fetch(U,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=UTF-8'},body:b});}catch(e){}
     }
     s('Vizita');
-    addEventListener('pagehide',function(){if(weg)return;weg=1;s('Plecare dupa '+Math.round((Date.now()-t0)/1000)+' s');});
+    addEventListener('pagehide',function(){
+      if(weg)return;weg=1;
+      // click pe un link din site = merge mai departe, nu pleaca
+      var n=0;try{n=parseInt(sessionStorage.getItem('internalNav')||'0',10)||0;}catch(e){}
+      s((Date.now()-n<5000?'Pagina urmatoare dupa ':'Plecare dupa ')+Math.round((Date.now()-t0)/1000)+' s');
+    });
   }catch(e){}})();
   </script>
   <meta name="description" content="Schornsteinverkleidung & Demontage in Ihrer Nähe – Schutz vor Regen. Kostenlose Besichtigung."/>

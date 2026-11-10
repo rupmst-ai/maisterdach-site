@@ -173,18 +173,17 @@
     // din pagina, "in Ihrer Nähe"; zona de serviciu arata regiunea noastra.
     var shown = name || FALLBACK_REGION;
     var nah = name ? disp(name) : FALLBACK_NAH;
-    var titelZusatz = 'in ' + (name || FALLBACK_NAH);
+    // <title> si descrierea pastreaza regiunea (conteaza pentru cautarea organica).
+    var titelZusatz = 'in ' + shown;
     var currentTitle = document.title;
     if (currentTitle.indexOf(' | ') !== -1) {
       document.title = currentTitle.replace(' | ', ' ' + titelZusatz + ' | ');
     } else {
       document.title = currentTitle + ' ' + titelZusatz;
     }
-    if (name) {
-      var meta = document.querySelector('meta[name="description"]');
-      if (meta) {
-        meta.content = meta.content.replace('Kostenlose Besichtigung', titelZusatz + ' – Kostenlose Besichtigung');
-      }
+    var meta = document.querySelector('meta[name="description"]');
+    if (meta) {
+      meta.content = meta.content.replace('Kostenlose Besichtigung', titelZusatz + ' – Kostenlose Besichtigung');
     }
 
     document.querySelectorAll('.city').forEach(function (el) {
