@@ -1,6 +1,7 @@
 (function () {
   var FALLBACK_REGION = 'Berlin & Brandenburg';
-  var FALLBACK_DISPLAY = 'in ' + FALLBACK_REGION;
+  var FALLBACK_NAH = 'Ihrer N\u00e4he';
+  var FALLBACK_DISPLAY = 'in ' + FALLBACK_NAH;
   var LAND = {'Berlin & Brandenburg':1,'Brandenburg':1,'Berlin':1,'Sachsen':1,'Sachsen-Anhalt':1,'Mecklenburg-Vorpommern':1,'Th\u00fcringen':1};
   function disp(name){ return LAND[name] ? name : name + ' und Umgebung'; }
 
@@ -73,20 +74,23 @@
     var camp = p.get('gad_campaignid') || '';
     var intr = p.get('loc_interest_ms') || '';
     var reg  = (p.get('region') || '').toLowerCase();
+    var phys = p.get('loc_physical_ms') || p.get('loc_id') || '';
     try {
       if (camp) {
         sessionStorage.setItem('dj_camp', camp);
         sessionStorage.setItem('dj_int', intr);
         sessionStorage.setItem('dj_reg', reg);
+        sessionStorage.setItem('dj_phys', phys);
       } else {
         camp = sessionStorage.getItem('dj_camp') || '';
         intr = intr || sessionStorage.getItem('dj_int') || '';
+        phys = phys || sessionStorage.getItem('dj_phys') || '';
         if (reg) sessionStorage.setItem('dj_reg', reg);
         else reg = sessionStorage.getItem('dj_reg') || '';
       }
     } catch (e) {}
     return {
-      physicalId: p.get('loc_physical_ms') || p.get('loc_id') || '',
+      physicalId: phys,
       interestId: intr,
       campaignId: camp,
       region:     REGION_PARAM[reg] || '',
@@ -165,39 +169,40 @@
       });
     }
 
-    // Fara oras (vizita directa, fara campanie): afisam regiunea noastra.
+    // Fara oras (vizita directa, fara campanie): titlurile raman pe textul
+    // din pagina, "in Ihrer Nähe"; zona de serviciu arata regiunea noastra.
     var shown = name || FALLBACK_REGION;
+    var nah = name ? disp(name) : FALLBACK_NAH;
+    // <title> si descrierea pastreaza regiunea (conteaza pentru cautarea organica).
     var titelZusatz = 'in ' + shown;
-    if (titelZusatz) {
-      var currentTitle = document.title;
-      if (currentTitle.indexOf(' | ') !== -1) {
-        document.title = currentTitle.replace(' | ', ' ' + titelZusatz + ' | ');
-      } else {
-        document.title = currentTitle + ' ' + titelZusatz;
-      }
-      var meta = document.querySelector('meta[name="description"]');
-      if (meta) {
-        meta.content = meta.content.replace('Kostenlose Besichtigung', titelZusatz + ' – Kostenlose Besichtigung');
-      }
+    var currentTitle = document.title;
+    if (currentTitle.indexOf(' | ') !== -1) {
+      document.title = currentTitle.replace(' | ', ' ' + titelZusatz + ' | ');
+    } else {
+      document.title = currentTitle + ' ' + titelZusatz;
+    }
+    var meta = document.querySelector('meta[name="description"]');
+    if (meta) {
+      meta.content = meta.content.replace('Kostenlose Besichtigung', titelZusatz + ' – Kostenlose Besichtigung');
     }
 
     document.querySelectorAll('.city').forEach(function (el) {
-      el.textContent = disp(shown);
+      el.textContent = nah;
     });
 
     document.querySelectorAll('.city-full').forEach(function (el) {
       el.style.display = '';
       var cn = el.querySelector('.city-name');
-      if (cn) cn.textContent = disp(shown);
+      if (cn) cn.textContent = nah;
     });
 
     document.querySelectorAll('.city-sub').forEach(function (el) {
-      el.textContent = 'in ' + disp(shown);
+      el.textContent = 'in ' + nah;
       el.style.display = '';
     });
 
     document.querySelectorAll('.city-map').forEach(function (el) {
-      el.textContent = shown;
+      el.textContent = name || 'Ihrer Region';
     });
 
     document.querySelectorAll('.city-service').forEach(function (el) {
@@ -208,26 +213,40 @@
       var section = document.getElementById('map-section');
       if (section) section.style.display = 'block';
 
+      // Harta Google e grea: o incarcam abia cand vizitatorul deruleaza spre ea.
       var mapDiv = document.getElementById('dynamic-map');
       if (mapDiv && mapDiv.children.length === 0) {
-        var iframe = document.createElement('iframe');
-        iframe.src = 'https://www.google.com/maps?q=' + encodeURIComponent(name + ', Germany') + '&output=embed&z=10';
-        iframe.width = '100%';
-        iframe.height = '150';
-        iframe.style.cssText = 'border:0;display:block;';
-        iframe.loading = 'lazy';
-        mapDiv.appendChild(iframe);
+        var ladeKarte = function () {
+          if (mapDiv.children.length) return;
+          var iframe = document.createElement('iframe');
+          iframe.src = 'https://www.google.com/maps?q=' + encodeURIComponent(name + ', Germany') + '&output=embed&z=10';
+          iframe.width = '100%';
+          iframe.height = '150';
+          iframe.title = 'Karte ' + name;
+          iframe.style.cssText = 'border:0;display:block;';
+          mapDiv.appendChild(iframe);
+        };
+        if ('IntersectionObserver' in window) {
+          var io = new IntersectionObserver(function (es) {
+            for (var k = 0; k < es.length; k++) {
+              if (es[k].isIntersecting) { io.disconnect(); ladeKarte(); return; }
+            }
+          }, { rootMargin: '100px 0px' });
+          io.observe(mapDiv);
+        } else {
+          window.addEventListener('scroll', function einmal() {
+            window.removeEventListener('scroll', einmal); ladeKarte();
+          }, { passive: true });
+        }
       }
     }
+  }
 
-    if (locId) {
-      document.querySelectorAll('a[href]').forEach(function (el) {
-        var href = el.getAttribute('href');
-        if (href && href.endsWith('.html') && !href.startsWith('http') && !href.includes('?')) {
-          el.href = href + '?loc_id=' + locId;
-        }
-      });
-    }
+  // Numele localitatilor vin de la functia /geo (doar cele doua ID-uri),
+  // nu din tot fisierul de orase.
+  function holeOrte(interestId, physicalId) {
+    return fetch('/geo?i=' + encodeURIComponent(interestId || '') + '&p=' + encodeURIComponent(physicalId || ''))
+      .then(function (r) { if (!r.ok) throw new Error('geo failed'); return r.json(); });
   }
 
   function run() {
@@ -267,15 +286,14 @@
     var intOk  = interestId && !istBerlinId(interestId);
     var physOk = physicalId && !istBerlinId(physicalId);
     if ((regK === 'Brandenburg' || regK === 'Mecklenburg-Vorpommern' || regK === 'Sachsen') && (intOk || physOk)) {
-      fetch('de-cities.json')
-        .then(function (r) { if (!r.ok) throw new Error('fetch failed'); return r.json(); })
-        .then(function (map) {
-          var ni = intOk ? map[interestId] : null;
+      holeOrte(intOk ? interestId : '', physOk ? physicalId : '')
+        .then(function (g) {
+          var ni = g.i;
           if (ni && isValidCityName(ni) && ni !== 'Berlin') {
             applyCity(ni.trim(), interestId, 'interest', ni);
             return;
           }
-          var np = physOk ? map[physicalId] : null;
+          var np = g.p;
           if (np && isValidCityName(np) && np !== 'Berlin') {
             applyCity(np.trim(), physicalId, 'physical', np);
             return;
@@ -302,14 +320,10 @@
       return;
     }
 
-    fetch('de-cities.json')
-      .then(function (r) {
-        if (!r.ok) throw new Error('fetch failed');
-        return r.json();
-      })
-      .then(function (map) {
+    holeOrte(interestId, '')
+      .then(function (g) {
         // 1. loc_interest_ms — orasul cautat de utilizator
-        var ni = interestId ? map[interestId] : null;
+        var ni = g.i;
         if (ni && isValidCityName(ni)) { applyCity(ni, interestId, 'interest', ni); return; }
 
         // 2. Nimic sigur. Numele brut ajunge in jurnal, dar nu pe ecran.

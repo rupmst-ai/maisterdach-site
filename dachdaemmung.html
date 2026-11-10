@@ -16,18 +16,41 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'AW-17044870869');
     gtag('config', 'G-E40WQHWM7V');
+    gtag('config', 'AW-17044870869');
     // Se incarca imediat, nu la prima atingere. Altfel pierdem vizitatorii
     // care pleaca in primele secunde - si conversiile lor.
     (function(){
       var s = document.createElement('script');
-      s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17044870869';
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-E40WQHWM7V';
       s.async = true;
       document.head.appendChild(s);
     })();
   </script>
-  <link rel="canonical" href="https://dachjetz.de/dachdaemmung.html"/>
+  <script>
+  /* Numarare proprie a vizitelor venite din reclame, in jurnalul Google Sheet:
+     un rand "Vizita" la intrare si unul "Plecare dupa N s" la iesire.
+     Sta in <head> ca sa prinda si vizitatorii care pleaca in prima secunda. */
+  (function(){try{
+    var q=new URLSearchParams(location.search),g=q.get('gclid')||q.get('gbraid')||q.get('wbraid')||'',c=q.get('gad_campaignid')||'';
+    if(!g&&!c)return;
+    try{var k=(g||c)+location.pathname;if(sessionStorage.getItem('dj_v')===k)return;sessionStorage.setItem('dj_v',k);}catch(e){}
+    var U='https://script.google.com/macros/s/AKfycbxKxU91jmxHQIyEyBzzcuQ7Q3zN1q9wsklPoltXMbpYjF6GybzK2o2ZqforBrD8gBLk/exec',t0=Date.now(),weg=0;
+    function s(a){
+      var b=JSON.stringify({action:a,city:'',locPhys:q.get('loc_physical_ms')||'',locInt:q.get('loc_interest_ms')||'',campId:c,page:location.pathname,campaign:c,keyword:q.get('kw')||'',gclid:g,device:/Mobi|Android|iPhone/i.test(navigator.userAgent)?'telefon':'desktop',referrer:document.referrer||'direct'});
+      try{if(navigator.sendBeacon&&navigator.sendBeacon(U,new Blob([b],{type:'text/plain;charset=UTF-8'})))return;}catch(e){}
+      try{fetch(U,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=UTF-8'},body:b});}catch(e){}
+    }
+    s('Vizita');
+    addEventListener('pagehide',function(){
+      if(weg)return;weg=1;
+      // click pe un link din site = merge mai departe, nu pleaca
+      var n=0;try{n=parseInt(sessionStorage.getItem('internalNav')||'0',10)||0;}catch(e){}
+      s((Date.now()-n<5000?'Pagina urmatoare dupa ':'Plecare dupa ')+Math.round((Date.now()-t0)/1000)+' s');
+    });
+  }catch(e){}})();
+  </script>
+  <link rel="canonical" href="https://dachjetz.de/dachdaemmung"/>
   <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
 <style>
 /* POPUP */
@@ -81,7 +104,7 @@
 <body>
 <div class="topbar">
 <header>
-  <a href="index.html" class="logo"><img src="logo.png" alt="Maisterdach" width="80" height="40" loading="eager"/> <span>Maister<em>dach</em></span></a>
+  <a href="/" class="logo"><img src="logo.png" alt="Maisterdach" width="80" height="40" loading="eager"/> <span>Maister<em>dach</em></span></a>
   <a href="tel:+491630138072" class="hd-call">
     <b><svg class="hd-ph" viewBox="0 0 24 24"><path d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1.2 1.2 0 0 1 1.2-.3c1.3.4 2.7.7 4.1.7.7 0 1.2.5 1.2 1.2V20c0 .7-.5 1.2-1.2 1.2C10.9 21.2 2.8 13.1 2.8 3.2 2.8 2.5 3.3 2 4 2h3.2c.7 0 1.2.5 1.2 1.2 0 1.4.2 2.8.7 4.1.1.4 0 .9-.3 1.2l-2.2 2.3z"/></svg><span class="hd-num">0163 0138072</span></b>
     <i><span class="hd-dot"></span>07–20 Uhr · 7 Tage</i>
@@ -112,21 +135,21 @@ section[id]{scroll-margin-top:96px}@media(min-width:768px){section[id]{scroll-ma
 </div>
 
 <nav class="nav" id="nav">
-  <a href="index.html" >Startseite</a>
-  <a href="dachdaemmung.html" class='active'>Dachdämmung</a>
-  <a href="flachdach.html" >Flachdach</a>
-  <a href="blechdach.html" >Blechdach</a>
-  <a href="dachrinne.html" >Dachrinne</a>
-  <a href="asbest.html">Asbest</a>
-  <a href="index.html#kontakt">Kontakt</a>
-  <a href="impressum.html">Impressum</a>
+  <a href="/" >Startseite</a>
+  <a href="/dachdaemmung" class='active'>Dachdämmung</a>
+  <a href="/flachdach" >Flachdach</a>
+  <a href="/blechdach" >Blechdach</a>
+  <a href="/dachrinne" >Dachrinne</a>
+  <a href="/asbest">Asbest</a>
+  <a href="/#kontakt">Kontakt</a>
+  <a href="/impressum">Impressum</a>
 </nav>
 <main>
 <section class="hero">
   <div class="hero-bg" style="background-image:url('dachdaemmung.svg');"></div>
   <div class="hero-content">
-    <div class="breadcrumb"><a href="index.html">Home</a> <span>›</span> <span>Dachdämmung</span></div>
-    <h1>Dachdämmung vom Dachdecker<span class="city-full" style="display:none"> in <span class="city-name"></span></span></h1>
+    <div class="breadcrumb"><a href="/">Home</a> <span>›</span> <span>Dachdämmung</span></div>
+    <h1>Dachdämmung vom Dachdecker<span class="city-full"> in <span class="city-name">Ihrer N&auml;he</span></span></h1>
     <p class="hero-index-sub">Dachboden und Dachschräge dämmen – weniger Wärmeverlust, niedrigere Heizkosten.<br/>Festpreis nach Aufmaß. Kostenlose Besichtigung.</p>
     <p style="text-align:center;font-size:.78rem;color:rgba(255,255,255,0.85);margin-top:10px;margin-bottom:0;font-weight:400;">Telefon: 07–20 Uhr · WhatsApp: 24/7 erreichbar</p>
   </div>
@@ -183,12 +206,12 @@ section[id]{scroll-margin-top:96px}@media(min-width:768px){section[id]{scroll-ma
       </div>
       <p class="qf-err"></p>
       <button class="qf-btn" type="button">Kostenloses Angebot anfordern</button>
-        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="datenschutz.html">Datenschutz</a></p>
+        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="/datenschutz">Datenschutz</a></p>
       <p class="qf-sicher">Kostenlos und unverbindlich &middot; Keine Weitergabe Ihrer Daten</p>
     </div>
     <div class="qf-danke">
       <b>Anfrage ist da.</b>
-      <span>Wir melden uns in K&uuml;rze bei Ihnen.</span>
+      <span>Wir rufen Sie noch am selben Tag zur&uuml;ck.</span>
     </div>
   </div>
   <p class="ref-note" style="max-width:520px;margin:14px auto 0;padding:0 6px;text-align:center;font-size:.86rem;line-height:1.5;color:rgba(255,255,255,.82)"><b style="color:#fff">Echte Referenzen statt Online-Sterne:</b> Am Telefon nennen wir Ihnen Arbeiten in Ihrer Region &ndash; auf Wunsch zeigen wir Ihnen fertige D&auml;cher vor Ort.</p>
@@ -196,16 +219,16 @@ section[id]{scroll-margin-top:96px}@media(min-width:768px){section[id]{scroll-ma
 
 <div id="map-section" style="display:none;">
   <div style="background:#0f172a;padding:12px 16px;text-align:center;">
-    <p style="color:#fff;font-size:1.05rem;font-weight:700;margin:0;">📍 Wir arbeiten regelmäßig in <span class="city-map" style="color:#f97316;"></span> und Umgebung.</p>
+    <p style="color:#fff;font-size:1.05rem;font-weight:700;margin:0;">📍 Wir arbeiten regelmäßig in <span class="city-map" style="color:#f97316;">Ihrer Region</span> und Umgebung.</p>
   </div>
   <div id="dynamic-map" style="width:100%;height:150px;"></div>
 </div>
 
 <div style="background:#f8fafc;border-top:2px solid #f97316;padding:14px 16px;">
   <div style="display:flex;flex-wrap:wrap;gap:8px 16px;justify-content:center;max-width:600px;margin:0 auto;">
-    <span style="font-size:.82rem;font-weight:700;color:#0f172a;">✓ Festpreis nach Besichtigung</span>
+    <span style="font-size:.82rem;font-weight:700;color:#0f172a;">✓ Festpreis nach Aufmaß</span>
     <span style="font-size:.82rem;font-weight:700;color:#0f172a;">✓ Keine versteckten Kosten</span>
-    <span style="font-size:.82rem;font-weight:700;color:#0f172a;">✓ Bis zu 10 Jahre Garantie</span>
+    <span style="font-size:.82rem;font-weight:700;color:#0f172a;">✓ 10 Jahre Garantie</span>
     <span style="font-size:.82rem;font-weight:700;color:#0f172a;">✓ Schnelle Terminvergabe</span>
   </div>
 </div>
@@ -237,7 +260,7 @@ section[id]{scroll-margin-top:96px}@media(min-width:768px){section[id]{scroll-ma
   <p class="sec-desc" style="margin-bottom:6px;"><strong>Aufsparrendämmung.</strong></p>
   <p class="sec-desc">Wird Ihr Dach ohnehin neu eingedeckt, dämmen wir auf Wunsch gleich von außen über den Sparren. So entsteht eine durchgehende Dämmschicht ohne Wärmebrücken – und der Wohnraum innen bleibt unberührt.</p>
   <ul class="check-list">
-    <li><div class="ci">✓</div>Ideal in Kombination mit einer <a href="index.html" style="color:#f97316;font-weight:700;text-decoration:none;">Neueindeckung</a></li>
+    <li><div class="ci">✓</div>Ideal in Kombination mit einer <a href="/" style="color:#f97316;font-weight:700;text-decoration:none;">Neueindeckung</a></li>
     <li><div class="ci">✓</div>Dämmung, Unterdeckung und neue Eindeckung aus einer Hand</li>
   </ul>
 </section>
@@ -256,8 +279,8 @@ section[id]{scroll-margin-top:96px}@media(min-width:768px){section[id]{scroll-ma
   <h2>Dachboden oder Dachschräge dämmen? Kostenlose Besichtigung anfragen.</h2>
   <p>Wir schauen uns Ihr Dach an und sagen Ihnen, welche Dämmung passt – mit Festpreis.</p>
   <div class="mid-cta-btns">
-    <a class="btn btn-or call-l" href="#">&#9990;&nbsp; Jetzt anrufen</a>
-    <a class="btn btn-wa wa-l" href="#">&#128172;&nbsp; Angebot per WhatsApp</a>
+    <a class="btn btn-or call-l" href="tel:+491630138072">&#9990;&nbsp; Jetzt anrufen</a>
+    <a class="btn btn-wa wa-l" href="https://wa.me/491630138072" target="_blank" rel="noopener">&#128172;&nbsp; Angebot per WhatsApp</a>
   </div>
 </section>
 <section class="faq-sec">
@@ -292,16 +315,16 @@ section[id]{scroll-margin-top:96px}@media(min-width:768px){section[id]{scroll-ma
 
 <section class="contact-sec" id="kontakt">
   <h2>Jetzt <em>kostenlos</em><br/>anfragen</h2>
-  <p class="contact-desc">Füllen Sie das Formular aus oder kontaktieren Sie uns direkt. Rückmeldung in 30 Minuten.</p>
+  <p class="contact-desc">Füllen Sie das Formular aus oder kontaktieren Sie uns direkt. Rückruf am selben Tag.</p>
   <div class="contact-btns">
-    <a class="btn btn-or call-l" href="#">&#9990;&nbsp; +49 163 0138072</a>
-    <a class="btn btn-wa wa-l" href="#">&#128172;&nbsp; Angebot per WhatsApp</a>
+    <a class="btn btn-or call-l" href="tel:+491630138072">&#9990;&nbsp; +49 163 0138072</a>
+    <a class="btn btn-wa wa-l" href="https://wa.me/491630138072" target="_blank" rel="noopener">&#128172;&nbsp; Angebot per WhatsApp</a>
   </div>
   <div class="qf-dark">
   <div class="qf-box qf-unit">
     <div class="qf-form">
       <h2>Jetzt anfragen</h2>
-      <p class="qf-sub">Nur Ihre Telefonnummer. R&uuml;ckmeldung in 30 Minuten.</p>
+      <p class="qf-sub">Nur Ihre Telefonnummer. R&uuml;ckruf am selben Tag.</p>
       <div class="qf-group">
         <label>Telefon</label>
         <input type="tel" class="qf-tel" inputmode="tel" autocomplete="tel"/>
@@ -312,25 +335,25 @@ section[id]{scroll-margin-top:96px}@media(min-width:768px){section[id]{scroll-ma
       </div>
       <p class="qf-err"></p>
       <button class="qf-btn" type="button">Kostenloses Angebot anfordern</button>
-        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="datenschutz.html">Datenschutz</a></p>
+        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="/datenschutz">Datenschutz</a></p>
       <p class="qf-sicher">Kostenlos und unverbindlich &middot; Keine Weitergabe Ihrer Daten</p>
     </div>
     <div class="qf-danke">
       <b>Anfrage ist da.</b>
-      <span>Wir melden uns in K&uuml;rze bei Ihnen.</span>
+      <span>Wir rufen Sie noch am selben Tag zur&uuml;ck.</span>
     </div>
   </div></div>
 </section><section class="sec sec-light">
   <h2 class="sec-title">Weitere Leistungen</h2>
   <div class="svc-cards">
-    <a href="index.html" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🏠 Startseite</h3><p>Alle Leistungen im Überblick</p></div></a>
-    <a href="flachdach.html" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🏢 Flachdach</h3><p>Sanierung &amp; Neueindeckung</p></div></a>
-    <a href="blechdach.html" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🔩 Blechdach</h3><p>Trapezblech &amp; Ziegeloptik</p></div></a>
-    <a href="dachrinne.html" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🌧️ Dachrinne</h3><p>Montage &amp; Reparatur</p></div></a>
-    <a href="dachfenster.html" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🪟 Dachfenster</h3><p>Einbau &amp; Abdichtung</p></div></a>
-    <a href="dachkasten.html" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🏗️ Dachkasten</h3><p>Verkleidung &amp; Schutz</p></div></a>
-    <a href="schornsteinverkleidung.html" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🧱 Schornstein</h3><p>Verkleidung &amp; Abdichtung</p></div></a>
-    <a href="sanierung-grosser-daecher.html" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🏭 Große Dächer</h3><p>Industrie &amp; Gewerbe</p></div></a>
+    <a href="/" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🏠 Startseite</h3><p>Alle Leistungen im Überblick</p></div></a>
+    <a href="/flachdach" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🏢 Flachdach</h3><p>Sanierung &amp; Neueindeckung</p></div></a>
+    <a href="/blechdach" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🔩 Blechdach</h3><p>Trapezblech &amp; Ziegeloptik</p></div></a>
+    <a href="/dachrinne" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🌧️ Dachrinne</h3><p>Montage &amp; Reparatur</p></div></a>
+    <a href="/dachfenster" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🪟 Dachfenster</h3><p>Einbau &amp; Abdichtung</p></div></a>
+    <a href="/dachkasten" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🏗️ Dachkasten</h3><p>Verkleidung &amp; Schutz</p></div></a>
+    <a href="/schornsteinverkleidung" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🧱 Schornstein</h3><p>Verkleidung &amp; Abdichtung</p></div></a>
+    <a href="/sanierung-grosser-daecher" style="text-decoration:none;color:inherit;"><div class="svc-card"><h3>🏭 Große Dächer</h3><p>Industrie &amp; Gewerbe</p></div></a>
   </div>
 </section>
 <footer>
@@ -344,24 +367,24 @@ section[id]{scroll-margin-top:96px}@media(min-width:768px){section[id]{scroll-ma
   </div>
   <div class="footer-sec">
     <h4>Leistungen</h4>
-    <a href="flachdach.html">Flachdach &amp; Bitumen</a>
-    <a href="dachdaemmung.html">Dachdämmung</a>
-    <a href="blechdach.html">Blechdach Montage</a>
-    <a href="dachrinne.html">Dachrinnen Montage</a>
-    <a href="dachfenster.html">Dachfenster Einbau</a>
-    <a href="schornsteinverkleidung.html">Schornsteinverkleidung</a>
+    <a href="/flachdach">Flachdach &amp; Bitumen</a>
+    <a href="/dachdaemmung">Dachdämmung</a>
+    <a href="/blechdach">Blechdach Montage</a>
+    <a href="/dachrinne">Dachrinnen Montage</a>
+    <a href="/dachfenster">Dachfenster Einbau</a>
+    <a href="/schornsteinverkleidung">Schornsteinverkleidung</a>
   </div>
   <div class="footer-sec footer-service" style="text-align:center;padding:12px 16px;background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.08);margin-top:8px;">
     <p style="margin:0;font-size:.9rem;color:rgba(255,255,255,.7);">📍 <strong>Servicegebiet:</strong> Mobil vor Ort in <span class="city-service" style="color:#f97316;">Berlin und Brandenburg</span>. Anfahrt, Besichtigung und Angebot kostenlos und unverbindlich.</p>
   </div>
   <div class="footer-bottom">
     © 2026 Maisterdach. Alle Rechte vorbehalten.<br/>
-    <a href="impressum.html">Impressum</a>
-    <a href="datenschutz.html">Datenschutz</a>
+    <a href="/impressum">Impressum</a>
+    <a href="/datenschutz">Datenschutz</a>
   </div>
 </footer>
-<script src="loc-lookup.js?v=52" defer></script>
-<script src="app.js?v=49" defer></script>
+<script src="loc-lookup.js?v=53" defer></script>
+<script src="app.js?v=50" defer></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   var form = document.getElementById('contact-form');
@@ -380,9 +403,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="formPopupOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);z-index:9999;justify-content:center;align-items:flex-start;overflow-y:auto;padding:16px 14px;box-sizing:border-box;">
   <div style="background:#fff;border-radius:16px;padding:20px 18px;max-width:420px;width:100%;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;position:relative;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
     <button id="closePopup" aria-label="Schließen" style="position:sticky;float:right;top:0;z-index:2;margin:-6px -4px 0 0;background:none;border:none;font-size:1.6rem;cursor:pointer;color:#94a3b8;line-height:1;padding:0;width:32px;height:32px;">&times;</button>
-    <div style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-weight:900;font-size:.8rem;padding:6px 13px;border-radius:999px;margin-bottom:10px;box-shadow:0 4px 12px rgba(239,68,68,0.3);letter-spacing:.3px;">⚡ Rückmeldung in 30 Minuten</div>
+    <div style="display:inline-block;background:linear-gradient(135deg,#ef4444,#dc2626);color:#fff;font-weight:900;font-size:.8rem;padding:6px 13px;border-radius:999px;margin-bottom:10px;box-shadow:0 4px 12px rgba(239,68,68,0.3);letter-spacing:.3px;">⚡ Rückruf am selben Tag</div>
     <h3 style="margin:0 0 6px;font-size:1.2rem;font-weight:900;color:#0f172a;">Einen Moment noch!</h3>
-    <p style="margin:0 0 16px;color:#475569;font-size:.92rem;line-height:1.4;font-weight:600;">Nur Ihre Telefonnummer &ndash; Antwort innerhalb von 30 Minuten</p>
+    <p style="margin:0 0 16px;color:#475569;font-size:.92rem;line-height:1.4;font-weight:600;">Nur Ihre Telefonnummer &ndash; R&uuml;ckruf am selben Tag</p>
     <div class="qf-box qf-unit" style="box-shadow:none;padding:0;margin:0 0 14px;text-align:left;">
       <div class="qf-form">
         <div class="qf-group">
@@ -395,11 +418,11 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <p class="qf-err"></p>
         <button class="qf-btn" type="button">Kostenloses Angebot anfordern</button>
-        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="datenschutz.html">Datenschutz</a></p>
+        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="/datenschutz">Datenschutz</a></p>
       </div>
       <div class="qf-danke">
         <b>Anfrage ist da.</b>
-        <span>Wir melden uns in K&uuml;rze bei Ihnen.</span>
+        <span>Wir rufen Sie noch am selben Tag zur&uuml;ck.</span>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;margin:0 0 12px;color:#94a3b8;font-size:.78rem;">
@@ -487,12 +510,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var waBtn = document.getElementById('popupWaBtn');
     if (waBtn) waBtn.addEventListener('click', function() {
       markSubmitted();
-      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': 'AW-17044870869/oURWCJjz5PYcENWt0L8_' });
     });
     var callBtn = document.getElementById('popupCallBtn');
     if (callBtn) callBtn.addEventListener('click', function() {
       markSubmitted();
-      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { 'send_to': 'AW-17044870869/rrY2CMqh2vYcENWt0L8_' });
     });
 
     // Daca formularele de pe site sunt trimise -> nu mai arata popup vreodata
@@ -607,7 +628,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <div class="sticky-modal">
     <button class="sticky-modal-close" onclick="closeStickyForm()" aria-label="Formular schließen">✕</button>
     <h3>Kostenlose Anfrage</h3>
-    <p class="sticky-modal-sub">Nur Ihre Telefonnummer. Rückmeldung in 30 Minuten.</p>
+    <p class="sticky-modal-sub">Nur Ihre Telefonnummer. Rückruf am selben Tag.</p>
     <div class="qf-modal">
   <div class="qf-box qf-unit">
     <div class="qf-form">
@@ -621,12 +642,12 @@ document.addEventListener('DOMContentLoaded', function() {
       </div>
       <p class="qf-err"></p>
       <button class="qf-btn" type="button">Kostenloses Angebot anfordern</button>
-        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="datenschutz.html">Datenschutz</a></p>
+        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="/datenschutz">Datenschutz</a></p>
       <p class="qf-sicher">Kostenlos und unverbindlich &middot; Keine Weitergabe Ihrer Daten</p>
     </div>
     <div class="qf-danke">
       <b>Anfrage ist da.</b>
-      <span>Wir melden uns in K&uuml;rze bei Ihnen.</span>
+      <span>Wir rufen Sie noch am selben Tag zur&uuml;ck.</span>
     </div>
   </div></div>
   </div>

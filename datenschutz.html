@@ -14,18 +14,41 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'AW-17044870869');
     gtag('config', 'G-E40WQHWM7V');
+    gtag('config', 'AW-17044870869');
     // Se incarca imediat, nu la prima atingere. Altfel pierdem vizitatorii
     // care pleaca in primele secunde - si conversiile lor.
     (function(){
       var s = document.createElement('script');
-      s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-17044870869';
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-E40WQHWM7V';
       s.async = true;
       document.head.appendChild(s);
     })();
   </script>
-  <link rel="canonical" href="https://dachjetz.de/datenschutz.html"/>
+  <script>
+  /* Numarare proprie a vizitelor venite din reclame, in jurnalul Google Sheet:
+     un rand "Vizita" la intrare si unul "Plecare dupa N s" la iesire.
+     Sta in <head> ca sa prinda si vizitatorii care pleaca in prima secunda. */
+  (function(){try{
+    var q=new URLSearchParams(location.search),g=q.get('gclid')||q.get('gbraid')||q.get('wbraid')||'',c=q.get('gad_campaignid')||'';
+    if(!g&&!c)return;
+    try{var k=(g||c)+location.pathname;if(sessionStorage.getItem('dj_v')===k)return;sessionStorage.setItem('dj_v',k);}catch(e){}
+    var U='https://script.google.com/macros/s/AKfycbxKxU91jmxHQIyEyBzzcuQ7Q3zN1q9wsklPoltXMbpYjF6GybzK2o2ZqforBrD8gBLk/exec',t0=Date.now(),weg=0;
+    function s(a){
+      var b=JSON.stringify({action:a,city:'',locPhys:q.get('loc_physical_ms')||'',locInt:q.get('loc_interest_ms')||'',campId:c,page:location.pathname,campaign:c,keyword:q.get('kw')||'',gclid:g,device:/Mobi|Android|iPhone/i.test(navigator.userAgent)?'telefon':'desktop',referrer:document.referrer||'direct'});
+      try{if(navigator.sendBeacon&&navigator.sendBeacon(U,new Blob([b],{type:'text/plain;charset=UTF-8'})))return;}catch(e){}
+      try{fetch(U,{method:'POST',mode:'no-cors',keepalive:true,headers:{'Content-Type':'text/plain;charset=UTF-8'},body:b});}catch(e){}
+    }
+    s('Vizita');
+    addEventListener('pagehide',function(){
+      if(weg)return;weg=1;
+      // click pe un link din site = merge mai departe, nu pleaca
+      var n=0;try{n=parseInt(sessionStorage.getItem('internalNav')||'0',10)||0;}catch(e){}
+      s((Date.now()-n<5000?'Pagina urmatoare dupa ':'Plecare dupa ')+Math.round((Date.now()-t0)/1000)+' s');
+    });
+  }catch(e){}})();
+  </script>
+  <link rel="canonical" href="https://dachjetz.de/datenschutz"/>
   <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
 
 <style id="qf-css">
@@ -84,19 +107,19 @@
 </head>
 <body>
 <header>
-  <a href="index.html" class="logo"><img src="logo.png" alt="Maisterdach" height="40"/> <span>Maister<em>dach</em></span></a>
+  <a href="/" class="logo"><img src="logo.png" alt="Maisterdach" height="40"/> <span>Maister<em>dach</em></span></a>
   <button class="hamburger" id="hbg" onclick="toggleNav()" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span><span></span></button>
 </header>
 <nav class="nav" id="nav">
-  <a href="index.html">Startseite</a>
-  <a href="flachdach.html">Flachdach</a>
-  <a href="dachdaemmung.html">Dachdämmung</a>
-  <a href="blechdach.html">Blechdach</a>
-  <a href="dachrinne.html">Dachrinne</a>
+  <a href="/">Startseite</a>
+  <a href="/flachdach">Flachdach</a>
+  <a href="/dachdaemmung">Dachdämmung</a>
+  <a href="/blechdach">Blechdach</a>
+  <a href="/dachrinne">Dachrinne</a>
 </nav>
 <main>
 <div class="legal">
-<a href="index.html" class="back-link">← Zurück zur Startseite</a>
+<a href="/" class="back-link">← Zurück zur Startseite</a>
 <div class="container" style="max-width:800px;">
     <h1>Datenschutzerklärung</h1>
 
@@ -157,10 +180,10 @@
 <footer>
   <div class="footer-logo">Maister<em>dach</em></div>
   <div class="footer-bottom">© 2026 Maisterdach. Alle Rechte vorbehalten.<br/>
-    <a href="impressum.html">Impressum</a><a href="datenschutz.html">Datenschutz</a></div>
+    <a href="/impressum">Impressum</a><a href="/datenschutz">Datenschutz</a></div>
 </footer>
-<script src="loc-lookup.js?v=52" defer></script>
-<script src="app.js?v=49" defer></script>
+<script src="loc-lookup.js?v=53" defer></script>
+<script src="app.js?v=50" defer></script>
 <!-- STICKY BOTTOM BAR -->
 <div class="sticky-bar">
   <div class="sticky-bar-top">
@@ -181,7 +204,7 @@
   <div class="sticky-modal">
     <button class="sticky-modal-close" onclick="closeStickyForm()" aria-label="Formular schließen">✕</button>
     <h3>Kostenlose Anfrage</h3>
-    <p class="sticky-modal-sub">Nur Ihre Telefonnummer. Rückmeldung in 30 Minuten.</p>
+    <p class="sticky-modal-sub">Nur Ihre Telefonnummer. Rückruf am selben Tag.</p>
     <div class="qf-modal">
   <div class="qf-box qf-unit">
     <div class="qf-form">
@@ -195,12 +218,12 @@
       </div>
       <p class="qf-err"></p>
       <button class="qf-btn" type="button">Kostenloses Angebot anfordern</button>
-        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="datenschutz.html">Datenschutz</a></p>
+        <p class="qf-hinweis">Ihre Angaben verwenden wir zur Bearbeitung Ihrer Anfrage. Details: <a href="/datenschutz">Datenschutz</a></p>
       <p class="qf-sicher">Kostenlos und unverbindlich &middot; Keine Weitergabe Ihrer Daten</p>
     </div>
     <div class="qf-danke">
       <b>Anfrage ist da.</b>
-      <span>Wir melden uns in K&uuml;rze bei Ihnen.</span>
+      <span>Wir rufen Sie noch am selben Tag zur&uuml;ck.</span>
     </div>
   </div></div>
   </div>
