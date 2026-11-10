@@ -18,9 +18,12 @@ function waHref() { return 'https://wa.me/' + WA + '?text=' + encodeURIComponent
 window.waHref = waHref;
 
 function applyLinks() {
+  // Linkurile au deja numarul corect in HTML; aici se adauga doar textul
+  // pregatit pentru WhatsApp. Conversiile se trimit dintr-un singur loc,
+  // din handlerul de click de la sfarsitul fisierului.
   document.querySelectorAll('.wa-l, .whatsapp-link').forEach(function(el) {
     el.href = waHref();
-    el.addEventListener('click', function() { el.href = waHref(); trackConversion('oURWCJjz5PYcENWt0L8_'); });
+    el.addEventListener('click', function() { el.href = waHref(); });
   });
   var pw = document.getElementById('popupWaBtn');
   if (pw) { pw.href = waHref(); pw.addEventListener('click', function() { pw.href = waHref(); }); }
@@ -33,7 +36,6 @@ function applyLinks() {
       var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
       while ((n = w.nextNode())) n.nodeValue = n.nodeValue.replace(/\+?49 ?30 ?5445357103|030 ?5445357103/, '0163 0138072');
     }
-    el.addEventListener('click', function() { trackConversion('rrY2CMqh2vYcENWt0L8_'); });
   });
 }
 
@@ -48,98 +50,7 @@ function forceOpenFAQ() {
   document.querySelectorAll('.faq-inner').forEach(function(el) { el.style.overflow = 'visible'; });
 }
 
-function buildWhatsAppMsg(formEl) {
-  var name      = (formEl.querySelector('[name="name"]') || {}).value || '';
-  var telefon   = (formEl.querySelector('[name="telefon"]') || {}).value || '';
-  var plz       = (formEl.querySelector('[name="plz"]') || {}).value || '';
-  var nachricht = (formEl.querySelector('[name="nachricht"]') || {}).value || '';
-  var page      = document.title || '';
-
-  return '🏠 *Neue Anfrage – Maisterdach*\n\n'
-    + '👤 Name: ' + name + '\n'
-    + '📞 Telefon: ' + telefon + '\n'
-    + '📍 PLZ: ' + plz + '\n'
-    + (nachricht ? '💬 Nachricht: ' + nachricht + '\n' : '')
-    + '\n📄 Seite: ' + page;
-}
-
-function submitToFormspreeAndWhatsApp(formEl, onSuccess) {
-  if (!formEl.checkValidity()) { formEl.reportValidity(); return; }
-  if (window.djNotify) window.djNotify('form');
-
-  var data = new FormData(formEl);
-
-  // 1. Trimite la Formspree
-  fetch(formEl.action, {
-    method: 'POST',
-    body: data,
-    headers: { 'Accept': 'application/json' }
-  })
-  .then(function(r) {
-    // 2. Indiferent de raspuns, deschide WhatsApp
-    var url = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(buildWhatsAppMsg(formEl));
-    window.open(url, '_blank');
-
-    trackConversion('form_submit');
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'form_submit_whatsapp', { 'event_category': 'Lead', 'event_label': document.title });
-    }
-
-    formEl.reset();
-    if (onSuccess) onSuccess();
-  })
-  .catch(function() {
-    // Chiar daca Formspree esueaza, deschidem WhatsApp — lead-ul nu se pierde
-    var url = 'https://wa.me/' + WA + '?text=' + encodeURIComponent(buildWhatsAppMsg(formEl));
-    window.open(url, '_blank');
-    formEl.reset();
-    if (onSuccess) onSuccess();
-  });
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  applyLinks();
-
-  // 1. Formularul principal
-  var mainForm = document.getElementById('contact-form');
-  if (mainForm) {
-    mainForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      submitToFormspreeAndWhatsApp(mainForm, function() {
-        var s = document.getElementById('form-success');
-        if (s) s.style.display = 'block';
-      });
-    });
-  }
-
-  // 2. Popup exit-intent
-  var popupForm = document.querySelector('#formPopupOverlay form');
-  if (popupForm) {
-    popupForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      submitToFormspreeAndWhatsApp(popupForm, function() {
-        setTimeout(function() {
-          var ov = document.getElementById('formPopupOverlay');
-          if (ov) ov.style.display = 'none';
-          localStorage.setItem('popupClosed', 'true');
-          localStorage.setItem('popupSubmitted', 'true');
-        }, 1500);
-      });
-    });
-  }
-
-  // 3. Sticky modal form
-  var stickyForm = document.getElementById('stickyForm');
-  if (stickyForm) {
-    stickyForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      submitToFormspreeAndWhatsApp(stickyForm, function() {
-        var s = document.getElementById('stickySuccess');
-        if (s) { s.style.display = 'block'; stickyForm.style.display = 'none'; }
-      });
-    });
-  }
-});
+document.addEventListener('DOMContentLoaded', applyLinks);
 
 function toggleNav() {
   var n = document.getElementById('nav'), h = document.getElementById('hbg');
@@ -221,14 +132,6 @@ function closeStickyForm() {
     } catch (e) {}
   }
 
-  document.addEventListener('click', function (ev) {
-    var a = ev.target && ev.target.closest ? ev.target.closest('a[href]') : null;
-    if (!a) return;
-    var href = a.getAttribute('href') || '';
-    if (href.indexOf('tel:') === 0) logHit('Apel');
-    else if (href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp') !== -1) logHit('WhatsApp');
-  }, true);
-
   window.logCallHit = logHit;
 })();
 
@@ -287,23 +190,61 @@ function closeStickyForm() {
     }
   }
 
+  window.djNotify = notify;
+})();
+
+/* ---- Un singur handler pentru orice buton de apel / WhatsApp / formular ----
+   Antet, bara fixa, Kontakt, mijlocul paginii, popup, bula, subsol.
+   La fiecare click trimite o singura data: conversia Google Ads,
+   evenimentul GA4, jurnalul din Sheet si notificarea Telegram. */
+(function () {
+  var CONV = { call: 'rrY2CMqh2vYcENWt0L8_', whatsapp: 'oURWCJjz5PYcENWt0L8_' };
+  var last = {};
+
+  function wo(el) {
+    if (el.closest('#formPopupOverlay')) return 'popup';
+    if (el.closest('#wab')) return 'bubble';
+    if (el.closest('.sticky-bar')) return 'sticky';
+    if (el.closest('header, .topbar')) return 'header';
+    if (el.closest('footer')) return 'footer';
+    if (el.closest('.contact-sec')) return 'kontakt';
+    if (el.closest('.mid-cta')) return 'mitte';
+    return 'seite';
+  }
+
+  function contact(type, el) {
+    var now = Date.now();
+    if (last[type] && now - last[type] < 1500) return;   // dublu-tap
+    last[type] = now;
+
+    trackConversion(CONV[type]);
+    if (typeof gtag !== 'undefined') {
+      gtag('event', type === 'call' ? 'click_call' : 'click_whatsapp', {
+        'send_to': 'G-E40WQHWM7V',
+        'button': wo(el),
+        'page_path': window.location.pathname
+      });
+    }
+    if (window.logCallHit) window.logCallHit(type === 'call' ? 'Apel' : 'WhatsApp');
+    if (window.djNotify) window.djNotify(type);
+  }
+
   document.addEventListener('click', function (ev) {
     var t = ev.target && ev.target.closest ? ev.target : null;
     if (!t) return;
     var a = t.closest('a[href]');
     if (a) {
       var href = a.getAttribute('href') || '';
-      if (href.indexOf('tel:') === 0) notify('call');
-      else if (href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp') !== -1) notify('whatsapp');
+      if (href.indexOf('tel:') === 0) contact('call', a);
+      else if (href.indexOf('wa.me') !== -1 || href.indexOf('whatsapp') !== -1) contact('whatsapp', a);
       return;
     }
-    // Formularul rapid (.qf-unit): doar daca numarul e valid, ca in scriptul din pagina.
+    // Formularul rapid (.qf-unit): conversia si evenimentul GA4 le trimite
+    // scriptul din pagina; aici doar Telegram, si doar la numar valid.
     var b = t.closest('.qf-btn');
-    if (b) {
+    if (b && window.djNotify) {
       var u = b.closest('.qf-unit'), tel = u && u.querySelector('.qf-tel');
-      if (tel && tel.value.replace(/\D/g, '').length >= 6) notify('form');
+      if (tel && tel.value.replace(/\D/g, '').length >= 6) window.djNotify('form');
     }
   }, true);
-
-  window.djNotify = notify;
 })();
