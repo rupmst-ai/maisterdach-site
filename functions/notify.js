@@ -138,6 +138,16 @@ export async function onRequestGet({ request, env }) {
       if (env.TG_CHAT_ID) {
         const ch = await fetch(base + '/getChat?chat_id=' + encodeURIComponent(String(env.TG_CHAT_ID).trim()));
         out.chat = ch.status;
+        // Temporar: send=1 trimite un mesaj de test, ca sa vedem raspunsul exact al Telegram.
+        if (url.searchParams.get('send') === '1') {
+          const sm = await fetch(base + '/sendMessage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chat_id: String(env.TG_CHAT_ID).trim(), text: '🧪 TEST – dachjetz.de (verificare Telegram)' })
+          });
+          out.send = sm.status;
+          try { out.send_info = String((await sm.json()).description || '').slice(0, 200); } catch (e) {}
+        }
       }
     } catch (e) {
       out.error = 'telegram unreachable';
