@@ -27,7 +27,10 @@ const CAMPAIGNS = {
   '24320584788': 'Dämmung – Mecklenburg-Vorpommern',
   '24328097681': 'Entrümpelung – Berlin',
   '24406866367': 'Entrümpelung – Hamburg',
-  '24235344397': 'Asbestdach – Neueindeckung'
+  '24235344397': 'Asbestdach – Neueindeckung',
+  '24405156377': 'Dachy – Warszawa',
+  '24455346452': 'Dachy – Wrocław + 30 km',
+  '24461286400': 'Dachy – Dolnośląskie'
 };
 
 const TYPES = {
@@ -95,7 +98,7 @@ export async function onRequestPost({ request, env }) {
   else src = 'direct / organic' + (source ? ' (' + source + ')' : '');
 
   const lines = [
-    TYPES[type] + ' – dachjetz.de',
+    TYPES[type] + ' – dachjetz.de' + (page.indexOf('/pl/') === 0 ? ' 🇵🇱 POLONIA' : ''),
     '📍 ' + where,
     '🔎 Cuvânt: ' + (kw || '–'),
     '📣 Sursă: ' + src,
