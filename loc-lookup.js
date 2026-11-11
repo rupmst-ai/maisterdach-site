@@ -1,5 +1,5 @@
 (function () {
-  var FALLBACK_REGION = 'Berlin & Brandenburg';
+  var FALLBACK_REGION = 'Hamburg, Mecklenburg-Vorpommern, Brandenburg und Sachsen';
   var FALLBACK_NAH = 'Ihrer N\u00e4he';
   var FALLBACK_DISPLAY = 'in ' + FALLBACK_NAH;
   var LAND = {'Berlin & Brandenburg':1,'Brandenburg':1,'Berlin':1,'Sachsen':1,'Sachsen-Anhalt':1,'Mecklenburg-Vorpommern':1,'Th\u00fcringen':1};
@@ -177,7 +177,8 @@
     var titelZusatz = 'in ' + shown;
     // Impressum si Datenschutz: titlul paginii ramane neschimbat.
     var rechtlich = /\/(impressum|datenschutz)(\.html)?\/?$/.test(window.location.pathname);
-    if (!rechtlich) {
+    // Fara oras si fara campanie: titlul si descrierea raman cum sunt in pagina.
+    if (!rechtlich && name) {
       var currentTitle = document.title;
       if (currentTitle.indexOf(' | ') !== -1) {
         document.title = currentTitle.replace(' | ', ' ' + titelZusatz + ' | ');
@@ -210,9 +211,9 @@
     });
 
     document.querySelectorAll('.city-service').forEach(function (el) {
-      // Fara oras: textul propriu al paginii (data-default), daca exista.
-      var eigen = el.getAttribute('data-default');
-      el.textContent = (name && !(eigen && /Berlin/.test(name))) ? disp(name) : (eigen || disp(shown));
+      // Fara oras: zona reala de lucru. In Impressum nu apare niciodata Berlin.
+      var ohneBerlin = rechtlich && /Berlin/.test(name || '');
+      el.textContent = (name && !ohneBerlin) ? disp(name) : FALLBACK_REGION;
     });
 
     if (name) {
