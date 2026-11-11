@@ -175,15 +175,19 @@
     var nah = name ? disp(name) : FALLBACK_NAH;
     // <title> si descrierea pastreaza regiunea (conteaza pentru cautarea organica).
     var titelZusatz = 'in ' + shown;
-    var currentTitle = document.title;
-    if (currentTitle.indexOf(' | ') !== -1) {
-      document.title = currentTitle.replace(' | ', ' ' + titelZusatz + ' | ');
-    } else {
-      document.title = currentTitle + ' ' + titelZusatz;
-    }
-    var meta = document.querySelector('meta[name="description"]');
-    if (meta) {
-      meta.content = meta.content.replace('Kostenlose Besichtigung', titelZusatz + ' – Kostenlose Besichtigung');
+    // Impressum si Datenschutz: titlul paginii ramane neschimbat.
+    var rechtlich = /\/(impressum|datenschutz)(\.html)?\/?$/.test(window.location.pathname);
+    if (!rechtlich) {
+      var currentTitle = document.title;
+      if (currentTitle.indexOf(' | ') !== -1) {
+        document.title = currentTitle.replace(' | ', ' ' + titelZusatz + ' | ');
+      } else {
+        document.title = currentTitle + ' ' + titelZusatz;
+      }
+      var meta = document.querySelector('meta[name="description"]');
+      if (meta) {
+        meta.content = meta.content.replace('Kostenlose Besichtigung', titelZusatz + ' – Kostenlose Besichtigung');
+      }
     }
 
     document.querySelectorAll('.city').forEach(function (el) {
@@ -206,7 +210,9 @@
     });
 
     document.querySelectorAll('.city-service').forEach(function (el) {
-      el.textContent = disp(shown);
+      // Fara oras: textul propriu al paginii (data-default), daca exista.
+      var eigen = el.getAttribute('data-default');
+      el.textContent = (name && !(eigen && /Berlin/.test(name))) ? disp(name) : (eigen || disp(shown));
     });
 
     if (name) {
