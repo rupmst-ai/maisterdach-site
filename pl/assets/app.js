@@ -142,9 +142,20 @@
   }
 
   /* ---- Kliknięcia WhatsApp / telefon ---- */
+  function linkZ(e) {
+    var t = e.target;
+    if (t && t.nodeType !== 1) t = t.parentNode;          // tekst / stare SVG
+    if (t && t.correspondingUseElement) t = t.correspondingUseElement;
+    return t && t.closest ? t.closest('a[href]') : null;
+  }
   function initClicks() {
+    /* Telefon: powiadomienie już przy puszczeniu palca – zanim przeglądarka przejdzie do aplikacji telefonu. */
+    document.addEventListener('pointerup', function (e) {   // przy przewijaniu przychodzi pointercancel, nie pointerup
+      var a = linkZ(e);
+      if (a && (a.getAttribute('href') || '').indexOf('tel:') === 0) tg('call');
+    }, true);
     document.addEventListener('click', function (e) {
-      var a = e.target.closest('a[href]');
+      var a = linkZ(e);
       if (!a) return;
       var h = a.getAttribute('href');
       // na stronie podziękowania lead jest już policzony (PL_FORM) – nie liczymy go drugi raz
@@ -152,7 +163,7 @@
       if (h.indexOf('https://wa.me/') === 0) { tg('whatsapp'); if (!thanks) { loadGtag(); conv(LABEL.whatsapp); } }
       else if (h.indexOf('tel:') === 0) { tg('call'); if (!thanks) { loadGtag(); conv(LABEL.tel); } }
       else if (a.hasAttribute('data-cookies')) { e.preventDefault(); showBanner(true); }
-    });
+    }, true);
   }
 
   /* ---- Formularz ---- */
