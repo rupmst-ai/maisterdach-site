@@ -339,7 +339,13 @@
     var kw = '';
     try { kw = new URLSearchParams(location.search).get('kw') || ''; } catch (e) {}
     kw = ' ' + bezOgonkow(kw) + ' ';
-    if (kw.length <= 2) return zapisz('pl_miasto', '');
+    if (kw.length <= 2) {
+      /* Kliknięcie w reklamę bez frazy: poprzednia miejscowość nie obowiązuje. */
+      var nowe = false;
+      try { nowe = !!new URLSearchParams(location.search).get('region'); } catch (e) {}
+      if (nowe) { try { sessionStorage.removeItem('pl_miasto'); } catch (e) {} return ''; }
+      return zapisz('pl_miasto', '');
+    }
     /* Nowe kliknięcie w reklamę: fraza bez miejscowości kasuje poprzednią. */
     var best = '';
     for (var m in MIASTA) {
@@ -380,7 +386,10 @@
              .replace(/do około 50 km od miasta/g, 'w całym regionie')
              .replace(/np\. Wrocław/g, 'np. Legnica');
       }
-      return t.replace(/we Wrocławiu/g, r[1]).replace(/We Wrocławiu/g, locU).replace(/Wrocław/g, r[0]);
+      /* Jedno przejście: wstawiony tekst nie jest ponownie zamieniany. */
+      return t.replace(/[Ww]e Wrocławiu|Wrocław/g, function (x) {
+        return x === 'we Wrocławiu' ? r[1] : x === 'We Wrocławiu' ? locU : r[0];
+      });
     }
     var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
     var node, list = [];
