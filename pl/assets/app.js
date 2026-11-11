@@ -178,7 +178,7 @@
 
         var fd = new FormData(f);
         fd.append('_subject', 'PL – nowe zapytanie: ' + (fd.get('rodzaj_pracy') || '') + ' – ' + (fd.get('miejscowosc') || ''));
-        fd.append('wersja', 'PL (Warszawa)');
+        fd.append('wersja', 'PL (Wrocław)');
         fd.append('strona', location.pathname);
         fd.append('gclid', param('gclid') || param('gbraid') || param('wbraid'));
         fd.append('kampania', param('gad_campaignid'));
