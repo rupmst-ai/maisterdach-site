@@ -149,8 +149,8 @@
       var h = a.getAttribute('href');
       // na stronie podziękowania lead jest już policzony (PL_FORM) – nie liczymy go drugi raz
       var thanks = document.body.getAttribute('data-page') === 'dziekujemy';
-      if (h.indexOf('https://wa.me/') === 0) { if (!thanks) { loadGtag(); conv(LABEL.whatsapp); } }
-      else if (h.indexOf('tel:') === 0) { if (!thanks) { loadGtag(); conv(LABEL.tel); } }
+      if (h.indexOf('https://wa.me/') === 0) { tg('whatsapp'); if (!thanks) { loadGtag(); conv(LABEL.whatsapp); } }
+      else if (h.indexOf('tel:') === 0) { tg('call'); if (!thanks) { loadGtag(); conv(LABEL.tel); } }
       else if (a.hasAttribute('data-cookies')) { e.preventDefault(); showBanner(true); }
     });
   }
@@ -190,6 +190,7 @@
         fetch(FORM_URL, { method: 'POST', body: fd, headers: { Accept: 'application/json' } })
           .then(function (r) {
             if (!r.ok) throw new Error('HTTP ' + r.status);
+            tg('form');
             try { sessionStorage.setItem('pl_form_sent', '1'); } catch (x) {}
             location.href = THANKS_URL;
           })
@@ -313,6 +314,54 @@
     'dekarz gora': ['Góra', 'w Górze']
   };
   var REGION_NAZWA = 'Wrocław';
+  var MIASTO_NAZWA = '';
+
+  /* ---- Powiadomienie na Telegram (functions/notify.js), jak na stronie DE ---- */
+  function sesja(n, key) {
+    var v = '';
+    try { v = new URLSearchParams(location.search).get(n) || ''; } catch (e) {}
+    try {
+      if (v) sessionStorage.setItem(key, v);
+      else v = sessionStorage.getItem(key) || '';
+    } catch (e) {}
+    return v;
+  }
+  var CTX = {
+    kw:       sesja('kw', 'pl_kw'),
+    campaign: sesja('gad_campaignid', 'pl_camp'),
+    device:   sesja('device', 'pl_dev'),
+    gclid:    sesja('gclid', 'pl_gclid') || sesja('gbraid', 'pl_gbraid') || sesja('wbraid', 'pl_wbraid'),
+    source:   sesja('utm_source', 'pl_src')
+  };
+  if (!CTX.source) {
+    try {
+      var rh = document.referrer ? new URL(document.referrer).hostname : '';
+      if (rh && rh.indexOf('dachjetz.de') === -1) { CTX.source = rh; sessionStorage.setItem('pl_src', rh); }
+    } catch (e) {}
+  }
+  var lastTg = {};
+  function tg(type) {
+    var now = Date.now();
+    if (lastTg[type] && now - lastTg[type] < 10000) return;   // bez duplikatów przy podwójnym kliknięciu
+    lastTg[type] = now;
+    var ua = navigator.userAgent;
+    var body = JSON.stringify({
+      type:     type,
+      town:     MIASTO_NAZWA,          // tylko prawdziwa miejscowość z frazy; inaczej decyduje IP
+      kw:       CTX.kw,
+      campaign: CTX.campaign,
+      device:   CTX.device || (/iPad|Tablet/i.test(ua) ? 't' : /Mobi|Android|iPhone/i.test(ua) ? 'm' : 'c'),
+      gclid:    CTX.gclid,
+      page:     location.pathname,
+      source:   CTX.source
+    });
+    try {
+      fetch('/notify', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: body })
+        .catch(function () {});
+    } catch (e) {
+      try { navigator.sendBeacon('/notify', new Blob([body], { type: 'text/plain;charset=UTF-8' })); } catch (e2) {}
+    }
+  }
 
   function bezOgonkow(t) {
     t = String(t || '').toLowerCase();
@@ -362,6 +411,7 @@
     var k = regionKey();
     var m = miastoKey();
     var r = MIASTA[m] || null;
+    if (r) MIASTO_NAZWA = r[0];
     if (!r) {
       if (!k || k === 'wroclaw') return;
       r = REGIONY[k];
