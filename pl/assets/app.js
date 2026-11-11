@@ -236,6 +236,7 @@
   function regionKey() {
     var k = '';
     try { k = (new URLSearchParams(location.search).get('region') || '').toLowerCase(); } catch (e) {}
+    try { k = k.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u0142/g, 'l'); } catch (e) {}
     k = k.replace(/[^a-z0-9\- ]/g, '').replace(/\s+/g, '-').slice(0, 40);
     try {
       if (k) sessionStorage.setItem('pl_region', k);
