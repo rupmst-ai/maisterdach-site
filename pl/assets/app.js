@@ -229,40 +229,172 @@
     czestochowa:    ['Częstochowa', 'w Częstochowie'],
     gliwice:        ['Gliwice', 'w Gliwicach'],
     kalisz:         ['Kalisz', 'w Kaliszu'],
-    leszno:         ['Leszno', 'w Lesznie']
+    leszno:         ['Leszno', 'w Lesznie'],
+    /* Cały region: trzeci element = true (bez „i okolice”). */
+    dolnoslaskie:   ['Dolny Śląsk', 'na Dolnym Śląsku', true]
+  };
+
+  /* Miejscowości z fraz kluczowych (parametr kw=... z Google Ads).
+     Gdy ktoś szuka „dekarz oleśnica”, strona pokazuje Oleśnicę. */
+  var MIASTA = {
+    'olesnica': ['Oleśnica', 'w Oleśnicy'],
+    'olawa': ['Oława', 'w Oławie'],
+    'trzebnica': ['Trzebnica', 'w Trzebnicy'],
+    'sroda slaska': ['Środa Śląska', 'w Środzie Śląskiej'],
+    'katy wroclawskie': ['Kąty Wrocławskie', 'w Kątach Wrocławskich'],
+    'siechnice': ['Siechnice', 'w Siechnicach'],
+    'kobierzyce': ['Kobierzyce', 'w Kobierzycach'],
+    'dlugoleka': ['Długołęka', 'w Długołęce'],
+    'oborniki slaskie': ['Oborniki Śląskie', 'w Obornikach Śląskich'],
+    'jelcz laskowice': ['Jelcz-Laskowice', 'w Jelczu-Laskowicach'],
+    'sobotka': ['Sobótka', 'w Sobótce'],
+    'brzeg dolny': ['Brzeg Dolny', 'w Brzegu Dolnym'],
+    'bielany wroclawskie': ['Bielany Wrocławskie', 'w Bielanach Wrocławskich'],
+    'zorawina': ['Żórawina', 'w Żórawinie'],
+    'czernica': ['Czernica', 'w Czernicy'],
+    'wisznia mala': ['Wisznia Mała', 'w Wiszni Małej'],
+    'miekinia': ['Miękinia', 'w Miękini'],
+    'legnica': ['Legnica', 'w Legnicy'],
+    'walbrzych': ['Wałbrzych', 'w Wałbrzychu'],
+    'jelenia gora': ['Jelenia Góra', 'w Jeleniej Górze'],
+    'lubin': ['Lubin', 'w Lubinie'],
+    'glogow': ['Głogów', 'w Głogowie'],
+    'swidnica': ['Świdnica', 'w Świdnicy'],
+    'boleslawiec': ['Bolesławiec', 'w Bolesławcu'],
+    'dzierzoniow': ['Dzierżoniów', 'w Dzierżoniowie'],
+    'zgorzelec': ['Zgorzelec', 'w Zgorzelcu'],
+    'bielawa': ['Bielawa', 'w Bielawie'],
+    'klodzko': ['Kłodzko', 'w Kłodzku'],
+    'jawor': ['Jawor', 'w Jaworze'],
+    'polkowice': ['Polkowice', 'w Polkowicach'],
+    'luban': ['Lubań', 'w Lubaniu'],
+    'swiebodzice': ['Świebodzice', 'w Świebodzicach'],
+    'nowa ruda': ['Nowa Ruda', 'w Nowej Rudzie'],
+    'strzegom': ['Strzegom', 'w Strzegomiu'],
+    'zlotoryja': ['Złotoryja', 'w Złotoryi'],
+    'kamienna gora': ['Kamienna Góra', 'w Kamiennej Górze'],
+    'boguszow gorce': ['Boguszów-Gorce', 'w Boguszowie-Gorcach'],
+    'chojnow': ['Chojnów', 'w Chojnowie'],
+    'strzelin': ['Strzelin', 'w Strzelinie'],
+    'wolow': ['Wołów', 'w Wołowie'],
+    'milicz': ['Milicz', 'w Miliczu'],
+    'sycow': ['Syców', 'w Sycowie'],
+    'zabkowice slaskie': ['Ząbkowice Śląskie', 'w Ząbkowicach Śląskich'],
+    'bystrzyca klodzka': ['Bystrzyca Kłodzka', 'w Bystrzycy Kłodzkiej'],
+    'kowary': ['Kowary', 'w Kowarach'],
+    'lwowek slaski': ['Lwówek Śląski', 'w Lwówku Śląskim'],
+    'bogatynia': ['Bogatynia', 'w Bogatyni'],
+    'ziebice': ['Ziębice', 'w Ziębicach'],
+    'twardogora': ['Twardogóra', 'w Twardogórze'],
+    'zmigrod': ['Żmigród', 'w Żmigrodzie'],
+    'gluszyca': ['Głuszyca', 'w Głuszycy'],
+    'szklarska poreba': ['Szklarska Poręba', 'w Szklarskiej Porębie'],
+    'karpacz': ['Karpacz', 'w Karpaczu'],
+    'kudowa zdroj': ['Kudowa-Zdrój', 'w Kudowie-Zdroju'],
+    'polanica zdroj': ['Polanica-Zdrój', 'w Polanicy-Zdroju'],
+    'ladek zdroj': ['Lądek-Zdrój', 'w Lądku-Zdroju'],
+    'piechowice': ['Piechowice', 'w Piechowicach'],
+    'gryfow slaski': ['Gryfów Śląski', 'w Gryfowie Śląskim'],
+    'lubawka': ['Lubawka', 'w Lubawce'],
+    'pieszyce': ['Pieszyce', 'w Pieszycach'],
+    'pilawa gorna': ['Piława Górna', 'w Piławie Górnej'],
+    'jaworzyna slaska': ['Jaworzyna Śląska', 'w Jaworzynie Śląskiej'],
+    'zarow': ['Żarów', 'w Żarowie'],
+    'swieradow zdroj': ['Świeradów-Zdrój', 'w Świeradowie-Zdroju'],
+    'nowogrodziec': ['Nowogrodziec', 'w Nowogrodźcu'],
+    'chocianow': ['Chocianów', 'w Chocianowie'],
+    'przemkow': ['Przemków', 'w Przemkowie'],
+    'scinawa': ['Ścinawa', 'w Ścinawie'],
+    'prochowice': ['Prochowice', 'w Prochowicach'],
+    'bierutow': ['Bierutów', 'w Bierutowie'],
+    'szczawno zdroj': ['Szczawno-Zdrój', 'w Szczawnie-Zdroju'],
+    'niemcza': ['Niemcza', 'w Niemczy'],
+    'zloty stok': ['Złoty Stok', 'w Złotym Stoku'],
+    'dekarz gora': ['Góra', 'w Górze']
   };
   var REGION_NAZWA = 'Wrocław';
 
+  function bezOgonkow(t) {
+    t = String(t || '').toLowerCase();
+    try { t = t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u0142/g, 'l'); } catch (e) {}
+    return t.replace(/[^a-z0-9]+/g, ' ').replace(/^ +| +$/g, '');
+  }
+
+  function zapisz(klucz, wart) {
+    try {
+      if (wart) sessionStorage.setItem(klucz, wart);
+      else wart = sessionStorage.getItem(klucz) || '';
+    } catch (e) {}
+    return wart;
+  }
+
   function regionKey() {
     var k = '';
-    try { k = (new URLSearchParams(location.search).get('region') || '').toLowerCase(); } catch (e) {}
-    try { k = k.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u0142/g, 'l'); } catch (e) {}
-    k = k.replace(/[^a-z0-9\- ]/g, '').replace(/\s+/g, '-').slice(0, 40);
+    try { k = new URLSearchParams(location.search).get('region') || ''; } catch (e) {}
+    return zapisz('pl_region', bezOgonkow(k).replace(/ /g, '-').slice(0, 40));
+  }
+
+  /* Miejscowość z frazy kluczowej: najdłuższa pasująca nazwa. */
+  function miastoKey() {
+    var kw = '';
+    try { kw = new URLSearchParams(location.search).get('kw') || ''; } catch (e) {}
+    kw = ' ' + bezOgonkow(kw) + ' ';
+    if (kw.length <= 2) {
+      /* Kliknięcie w reklamę bez frazy: poprzednia miejscowość nie obowiązuje. */
+      var nowe = false;
+      try { nowe = !!new URLSearchParams(location.search).get('region'); } catch (e) {}
+      if (nowe) { try { sessionStorage.removeItem('pl_miasto'); } catch (e) {} return ''; }
+      return zapisz('pl_miasto', '');
+    }
+    /* Nowe kliknięcie w reklamę: fraza bez miejscowości kasuje poprzednią. */
+    var best = '';
+    for (var m in MIASTA) {
+      if (MIASTA.hasOwnProperty(m) && m.length > best.length && kw.indexOf(' ' + m + ' ') !== -1) best = m;
+    }
     try {
-      if (k) sessionStorage.setItem('pl_region', k);
-      else k = sessionStorage.getItem('pl_region') || '';
+      if (best) sessionStorage.setItem('pl_miasto', best);
+      else sessionStorage.removeItem('pl_miasto');
     } catch (e) {}
-    return k;
+    return best;
   }
 
   function applyRegion() {
     var k = regionKey();
-    if (!k || k === 'wroclaw') return;
-    var r = REGIONY[k];
+    var m = miastoKey();
+    var r = MIASTA[m] || null;
     if (!r) {
-      /* Nieznane miasto: nazwa z parametru, bez odmiany. */
-      var n = k.split('-').map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(' ');
-      r = [n, 'w mieście ' + n];
+      if (!k || k === 'wroclaw') return;
+      r = REGIONY[k];
+      if (!r) {
+        /* Nieznane miasto: nazwa z parametru, bez odmiany. */
+        var n = k.split('-').map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(' ');
+        r = [n, 'w miejscowości ' + n];
+      }
     }
     REGION_NAZWA = r[0];
+    var obszar = r[2] === true;
     var locU = r[1].charAt(0).toUpperCase() + r[1].slice(1);
     function zam(t) {
-      return t.replace(/we Wrocławiu/g, r[1]).replace(/We Wrocławiu/g, locU).replace(/Wrocław/g, r[0]);
+      if (obszar) {
+        t = t.replace(/we Wrocławiu i okolicach \(do 50 km\)/g, r[1])
+             .replace(/we Wrocławiu i okolicach/g, r[1])
+             .replace(/We Wrocławiu i okolicach/g, locU)
+             .replace(/we Wrocławiu lub w okolicy/g, r[1])
+             .replace(/we Wrocławiu lub okolicy/g, r[1])
+             .replace(/Wrocław i okolice \(do 50 km\)/g, r[0])
+             .replace(/Wrocław i okolice/g, r[0])
+             .replace(/do około 50 km od miasta/g, 'w całym regionie')
+             .replace(/np\. Wrocław/g, 'np. Legnica');
+      }
+      /* Jedno przejście: wstawiony tekst nie jest ponownie zamieniany. */
+      return t.replace(/[Ww]e Wrocławiu|Wrocław/g, function (x) {
+        return x === 'we Wrocławiu' ? r[1] : x === 'We Wrocławiu' ? locU : r[0];
+      });
     }
     var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
     var node, list = [];
     while ((node = w.nextNode())) {
-      if (node.nodeValue.indexOf('Wrocław') !== -1 && !/^(SCRIPT|STYLE)$/.test(node.parentNode.nodeName)) list.push(node);
+      if (/Wrocław|50 km od miasta/.test(node.nodeValue) && !/^(SCRIPT|STYLE)$/.test(node.parentNode.nodeName)) list.push(node);
     }
     list.forEach(function (nd) { nd.nodeValue = zam(nd.nodeValue); });
     Array.prototype.forEach.call(document.querySelectorAll('[placeholder*="Wrocław"]'), function (el) {
