@@ -150,15 +150,7 @@
       // na stronie podziękowania lead jest już policzony (PL_FORM) – nie liczymy go drugi raz
       var thanks = document.body.getAttribute('data-page') === 'dziekujemy';
       if (h.indexOf('https://wa.me/') === 0) { tg('whatsapp'); if (!thanks) { loadGtag(); conv(LABEL.whatsapp); } }
-      else if (h.indexOf('tel:') === 0) {
-        tg('call');
-        if (!thanks) { loadGtag(); conv(LABEL.tel); }
-        /* Telefon otwiera się po chwili, żeby powiadomienie zdążyło wyjść. */
-        if (!e.defaultPrevented) {
-          e.preventDefault();
-          setTimeout(function () { location.href = h; }, 350);
-        }
-      }
+      else if (h.indexOf('tel:') === 0) { tg('call'); if (!thanks) { loadGtag(); conv(LABEL.tel); } }
       else if (a.hasAttribute('data-cookies')) { e.preventDefault(); showBanner(true); }
     });
   }
