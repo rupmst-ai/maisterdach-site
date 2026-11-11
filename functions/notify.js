@@ -123,3 +123,25 @@ export async function onRequestPost({ request, env }) {
   if (!res.ok) return json({ ok: false, error: 'telegram ' + res.status }, 502);
   return json({ ok: true }, 200);
 }
+
+// Diagnoza: GET /notify?check=1 – nu trimite niciun mesaj, doar verifica
+// daca secretele exista si daca Telegram accepta tokenul si chat-ul.
+export async function onRequestGet({ request, env }) {
+  const url = new URL(request.url);
+  if (url.searchParams.get('check') !== '1') return json({ ok: false, error: 'method' }, 405);
+  const out = { token_set: !!env.TG_TOKEN, chat_set: !!env.TG_CHAT_ID };
+  if (env.TG_TOKEN) {
+    try {
+      const base = 'https://api.telegram.org/bot' + String(env.TG_TOKEN).trim();
+      const me = await fetch(base + '/getMe');
+      out.bot = me.status;
+      if (env.TG_CHAT_ID) {
+        const ch = await fetch(base + '/getChat?chat_id=' + encodeURIComponent(String(env.TG_CHAT_ID).trim()));
+        out.chat = ch.status;
+      }
+    } catch (e) {
+      out.error = 'telegram unreachable';
+    }
+  }
+  return json(out, 200);
+}
