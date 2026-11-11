@@ -178,7 +178,7 @@
 
         var fd = new FormData(f);
         fd.append('_subject', 'PL – nowe zapytanie: ' + (fd.get('rodzaj_pracy') || '') + ' – ' + (fd.get('miejscowosc') || ''));
-        fd.append('wersja', 'PL (Wrocław)');
+        fd.append('wersja', 'PL (' + REGION_NAZWA + ')');
         fd.append('strona', location.pathname);
         fd.append('gclid', param('gclid') || param('gbraid') || param('wbraid'));
         fd.append('kampania', param('gad_campaignid'));
@@ -202,6 +202,77 @@
     });
   }
 
+  /* ---- Obszar działania wg kampanii: parametr region=... w adresie ----
+     Domyślnie Wrocław. Nowa kampania w innym mieście: w Google Ads w sufiksie
+     końcowego adresu URL wpisać region=nazwa (np. region=poznan). */
+  var REGIONY = {
+    wroclaw:        ['Wrocław', 'we Wrocławiu'],
+    warszawa:       ['Warszawa', 'w Warszawie'],
+    poznan:         ['Poznań', 'w Poznaniu'],
+    krakow:         ['Kraków', 'w Krakowie'],
+    lodz:           ['Łódź', 'w Łodzi'],
+    katowice:       ['Katowice', 'w Katowicach'],
+    gdansk:         ['Gdańsk', 'w Gdańsku'],
+    szczecin:       ['Szczecin', 'w Szczecinie'],
+    opole:          ['Opole', 'w Opolu'],
+    legnica:        ['Legnica', 'w Legnicy'],
+    walbrzych:      ['Wałbrzych', 'w Wałbrzychu'],
+    'zielona-gora': ['Zielona Góra', 'w Zielonej Górze'],
+    'jelenia-gora': ['Jelenia Góra', 'w Jeleniej Górze'],
+    lublin:         ['Lublin', 'w Lublinie'],
+    bydgoszcz:      ['Bydgoszcz', 'w Bydgoszczy'],
+    torun:          ['Toruń', 'w Toruniu'],
+    bialystok:      ['Białystok', 'w Białymstoku'],
+    rzeszow:        ['Rzeszów', 'w Rzeszowie'],
+    kielce:         ['Kielce', 'w Kielcach'],
+    olsztyn:        ['Olsztyn', 'w Olsztynie'],
+    czestochowa:    ['Częstochowa', 'w Częstochowie'],
+    gliwice:        ['Gliwice', 'w Gliwicach'],
+    kalisz:         ['Kalisz', 'w Kaliszu'],
+    leszno:         ['Leszno', 'w Lesznie']
+  };
+  var REGION_NAZWA = 'Wrocław';
+
+  function regionKey() {
+    var k = '';
+    try { k = (new URLSearchParams(location.search).get('region') || '').toLowerCase(); } catch (e) {}
+    try { k = k.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\u0142/g, 'l'); } catch (e) {}
+    k = k.replace(/[^a-z0-9\- ]/g, '').replace(/\s+/g, '-').slice(0, 40);
+    try {
+      if (k) sessionStorage.setItem('pl_region', k);
+      else k = sessionStorage.getItem('pl_region') || '';
+    } catch (e) {}
+    return k;
+  }
+
+  function applyRegion() {
+    var k = regionKey();
+    if (!k || k === 'wroclaw') return;
+    var r = REGIONY[k];
+    if (!r) {
+      /* Nieznane miasto: nazwa z parametru, bez odmiany. */
+      var n = k.split('-').map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(' ');
+      r = [n, 'w mieście ' + n];
+    }
+    REGION_NAZWA = r[0];
+    var locU = r[1].charAt(0).toUpperCase() + r[1].slice(1);
+    function zam(t) {
+      return t.replace(/we Wrocławiu/g, r[1]).replace(/We Wrocławiu/g, locU).replace(/Wrocław/g, r[0]);
+    }
+    var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+    var node, list = [];
+    while ((node = w.nextNode())) {
+      if (node.nodeValue.indexOf('Wrocław') !== -1 && !/^(SCRIPT|STYLE)$/.test(node.parentNode.nodeName)) list.push(node);
+    }
+    list.forEach(function (nd) { nd.nodeValue = zam(nd.nodeValue); });
+    Array.prototype.forEach.call(document.querySelectorAll('[placeholder*="Wrocław"]'), function (el) {
+      el.setAttribute('placeholder', zam(el.getAttribute('placeholder')));
+    });
+    document.title = zam(document.title);
+    var md = document.querySelector('meta[name="description"]');
+    if (md) md.setAttribute('content', zam(md.getAttribute('content') || ''));
+  }
+
   /* ---- Strona podziękowania: konwersja tylko po prawdziwym wysłaniu ---- */
   function thanksPage() {
     if (document.body.getAttribute('data-page') !== 'dziekujemy') return false;
@@ -216,6 +287,7 @@
   }
 
   function init() {
+    applyRegion();
     var c = readConsent();
     if (!c) showBanner(false);
     initNav();
