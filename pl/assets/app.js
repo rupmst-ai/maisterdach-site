@@ -355,11 +355,14 @@
       page:     location.pathname,
       source:   CTX.source
     });
-    try {
-      fetch('/notify', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: body })
-        .catch(function () {});
-    } catch (e) {
-      try { navigator.sendBeacon('/notify', new Blob([body], { type: 'text/plain;charset=UTF-8' })); } catch (e2) {}
+    /* sendBeacon przeżywa przejście do aplikacji telefonu / WhatsApp; fetch tylko gdy beacon niedostępny. */
+    var ok = false;
+    try { ok = !!(navigator.sendBeacon && navigator.sendBeacon('/notify', new Blob([body], { type: 'text/plain;charset=UTF-8' }))); } catch (e) {}
+    if (!ok) {
+      try {
+        fetch('/notify', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: body })
+          .catch(function () {});
+      } catch (e2) {}
     }
   }
 

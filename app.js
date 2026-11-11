@@ -182,11 +182,15 @@ function closeStickyForm() {
       source:   ctx.source
     });
 
-    try {
-      fetch('/notify', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: body })
-        .catch(function () {});
-    } catch (e) {
-      try { navigator.sendBeacon('/notify', new Blob([body], { type: 'text/plain;charset=UTF-8' })); } catch (e2) {}
+    // sendBeacon supravietuieste trecerii la aplicatia de telefon / WhatsApp
+    // (la "Apel" fetch-ul se pierdea pe mobil); fetch doar daca beacon lipseste.
+    var sent = false;
+    try { sent = !!(navigator.sendBeacon && navigator.sendBeacon('/notify', new Blob([body], { type: 'text/plain;charset=UTF-8' }))); } catch (e) {}
+    if (!sent) {
+      try {
+        fetch('/notify', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' }, body: body })
+          .catch(function () {});
+      } catch (e2) {}
     }
   }
 
