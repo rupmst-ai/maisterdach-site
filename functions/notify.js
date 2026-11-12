@@ -29,6 +29,7 @@ const CAMPAIGNS = {
   '24406866367': 'Entrümpelung – Hamburg',
   '24235344397': 'Asbestdach – Neueindeckung',
   '24405156377': 'Dachy – Warszawa',
+  '24454030035': 'Dachy – Warszawa + 50 km',
   '24455346452': 'Dachy – Wrocław + 30 km',
   '24461286400': 'Dachy – Dolnośląskie'
 };
