@@ -4,6 +4,7 @@
   'use strict';
 
   var AW = 'AW-17044870869';
+  var GA4 = 'G-E40WQHWM7V';   // Google Analytics – ta sama usługa co na stronie DE
   var LABEL = {
     whatsapp: 'oURWCJjz5PYcENWt0L8_',   // Whatsapp
     tel: 'rrY2CMqh2vYcENWt0L8_',        // Anruf
@@ -16,6 +17,15 @@
   window.dataLayer = window.dataLayer || [];
   if (typeof window.gtag !== 'function') {
     window.gtag = function () { window.dataLayer.push(arguments); };
+  }
+
+  /* Zdarzenie GA4 (nazwy jak na stronie DE: click_call, click_whatsapp, generate_lead). */
+  function ga(ev, el, extra) {
+    var o = { send_to: GA4, page_path: location.pathname, site_lang: 'pl' };
+    if (el) o.button = el.closest('.hd') ? 'header' : el.closest('.mbar') ? 'sticky' : el.closest('.hero') ? 'hero'
+      : el.closest('.form-sec') ? 'formularz' : el.closest('.ft') ? 'footer' : el.closest('.cta') ? 'cta' : 'strona';
+    for (var k in extra || {}) o[k] = extra[k];
+    window.gtag('event', ev, o);
   }
 
   function conv(label, cb) {
@@ -164,9 +174,9 @@
       if (!a) return;
       var h = (a.getAttribute('href') || '').trim().toLowerCase();
       /* Dowolny numer: +48, +49, bez prefiksu – liczy się tylko schemat tel: */
-      if (h.indexOf('tel:') === 0) { tg('call'); loadGtag(); conv(LABEL.tel); }
+      if (h.indexOf('tel:') === 0) { tg('call'); loadGtag(); conv(LABEL.tel); ga('click_call', a); }
       else if (/^(https?:)?\/\/(wa\.me|api\.whatsapp\.com|chat\.whatsapp\.com)\//.test(h) || h.indexOf('whatsapp://') === 0) {
-        tg('whatsapp'); loadGtag(); conv(LABEL.whatsapp);
+        tg('whatsapp'); loadGtag(); conv(LABEL.whatsapp); ga('click_whatsapp', a);
       }
       else if (a.hasAttribute('data-cookies')) { e.preventDefault(); showBanner(true); }
     }, true);
@@ -209,6 +219,7 @@
             var poszlo = false;
             function dalej() { if (poszlo) return; poszlo = true; location.href = THANKS_URL; }
             loadGtag();
+            ga('generate_lead', null, { rodzaj_pracy: fd.get('rodzaj_pracy') || '' });
             conv(LABEL.form, dalej);
             setTimeout(dalej, 1600);
           })
