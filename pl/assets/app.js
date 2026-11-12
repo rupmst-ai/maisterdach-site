@@ -1,13 +1,13 @@
 /* Maisterdach PL – skrypt wspólny dla stron /pl/
-   Konwersje Google Ads: zamień etykiety PL_* na prawdziwe po utworzeniu konwersji. */
+   Konwersje Google Ads – te same akcje co na stronie DE (konto AW-17044870869). */
 (function () {
   'use strict';
 
   var AW = 'AW-17044870869';
   var LABEL = {
-    whatsapp: 'PL_WHATSAPP',
-    tel: 'PL_TEL',
-    form: 'PL_FORM'
+    whatsapp: 'oURWCJjz5PYcENWt0L8_',   // Whatsapp
+    tel: 'rrY2CMqh2vYcENWt0L8_',        // Anruf
+    form: 'zz_4CN-B2_YcENWt0L8_'        // formular
   };
   var FORM_URL = 'https://formspree.io/f/xvzbwbrj';
   var THANKS_URL = '/pl/dziekujemy/';
@@ -18,8 +18,10 @@
     window.gtag = function () { window.dataLayer.push(arguments); };
   }
 
-  function conv(label) {
-    window.gtag('event', 'conversion', { send_to: AW + '/' + label });
+  function conv(label, cb) {
+    var o = { send_to: AW + '/' + label };
+    if (cb) { o.event_callback = cb; o.event_timeout = 1500; }
+    window.gtag('event', 'conversion', o);
   }
 
   /* ---- gtag.js: ładowany z opóźnieniem, żeby nie spowalniać strony ---- */
@@ -33,7 +35,10 @@
     document.head.appendChild(s);
   }
   function scheduleGtag(now) {
-    if (now) { loadGtag(); return; }
+    /* Tag Google ładujemy od razu na każdej stronie /pl/: odczytuje gclid z adresu
+       wejścia i jest gotowy, zanim ktoś kliknie telefon lub WhatsApp. */
+    loadGtag();
+    if (now) return;
     ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(function (ev) {
       window.addEventListener(ev, loadGtag, { once: true, passive: true });
     });
@@ -152,24 +157,22 @@
     /* Telefon: powiadomienie już przy puszczeniu palca – zanim przeglądarka przejdzie do aplikacji telefonu. */
     document.addEventListener('pointerup', function (e) {   // przy przewijaniu przychodzi pointercancel, nie pointerup
       var a = linkZ(e);
-      if (a && (a.getAttribute('href') || '').indexOf('tel:') === 0) tg('call');
+      if (a && (a.getAttribute('href') || '').trim().toLowerCase().indexOf('tel:') === 0) tg('call');
     }, true);
     document.addEventListener('click', function (e) {
       var a = linkZ(e);
       if (!a) return;
-      var h = a.getAttribute('href');
-      // na stronie podziękowania lead jest już policzony (PL_FORM) – nie liczymy go drugi raz
-      var thanks = document.body.getAttribute('data-page') === 'dziekujemy';
-      if (h.indexOf('https://wa.me/') === 0) { tg('whatsapp'); if (!thanks) { loadGtag(); conv(LABEL.whatsapp); } }
-      else if (h.indexOf('tel:') === 0) { tg('call'); if (!thanks) { loadGtag(); conv(LABEL.tel); } }
+      var h = (a.getAttribute('href') || '').trim().toLowerCase();
+      /* Dowolny numer: +48, +49, bez prefiksu – liczy się tylko schemat tel: */
+      if (h.indexOf('tel:') === 0) { tg('call'); loadGtag(); conv(LABEL.tel); }
+      else if (/^(https?:)?\/\/(wa\.me|api\.whatsapp\.com|chat\.whatsapp\.com)\//.test(h) || h.indexOf('whatsapp://') === 0) {
+        tg('whatsapp'); loadGtag(); conv(LABEL.whatsapp);
+      }
       else if (a.hasAttribute('data-cookies')) { e.preventDefault(); showBanner(true); }
     }, true);
   }
 
   /* ---- Formularz ---- */
-  function param(n) {
-    try { return new URLSearchParams(location.search).get(n) || ''; } catch (e) { return ''; }
-  }
   function initForms() {
     document.querySelectorAll('form.js-lead').forEach(function (f) {
       var err = f.querySelector('.form-err');
@@ -191,8 +194,8 @@
         fd.append('_subject', 'PL – nowe zapytanie: ' + (fd.get('rodzaj_pracy') || '') + ' – ' + (fd.get('miejscowosc') || ''));
         fd.append('wersja', 'PL (' + REGION_NAZWA + ')');
         fd.append('strona', location.pathname);
-        fd.append('gclid', param('gclid') || param('gbraid') || param('wbraid'));
-        fd.append('kampania', param('gad_campaignid'));
+        fd.append('gclid', CTX.gclid);
+        fd.append('kampania', CTX.campaign);
 
         btn.disabled = true;
         var oldTxt = btn.textContent;
@@ -202,8 +205,12 @@
           .then(function (r) {
             if (!r.ok) throw new Error('HTTP ' + r.status);
             tg('form');
-            try { sessionStorage.setItem('pl_form_sent', '1'); } catch (x) {}
-            location.href = THANKS_URL;
+            /* Konwersja „formular”, potem strona podziękowania (najpóźniej po 1,5 s). */
+            var poszlo = false;
+            function dalej() { if (poszlo) return; poszlo = true; location.href = THANKS_URL; }
+            loadGtag();
+            conv(LABEL.form, dalej);
+            setTimeout(dalej, 1600);
           })
           .catch(function () {
             btn.disabled = false;
@@ -470,17 +477,8 @@
   }
 
   /* ---- Strona podziękowania: konwersja tylko po prawdziwym wysłaniu ---- */
-  function thanksPage() {
-    if (document.body.getAttribute('data-page') !== 'dziekujemy') return false;
-    var sent = false;
-    try { sent = sessionStorage.getItem('pl_form_sent') === '1'; } catch (e) {}
-    if (sent) {
-      try { sessionStorage.removeItem('pl_form_sent'); } catch (e) {}
-      conv(LABEL.form);
-      return true;
-    }
-    return false;
-  }
+  /* Konwersja formularza jest wysyłana przy wysłaniu, nie na stronie podziękowania. */
+  function thanksPage() { return false; }
 
   function init() {
     applyRegion();
