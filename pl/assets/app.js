@@ -233,7 +233,7 @@
   }
 
   /* ---- Obszar działania wg kampanii: parametr region=... w adresie ----
-     Domyślnie Wrocław. Nowa kampania w innym mieście: w Google Ads w sufiksie
+     Domyślnie Warszawa. Nowa kampania w innym mieście: w Google Ads w sufiksie
      końcowego adresu URL wpisać region=nazwa (np. region=poznan). */
   var REGIONY = {
     wroclaw:        ['Wrocław', 'we Wrocławiu'],
@@ -267,6 +267,57 @@
   /* Miejscowości z fraz kluczowych (parametr kw=... z Google Ads).
      Gdy ktoś szuka „dekarz oleśnica”, strona pokazuje Oleśnicę. */
   var MIASTA = {
+    /* Okolice Warszawy (do 50 km) */
+    'piaseczno': ['Piaseczno', 'w Piasecznie'],
+    'legionowo': ['Legionowo', 'w Legionowie'],
+    'pruszkow': ['Pruszków', 'w Pruszkowie'],
+    'otwock': ['Otwock', 'w Otwocku'],
+    'wolomin': ['Wołomin', 'w Wołominie'],
+    'grodzisk mazowiecki': ['Grodzisk Mazowiecki', 'w Grodzisku Mazowieckim'],
+    'grodzisk': ['Grodzisk Mazowiecki', 'w Grodzisku Mazowieckim'],
+    'minsk mazowiecki': ['Mińsk Mazowiecki', 'w Mińsku Mazowieckim'],
+    'dekarz marki': ['Marki', 'w Markach'],
+    'dachy marki': ['Marki', 'w Markach'],
+    'zabki': ['Ząbki', 'w Ząbkach'],
+    'kobylka': ['Kobyłka', 'w Kobyłce'],
+    'zielonka': ['Zielonka', 'w Zielonce'],
+    'jozefow': ['Józefów', 'w Józefowie'],
+    'konstancin jeziorna': ['Konstancin-Jeziorna', 'w Konstancinie-Jeziornie'],
+    'konstancin': ['Konstancin-Jeziorna', 'w Konstancinie-Jeziornie'],
+    'gora kalwaria': ['Góra Kalwaria', 'w Górze Kalwarii'],
+    'nowy dwor mazowiecki': ['Nowy Dwór Mazowiecki', 'w Nowym Dworze Mazowieckim'],
+    'dekarz blonie': ['Błonie', 'w Błoniu'],
+    'dachy blonie': ['Błonie', 'w Błoniu'],
+    'ozarow mazowiecki': ['Ożarów Mazowiecki', 'w Ożarowie Mazowieckim'],
+    'piastow': ['Piastów', 'w Piastowie'],
+    'milanowek': ['Milanówek', 'w Milanówku'],
+    'brwinow': ['Brwinów', 'w Brwinowie'],
+    'podkowa lesna': ['Podkowa Leśna', 'w Podkowie Leśnej'],
+    'lomianki': ['Łomianki', 'w Łomiankach'],
+    'sulejowek': ['Sulejówek', 'w Sulejówku'],
+    'halinow': ['Halinów', 'w Halinowie'],
+    'radzymin': ['Radzymin', 'w Radzyminie'],
+    'serock': ['Serock', 'w Serocku'],
+    'tluszcz': ['Tłuszcz', 'w Tłuszczu'],
+    'zyrardow': ['Żyrardów', 'w Żyrardowie'],
+    'grojec': ['Grójec', 'w Grójcu'],
+    'tarczyn': ['Tarczyn', 'w Tarczynie'],
+    'karczew': ['Karczew', 'w Karczewie'],
+    'wiazowna': ['Wiązowna', 'w Wiązownie'],
+    'nadarzyn': ['Nadarzyn', 'w Nadarzynie'],
+    'raszyn': ['Raszyn', 'w Raszynie'],
+    'mszczonow': ['Mszczonów', 'w Mszczonowie'],
+    'zakroczym': ['Zakroczym', 'w Zakroczymiu'],
+    'lesznowola': ['Lesznowola', 'w Lesznowoli'],
+    'izabelin': ['Izabelin', 'w Izabelinie'],
+    'stare babice': ['Stare Babice', 'w Starych Babicach'],
+    'wieliszew': ['Wieliszew', 'w Wieliszewie'],
+    'nieporet': ['Nieporęt', 'w Nieporęcie'],
+    'jablonna': ['Jabłonna', 'w Jabłonnie'],
+    'celestynow': ['Celestynów', 'w Celestynowie'],
+    'zalesie gorne': ['Zalesie Górne', 'w Zalesiu Górnym'],
+    'komorow': ['Komorów', 'w Komorowie'],
+    'michalowice': ['Michałowice', 'w Michałowicach'],
     'olesnica': ['Oleśnica', 'w Oleśnicy'],
     'olawa': ['Oława', 'w Oławie'],
     'trzebnica': ['Trzebnica', 'w Trzebnicy'],
@@ -342,7 +393,7 @@
     'zloty stok': ['Złoty Stok', 'w Złotym Stoku'],
     'dekarz gora': ['Góra', 'w Górze']
   };
-  var REGION_NAZWA = 'Wrocław';
+  var REGION_NAZWA = 'Warszawa';
   var MIASTO_NAZWA = '';
 
   /* ---- Powiadomienie na Telegram (functions/notify.js), jak na stronie DE ---- */
@@ -445,7 +496,7 @@
     var r = MIASTA[m] || null;
     if (r) MIASTO_NAZWA = r[0];
     if (!r) {
-      if (!k || k === 'wroclaw') return;
+      if (!k || k === 'warszawa') return;
       r = REGIONY[k];
       if (!r) {
         /* Nieznane miasto: nazwa z parametru, bez odmiany. */
@@ -458,28 +509,29 @@
     var locU = r[1].charAt(0).toUpperCase() + r[1].slice(1);
     function zam(t) {
       if (obszar) {
-        t = t.replace(/we Wrocławiu i okolicach \(do 50 km\)/g, r[1])
-             .replace(/we Wrocławiu i okolicach/g, r[1])
-             .replace(/We Wrocławiu i okolicach/g, locU)
-             .replace(/we Wrocławiu lub w okolicy/g, r[1])
-             .replace(/we Wrocławiu lub okolicy/g, r[1])
-             .replace(/Wrocław i okolice \(do 50 km\)/g, r[0])
-             .replace(/Wrocław i okolice/g, r[0])
+        t = t.replace(/w Warszawie i okolicach \(do 50 km\)/g, r[1])
+             .replace(/w Warszawie i okolicach/g, r[1])
+             .replace(/W Warszawie i okolicach/g, locU)
+             .replace(/w Warszawie lub w okolicy/g, r[1])
+             .replace(/w Warszawie lub okolicy/g, r[1])
+             .replace(/Warszawa i okolice \(do 50 km\)/g, r[0])
+             .replace(/Warszawa i okolice/g, r[0])
              .replace(/do około 50 km od miasta/g, 'w całym regionie')
-             .replace(/np\. Wrocław/g, 'np. Legnica');
+             .replace(/np\. Warszawa/g, 'np. Legnica');
       }
       /* Jedno przejście: wstawiony tekst nie jest ponownie zamieniany. */
-      return t.replace(/[Ww]e Wrocławiu|Wrocław/g, function (x) {
-        return x === 'we Wrocławiu' ? r[1] : x === 'We Wrocławiu' ? locU : r[0];
+      return t.replace(/[Ww] Warszawie|Warszawa/g, function (x) {
+        return x === 'w Warszawie' ? r[1] : x === 'W Warszawie' ? locU : r[0];
       });
     }
     var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
     var node, list = [];
     while ((node = w.nextNode())) {
-      if (/Wrocław|50 km od miasta/.test(node.nodeValue) && !/^(SCRIPT|STYLE)$/.test(node.parentNode.nodeName)) list.push(node);
+      /* Adres UODO (00-193 Warszawa) zostaje bez zmian. */
+      if (/Warszaw|50 km od miasta/.test(node.nodeValue) && !/00-193/.test(node.nodeValue) && !/^(SCRIPT|STYLE)$/.test(node.parentNode.nodeName)) list.push(node);
     }
     list.forEach(function (nd) { nd.nodeValue = zam(nd.nodeValue); });
-    Array.prototype.forEach.call(document.querySelectorAll('[placeholder*="Wrocław"]'), function (el) {
+    Array.prototype.forEach.call(document.querySelectorAll('[placeholder*="Warszawa"]'), function (el) {
       el.setAttribute('placeholder', zam(el.getAttribute('placeholder')));
     });
     document.title = zam(document.title);
