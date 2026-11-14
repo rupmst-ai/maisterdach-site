@@ -420,13 +420,15 @@
     } catch (e) {}
   }
   var lastTg = {};
-  function tg(type) {
+  function tg(type, lead) {
     var now = Date.now();
-    if (lastTg[type] && now - lastTg[type] < 10000) return;   // bez duplikatów przy podwójnym kliknięciu
+    /* Zgłoszenia z formularza wyceny (lead) mają własną ochronę przed duplikatami. */
+    if (!lead && lastTg[type] && now - lastTg[type] < 10000) return;   // bez duplikatów przy podwójnym kliknięciu
     lastTg[type] = now;
     var ua = navigator.userAgent;
     var body = JSON.stringify({
       type:     type,
+      lead:     lead || undefined,
       town:     MIASTO_NAZWA,          // tylko prawdziwa miejscowość z frazy; inaczej decyduje IP
       kw:       CTX.kw,
       campaign: CTX.campaign,
@@ -542,6 +544,16 @@
   /* ---- Strona podziękowania: konwersja tylko po prawdziwym wysłaniu ---- */
   /* Konwersja formularza jest wysyłana przy wysłaniu, nie na stronie podziękowania. */
   function thanksPage() { return false; }
+
+  // Dla stron /pl/wycena-.../ (assets/wycena.js).
+  window.DJPL = {
+    tg: tg,
+    formConversion: function (problem) {
+      loadGtag();
+      ga('generate_lead', null, { rodzaj_pracy: problem || '' });
+      conv(LABEL.form);
+    }
+  };
 
   function init() {
     applyRegion();

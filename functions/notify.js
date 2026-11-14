@@ -37,7 +37,8 @@ const CAMPAIGNS = {
 const TYPES = {
   call: '📞 APEL',
   whatsapp: '💬 WHATSAPP',
-  form: '📝 FORMULAR'
+  form: '📝 FORMULAR',
+  partial: '⚠️ PARȚIAL (netrimis)'
 };
 
 const DEVICES = { m: 'mobil', c: 'PC', t: 'tabletă' };
@@ -98,14 +99,35 @@ export async function onRequestPost({ request, env }) {
   else if (gclid) src = 'Google Ads';
   else src = 'direct / organic' + (source ? ' (' + source + ')' : '');
 
+  // Formularul de pe paginile /pl/wycena-.../: date scrise de vizitator.
+  const lead = d.lead && typeof d.lead === 'object' ? d.lead : null;
+  if (type === 'partial' && !lead) return json({ ok: false, error: 'bad lead' }, 400);
+  const isPl = page.indexOf('/pl/') === 0;
+  let title = TYPES[type];
+  if (lead && isPl) title = type === 'partial' ? '⚠️ PL PARȚIAL (netrimis)' : '📝 PL FORMULAR';
+
   const lines = [
-    TYPES[type] + ' – dachjetz.de' + (page.indexOf('/pl/') === 0 ? ' 🇵🇱 POLONIA' : ''),
+    title + ' – dachjetz.de' + (isPl ? ' 🇵🇱 POLONIA' : ''),
     '📍 ' + where,
     '🔎 Cuvânt: ' + (kw || '–'),
     '📣 Sursă: ' + src,
     '📱 Dispozitiv: ' + (DEVICES[device] || device || '–'),
     '📄 Pagină: ' + (page || '–')
   ];
+  if (lead) {
+    const digits = clean(lead.telefon, 40).replace(/\D/g, '');
+    let tel = clean(lead.telefon, 40);
+    if (digits.length === 9) tel = '+48' + digits;
+    else if (digits.length === 11 && digits.indexOf('48') === 0) tel = '+' + digits;
+    const oferta = clean(lead.oferta, 80);
+    const rabat = clean(lead.rabat, 10);
+    lines.splice(1, 0,
+      '☎️ Telefon: ' + (tel || '–'),
+      '🏠 Adresă: ' + (clean(lead.adres, 200) || '–'),
+      '🔧 Problemă: ' + (clean(lead.problem, 80) || '–'),
+      '🎁 Ofertă: ' + (oferta ? oferta + (rabat ? ' (' + rabat + ')' : '') : '–')
+    );
+  }
 
   let res;
   try {
