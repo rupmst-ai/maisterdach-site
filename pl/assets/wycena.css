@@ -117,3 +117,29 @@ footer a[data-cookies]{cursor:pointer}
 .terr{display:none;font-size:12.5px;color:#dc2626;font-weight:700;text-align:center;margin:-4px 0 6px}
 input.err~.terr{display:block}
 input.err~.hint{display:none}
+
+/* ---- nagłówek z deszczem i domem 3D ---- */
+.hero{position:relative;overflow:hidden;padding:12px 16px 26px}
+.hero>*{position:relative;z-index:3}
+.hero .fx,.hero .fx i{position:absolute;inset:0;z-index:1;pointer-events:none}
+.fx .r1{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cg stroke='%23fff' stroke-opacity='.34' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M12 2l-4 16M40 22l-4 16M26 42l-4 14M54 6l-3 12'/%3E%3C/g%3E%3C/svg%3E");background-size:60px 60px;animation:rn .55s linear infinite}
+.fx .r2{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cg stroke='%23fff' stroke-opacity='.2' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M12 2l-4 16M40 22l-4 16M26 42l-4 14M54 6l-3 12'/%3E%3C/g%3E%3C/svg%3E");background-size:96px 96px;animation:rn2 .9s linear infinite}
+@keyframes rn{to{background-position:-30px 120px}}@keyframes rn2{to{background-position:-48px 192px}}
+.house{display:block;width:176px;margin:0 auto -30px;filter:drop-shadow(0 14px 18px rgba(0,0,0,.45))}
+.hero h1{text-shadow:0 2px 14px rgba(0,0,0,.55)}
+.card{position:relative;z-index:4}
+body.s3 .house,body.kb .house{display:none}
+@media (max-height:700px){.house{display:none}}
+@media (prefers-reduced-motion:reduce){.fx .r1,.fx .r2{animation:none}}
+
+/* tło: pogotowie dekarskie */
+body{background:#0d1422}
+.hero{background:linear-gradient(180deg,#0d1422 0%,#1a2740 70%,#0d1422 100%)}
+.top{background:#0d1422}
+.hero .fx .tape{position:absolute;z-index:2;left:-10%;width:120%;top:-2px;height:9px;background:repeating-linear-gradient(-45deg,#ffb000 0 12px,#141a26 12px 24px);opacity:.95}
+.badge{background:#ff3b30;border-color:#ff3b30;color:#fff;box-shadow:0 0 18px rgba(255,59,48,.65)}
+.hero .fx .beam{inset:auto;left:50%;bottom:-30px;width:340px;height:260px;margin-left:-170px;background:radial-gradient(closest-side,rgba(255,176,0,.38),rgba(255,122,26,.12) 55%,transparent 72%)}
+footer{color:#93a0b5}footer a{color:#93a0b5}
+.bbar{background:#0d1422;border-top-color:#1e2a40}
+.call{background:#ff7a1a}
+body.s3 .hero{padding-top:16px}
