@@ -6,6 +6,16 @@
 /
   Cache-Control: no-cache, must-revalidate
 
+# Paginile cu formular pentru Google Ads: fara cache.
+/pl/wycena-przeciekajacy-dach/
+  Cache-Control: no-cache, must-revalidate
+/pl/wycena-naprawa-dachu/
+  Cache-Control: no-cache, must-revalidate
+/pl/wycena-rynny/
+  Cache-Control: no-cache, must-revalidate
+/pl/wycena-nowy-dach/
+  Cache-Control: no-cache, must-revalidate
+
 # Imagini: un an. Nu se schimba; daca le schimbi, redenumeste-le.
 /*.webp
   Cache-Control: public, max-age=31536000, immutable
