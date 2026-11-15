@@ -318,6 +318,26 @@
     'zalesie gorne': ['Zalesie Górne', 'w Zalesiu Górnym'],
     'komorow': ['Komorów', 'w Komorowie'],
     'michalowice': ['Michałowice', 'w Michałowicach'],
+    /* Dalej od Warszawy (do 100 km) */
+    'sochaczew': ['Sochaczew', 'w Sochaczewie'],
+    'wyszkow': ['Wyszków', 'w Wyszkowie'],
+    'garwolin': ['Garwolin', 'w Garwolinie'],
+    'warka': ['Warka', 'w Warce'],
+    'plonsk': ['Płońsk', 'w Płońsku'],
+    'pultusk': ['Pułtusk', 'w Pułtusku'],
+    'nasielsk': ['Nasielsk', 'w Nasielsku'],
+    'wegrow': ['Węgrów', 'w Węgrowie'],
+    'lochow': ['Łochów', 'w Łochowie'],
+    'skierniewice': ['Skierniewice', 'w Skierniewicach'],
+    'rawa mazowiecka': ['Rawa Mazowiecka', 'w Rawie Mazowieckiej'],
+    'bialobrzegi': ['Białobrzegi', 'w Białobrzegach'],
+    'kaluszyn': ['Kałuszyn', 'w Kałuszynie'],
+    'pilawa': ['Pilawa', 'w Pilawie'],
+    'lowicz': ['Łowicz', 'w Łowiczu'],
+    'kozienice': ['Kozienice', 'w Kozienicach'],
+    'sokolow podlaski': ['Sokołów Podlaski', 'w Sokołowie Podlaskim'],
+    'ostrow mazowiecka': ['Ostrów Mazowiecka', 'w Ostrowi Mazowieckiej'],
+    'przasnysz': ['Przasnysz', 'w Przasnyszu'],
     'olesnica': ['Oleśnica', 'w Oleśnicy'],
     'olawa': ['Oława', 'w Oławie'],
     'trzebnica': ['Trzebnica', 'w Trzebnicy'],
@@ -498,7 +518,7 @@
     var r = MIASTA[m] || null;
     if (r) MIASTO_NAZWA = r[0];
     if (!r) {
-      if (!k || k === 'warszawa') return;
+      if (!k || k === 'warszawa') { miastoZIp(); return; }
       r = REGIONY[k];
       if (!r) {
         /* Nieznane miasto: nazwa z parametru, bez odmiany. */
@@ -506,6 +526,36 @@
         r = [n, 'w miejscowości ' + n];
       }
     }
+    podmien(r);
+  }
+
+  /* Bez miejscowości we frazie: pokazujemy miejscowość odwiedzającego (wg IP, funkcja /miasto).
+     Tylko miejscowości z listy MIASTA w okolicach Warszawy; inaczej zostaje Warszawa. */
+  function miastoZIp() {
+    function uzyj(nazwa) {
+      var n = bezOgonkow(nazwa);
+      if (!n || n === 'warsaw' || n === 'warszawa') return;
+      for (var m in MIASTA) {
+        if (m === 'olesnica') return;   // dalej są miejscowości z Dolnego Śląska
+        if (MIASTA.hasOwnProperty(m) && bezOgonkow(MIASTA[m][0]) === n) {
+          podmien(MIASTA[m]);
+          return;
+        }
+      }
+    }
+    var z = null;
+    try { z = sessionStorage.getItem('pl_ipmiasto'); } catch (e) {}
+    if (z !== null) { uzyj(z); return; }
+    try {
+      fetch('/miasto').then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+        var c = (d && d.city) || '';
+        try { sessionStorage.setItem('pl_ipmiasto', c); } catch (e) {}
+        uzyj(c);
+      }).catch(function () {});
+    } catch (e2) {}
+  }
+
+  function podmien(r) {
     REGION_NAZWA = r[0];
     var obszar = r[2] === true;
     var locU = r[1].charAt(0).toUpperCase() + r[1].slice(1);
@@ -555,7 +605,22 @@
     }
   };
 
+  /* Pasek z rabatami na zwykłych stronach /pl/ (nie na stronach wyceny). */
+  function pasekRabatow() {
+    if (location.pathname.indexOf('/pl/wycena-') === 0 || document.getElementById('rabaty')) return;
+    var d = document.createElement('div');
+    d.id = 'rabaty';
+    d.setAttribute('role', 'note');
+    d.style.cssText = 'background:#ff7a1a;color:#fff;text-align:center;font-weight:800;font-size:14px;line-height:1.35;padding:8px 12px';
+    /* Oferta zimowa znika sama po 30.11.2026. */
+    var zima = new Date() < new Date(2026, 11, 1)
+      ? ' &nbsp;·&nbsp; Oferta zimowa <span style="white-space:nowrap">−15% do 30.11</span>' : '';
+    d.innerHTML = 'Seniorzy <span style="white-space:nowrap">−25%</span>' + zima + ' &nbsp;·&nbsp; Bezpłatna wycena';
+    document.body.insertBefore(d, document.body.firstChild);
+  }
+
   function init() {
+    pasekRabatow();
     applyRegion();
     var c = readConsent();
     if (!c) showBanner(false);
