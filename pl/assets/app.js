@@ -529,30 +529,26 @@
     podmien(r);
   }
 
-  /* Bez miejscowości we frazie: pokazujemy miejscowość odwiedzającego (wg IP, funkcja /miasto).
-     Tylko miejscowości z listy MIASTA w okolicach Warszawy; inaczej zostaje Warszawa. */
+  /* Bez miejscowości we frazie: pokazujemy województwo odwiedzającego (wg IP, funkcja /miasto).
+     Poza Mazowszem i Łódzkiem (albo gdy nie wiadomo) zostaje Mazowsze – tam działa kampania. */
+  var WOJ = {
+    mazowieckie: ['Mazowsze', 'na Mazowszu', true],
+    lodzkie:     ['woj. łódzkie', 'w województwie łódzkim', true]
+  };
   function miastoZIp() {
-    function uzyj(nazwa) {
-      var n = bezOgonkow(nazwa);
-      if (!n || n === 'warsaw' || n === 'warszawa') return;
-      for (var m in MIASTA) {
-        if (m === 'olesnica') return;   // dalej są miejscowości z Dolnego Śląska
-        if (MIASTA.hasOwnProperty(m) && bezOgonkow(MIASTA[m][0]) === n) {
-          podmien(MIASTA[m]);
-          return;
-        }
-      }
-    }
+    /* Ktoś szukał „… Warszawa”: zostaje Warszawa. */
+    if (/warszaw/.test(bezOgonkow(CTX.kw))) return;
+    function uzyj(w) { podmien(WOJ[w] || WOJ.mazowieckie); }
     var z = null;
-    try { z = sessionStorage.getItem('pl_ipmiasto'); } catch (e) {}
+    try { z = sessionStorage.getItem('pl_woj'); } catch (e) {}
     if (z !== null) { uzyj(z); return; }
     try {
       fetch('/miasto').then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
-        var c = (d && d.city) || '';
-        try { sessionStorage.setItem('pl_ipmiasto', c); } catch (e) {}
-        uzyj(c);
-      }).catch(function () {});
-    } catch (e2) {}
+        var w = (d && d.woj) || '';
+        try { sessionStorage.setItem('pl_woj', w); } catch (e) {}
+        uzyj(w);
+      }).catch(function () { uzyj(''); });
+    } catch (e2) { uzyj(''); }
   }
 
   function podmien(r) {
@@ -569,7 +565,7 @@
              .replace(/Warszawa i okolice \(do 50 km\)/g, r[0])
              .replace(/Warszawa i okolice/g, r[0])
              .replace(/do około 50 km od miasta/g, 'w całym regionie')
-             .replace(/np\. Warszawa/g, 'np. Legnica');
+             .replace(/np\. Warszawa/g, r[0] === 'Dolny Śląsk' ? 'np. Legnica' : 'np. Piaseczno');
       }
       /* Jedno przejście: wstawiony tekst nie jest ponownie zamieniany. */
       return t.replace(/[Ww] Warszawie|Warszawa/g, function (x) {
