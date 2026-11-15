@@ -538,7 +538,6 @@
       for (var m in MIASTA) {
         if (m === 'olesnica') return;   // dalej są miejscowości z Dolnego Śląska
         if (MIASTA.hasOwnProperty(m) && bezOgonkow(MIASTA[m][0]) === n) {
-          MIASTO_NAZWA = MIASTA[m][0];
           podmien(MIASTA[m]);
           return;
         }
@@ -613,7 +612,10 @@
     d.id = 'rabaty';
     d.setAttribute('role', 'note');
     d.style.cssText = 'background:#ff7a1a;color:#fff;text-align:center;font-weight:800;font-size:14px;line-height:1.35;padding:8px 12px';
-    d.innerHTML = 'Seniorzy <span style="white-space:nowrap">−25%</span> &nbsp;·&nbsp; Oferta zimowa <span style="white-space:nowrap">−15% do 30.11</span> &nbsp;·&nbsp; Bezpłatna wycena';
+    /* Oferta zimowa znika sama po 30.11.2026. */
+    var zima = new Date() < new Date(2026, 11, 1)
+      ? ' &nbsp;·&nbsp; Oferta zimowa <span style="white-space:nowrap">−15% do 30.11</span>' : '';
+    d.innerHTML = 'Seniorzy <span style="white-space:nowrap">−25%</span>' + zima + ' &nbsp;·&nbsp; Bezpłatna wycena';
     document.body.insertBefore(d, document.body.firstChild);
   }
 
