@@ -117,10 +117,12 @@ export async function onRequestPost({ request, env }) {
   if (lead) {
     const digits = clean(lead.telefon, 40).replace(/\D/g, '');
     let tel = clean(lead.telefon, 40);
-    if (digits.length === 9) tel = '+48' + digits;
-    else if (digits.length === 11 && digits.indexOf('48') === 0) tel = '+' + digits;
+    if (isPl && digits.length === 9) tel = '+48' + digits;
+    else if (isPl && digits.length === 11 && digits.indexOf('48') === 0) tel = '+' + digits;
     const oferta = clean(lead.oferta, 80);
     const rabat = clean(lead.rabat, 10);
+    const nume = clean(lead.nume, 80);
+    if (nume) lines.splice(1, 0, '👤 Nume: ' + nume);
     lines.splice(1, 0,
       '☎️ Telefon: ' + (tel || '–'),
       '🏠 Adresă: ' + (clean(lead.adres, 200) || '–'),
