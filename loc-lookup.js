@@ -61,6 +61,9 @@
   // tot Berlin afisam, nu nimic.
   var BERLIN_VON = 9061130, BERLIN_BIS = 9061142;
 
+  // Campanii Brandenburg care tintesc si Berlinul: acolo Berlin se afiseaza.
+  var MIT_BERLIN = { '24288722376': 1 };
+
   // Nume care nu sunt localitati, ci cartiere. A doua plasa de siguranta,
   // in caz ca mai scapa ceva in fisierul de orase.
   var NICHT_STADT = [
@@ -283,6 +286,14 @@
     // asa ca pozitia fizica trece pe locul doi.
     var regK = KAMPAGNE_REGION[params.campaignId];
 
+    // Neues Dach – Brandenburg tinteste si Berlinul (test 19.11.2026):
+    // aici Berlinul se afiseaza, nu se ascunde.
+    var mitBerlin = MIT_BERLIN[params.campaignId] === 1;
+    if (mitBerlin && (istBerlinId(interestId) || (!interestId && istBerlinId(physicalId)))) {
+      applyCity('Berlin', interestId || physicalId, istBerlinId(interestId) ? 'interest+berlin' : 'physical+berlin', 'Berlin');
+      return;
+    }
+
     // Brandenburg, Mecklenburg-Vorpommern si Sachsen:
     //   1. orasul cautat (loc_interest_ms)
     //   2. altfel orasul fizic (loc_physical_ms) — campaniile tintesc doar
@@ -296,12 +307,12 @@
       holeOrte(intOk ? interestId : '', physOk ? physicalId : '')
         .then(function (g) {
           var ni = g.i;
-          if (ni && isValidCityName(ni) && ni !== 'Berlin') {
+          if (ni && isValidCityName(ni) && (mitBerlin || ni !== 'Berlin')) {
             applyCity(ni.trim(), interestId, 'interest', ni);
             return;
           }
           var np = g.p;
-          if (np && isValidCityName(np) && np !== 'Berlin') {
+          if (np && isValidCityName(np) && (mitBerlin || np !== 'Berlin')) {
             applyCity(np.trim(), physicalId, 'physical', np);
             return;
           }
