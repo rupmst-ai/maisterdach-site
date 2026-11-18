@@ -7,6 +7,8 @@
   Cache-Control: no-cache, must-revalidate
 
 # Paginile cu formular pentru Google Ads: fara cache.
+/dachreparatur
+  Cache-Control: no-cache, must-revalidate
 /pl/wycena-przeciekajacy-dach/
   Cache-Control: no-cache, must-revalidate
 /pl/wycena-naprawa-dachu/
