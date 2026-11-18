@@ -18,7 +18,7 @@
     '24219701426': 'Brandenburg',   // Flachdach – Brandenburg (acum doar Brandenburg)
     '24264541414': 'Berlin',        // Dachsanierung – Berlin
     '24258974144': 'Brandenburg',   // Dachsanierung – Brandenburg
-    '24288722376': 'Brandenburg',   // Neues Dach – Brandenburg (v41)
+    '24288722376': 'Berlin & Brandenburg', // Neues Dach – Brandenburg + Berlin (test 19.11.2026)
     '24294161033': 'Mecklenburg-Vorpommern', // Neues Dach – Mecklenburg-Vorpommern (v41)
     '24300425899': 'Berlin',        // Neues Dach – Berlin (v43)
     '24331784104': 'Berlin',        // Dämmung – Berlin (v44)
@@ -303,7 +303,7 @@
     // Campaniile Berlin raman neschimbate: acolo loc_physical_ms nu se foloseste.
     var intOk  = interestId && !istBerlinId(interestId);
     var physOk = physicalId && !istBerlinId(physicalId);
-    if ((regK === 'Brandenburg' || regK === 'Mecklenburg-Vorpommern' || regK === 'Sachsen') && (intOk || physOk)) {
+    if ((regK === 'Brandenburg' || regK === 'Berlin & Brandenburg' || regK === 'Mecklenburg-Vorpommern' || regK === 'Sachsen') && (intOk || physOk)) {
       holeOrte(intOk ? interestId : '', physOk ? physicalId : '')
         .then(function (g) {
           var ni = g.i;

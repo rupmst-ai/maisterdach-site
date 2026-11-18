@@ -122,13 +122,13 @@ export async function onRequestPost({ request, env }) {
     const oferta = clean(lead.oferta, 80);
     const rabat = clean(lead.rabat, 10);
     const nume = clean(lead.nume, 80);
-    if (nume) lines.splice(1, 0, '👤 Nume: ' + nume);
     lines.splice(1, 0,
       '☎️ Telefon: ' + (tel || '–'),
       '🏠 Adresă: ' + (clean(lead.adres, 200) || '–'),
       '🔧 Problemă: ' + (clean(lead.problem, 80) || '–'),
       '🎁 Ofertă: ' + (oferta ? oferta + (rabat ? ' (' + rabat + ')' : '') : '–')
     );
+    if (nume) lines.splice(1, 0, '👤 Nume: ' + nume);
   }
 
   let res;
