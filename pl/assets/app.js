@@ -449,7 +449,7 @@
     var body = JSON.stringify({
       type:     type,
       lead:     lead || undefined,
-      town:     MIASTO_NAZWA,          // tylko prawdziwa miejscowość z frazy; inaczej decyduje IP
+      town:     MIASTO_NAZWA,          // miejscowość z frazy lub z wyszukiwania; inaczej decyduje IP
       kw:       CTX.kw,
       campaign: CTX.campaign,
       device:   CTX.device || (/iPad|Tablet/i.test(ua) ? 't' : /Mobi|Android|iPhone/i.test(ua) ? 'm' : 'c'),
@@ -512,13 +512,45 @@
     return best;
   }
 
+  /* Google Ads: loc_interest_ms = miejscowość, której dotyczyło wyszukiwanie.
+     Tylko okolice Warszawy (do ~50 km); ID z kryteriów lokalizacji Google Ads.
+     Miejsce fizyczne odwiedzającego (loc_physical_ms, IP) NIE jest używane. */
+  var GEO_PL = {
+    '1011410': 'piaseczno', '1031063': 'legionowo', '1031100': 'pruszkow', '1031089': 'otwock',
+    '1011421': 'wolomin', '1031036': 'grodzisk mazowiecki', '1011405': 'minsk mazowiecki',
+    '1031071': 'dekarz marki', '1011423': 'zabki', '1031053': 'kobylka', '1031139': 'zielonka',
+    '1031050': 'jozefow', '1011401': 'konstancin jeziorna', '1031042': 'gora kalwaria',
+    '1031085': 'nowy dwor mazowiecki', '1031026': 'dekarz blonie', '9051312': 'ozarow mazowiecki',
+    '1031095': 'piastow', '1031073': 'milanowek', '1031019': 'brwinow', '1011413': 'podkowa lesna',
+    '1011403': 'lomianki', '1011417': 'sulejowek', '9051318': 'radzymin', '9051321': 'serock',
+    '9229865': 'tluszcz', '1011336': 'zyrardow', '1031040': 'grojec', '9252119': 'tarczyn',
+    '1031052': 'karczew', '9220833': 'nadarzyn', '1011408': 'mszczonow', '9215465': 'zakroczym',
+    '9213674': 'wieliszew', '9258512': 'nieporet', '1011422': 'wyszkow'
+  };
+  function miastoZInteresu() {
+    var id = '', z = false;
+    try {
+      var q = new URLSearchParams(location.search);
+      id = (q.get('loc_interest_ms') || '').replace(/\D/g, '');
+      z = !!(q.get('gad_campaignid') || q.get('gclid') || q.get('region'));
+    } catch (e) {}
+    try {
+      if (id) sessionStorage.setItem('pl_interes', id);
+      else if (z) sessionStorage.removeItem('pl_interes');   // nowe kliknięcie bez miejscowości
+      else id = sessionStorage.getItem('pl_interes') || '';
+    } catch (e) {}
+    return GEO_PL[id] || '';
+  }
+
+  /* Kolejność: 1) miejscowość z frazy (kw), 2) miejscowość z wyszukiwania (loc_interest_ms),
+     3) region kampanii (np. region=wroclaw), 4) bez zmian: „Warszawa i okolice”. */
   function applyRegion() {
     var k = regionKey();
-    var m = miastoKey();
+    var m = miastoKey() || miastoZInteresu();
     var r = MIASTA[m] || null;
     if (r) MIASTO_NAZWA = r[0];
     if (!r) {
-      if (!k || k === 'warszawa') { miastoZIp(); return; }
+      if (!k || k === 'warszawa') return;
       r = REGIONY[k];
       if (!r) {
         /* Nieznane miasto: nazwa z parametru, bez odmiany. */
@@ -527,28 +559,6 @@
       }
     }
     podmien(r);
-  }
-
-  /* Bez miejscowości we frazie: pokazujemy województwo odwiedzającego (wg IP, funkcja /miasto).
-     Poza Mazowszem i Łódzkiem (albo gdy nie wiadomo) zostaje Mazowsze – tam działa kampania. */
-  var WOJ = {
-    mazowieckie: ['Mazowsze', 'na Mazowszu', true],
-    lodzkie:     ['woj. łódzkie', 'w województwie łódzkim', true]
-  };
-  function miastoZIp() {
-    /* Ktoś szukał „… Warszawa”: zostaje Warszawa. */
-    if (/warszaw/.test(bezOgonkow(CTX.kw))) return;
-    function uzyj(w) { podmien(WOJ[w] || WOJ.mazowieckie); }
-    var z = null;
-    try { z = sessionStorage.getItem('pl_woj'); } catch (e) {}
-    if (z !== null) { uzyj(z); return; }
-    try {
-      fetch('/miasto').then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
-        var w = (d && d.woj) || '';
-        try { sessionStorage.setItem('pl_woj', w); } catch (e) {}
-        uzyj(w);
-      }).catch(function () { uzyj(''); });
-    } catch (e2) { uzyj(''); }
   }
 
   function podmien(r) {
@@ -582,9 +592,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('[placeholder*="Warszawa"]'), function (el) {
       el.setAttribute('placeholder', zam(el.getAttribute('placeholder')));
     });
-    document.title = zam(document.title);
-    var md = document.querySelector('meta[name="description"]');
-    if (md) md.setAttribute('content', zam(md.getAttribute('content') || ''));
+    /* Tytuł karty i meta description zostają bez zmian: zawsze „Warszawa i okolice”. */
   }
 
   /* ---- Strona podziękowania: konwersja tylko po prawdziwym wysłaniu ---- */
