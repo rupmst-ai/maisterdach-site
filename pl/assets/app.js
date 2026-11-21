@@ -585,8 +585,8 @@
     var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
     var node, list = [];
     while ((node = w.nextNode())) {
-      /* Adres UODO (00-193 Warszawa) zostaje bez zmian. */
-      if (/Warszaw|50 km od miasta/.test(node.nodeValue) && !/00-193/.test(node.nodeValue) && !/^(SCRIPT|STYLE)$/.test(node.parentNode.nodeName)) list.push(node);
+      /* Adres UODO (00-193 Warszawa) i lista miejscowości [data-stale] zostają bez zmian. */
+      if (/Warszaw|50 km od miasta/.test(node.nodeValue) && !/00-193/.test(node.nodeValue) && !/^(SCRIPT|STYLE)$/.test(node.parentNode.nodeName) && !node.parentNode.closest('[data-stale]')) list.push(node);
     }
     list.forEach(function (nd) { nd.nodeValue = zam(nd.nodeValue); });
     Array.prototype.forEach.call(document.querySelectorAll('[placeholder*="Warszawa"]'), function (el) {
