@@ -21,12 +21,25 @@
     if (n !== 3) document.body.classList.remove('kb');
   }
 
+  /* Po 30.11.2026 oferta zimowa (−15%) znika: zamiast niej wycena bez rabatu. */
+  if (new Date() >= new Date(2026, 11, 1)) {
+    document.querySelectorAll('.offer[data-v="Oferta zimowa"]').forEach(function (b) {
+      b.dataset.v = 'Standardowa wycena';
+      delete b.dataset.pct;
+      b.innerHTML = '<span class="ic">📋</span><span><div class="t">Standardowa wycena — bez rabatu</div><div class="d">bezpłatne oględziny i wycena</div></span>';
+    });
+  }
+
   document.querySelectorAll('.opt,.offer').forEach(function (b) {
     b.addEventListener('click', function () {
       b.parentNode.querySelectorAll('.sel').forEach(function (x) { x.classList.remove('sel'); });
       b.classList.add('sel');
       data[b.dataset.k] = b.dataset.v;
-      if (b.dataset.pct) { data.rabat = b.dataset.pct + '%'; document.getElementById('pct').textContent = b.dataset.pct; }
+      if (b.classList.contains('offer')) {
+        var li = document.getElementById('pct').closest('li');
+        if (b.dataset.pct) { data.rabat = b.dataset.pct + '%'; document.getElementById('pct').textContent = b.dataset.pct; li.style.display = ''; }
+        else { delete data.rabat; li.style.display = 'none'; }
+      }
       setTimeout(function () { go(step + 1); }, 180);
     });
   });
