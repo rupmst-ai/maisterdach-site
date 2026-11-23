@@ -19,3 +19,8 @@ Opus plans and reviews, Sonnet writes, Haiku reads.
 - Service pages (`dachreparatur.html`, `flachdach.html`, `blechdach.html`, …) share one structure: a change to a shared block usually has to be repeated on every service page and `index.html`.
 - A new page also needs a `sitemap.xml` entry and, usually, a card on `index.html`.
 - Images are cached for a year (`_headers`): when replacing an image, use a new file name.
+
+## Context despre utilizator (de reținut)
+
+- Din 23 noiembrie 2026 până în februarie 2027 utilizatorul stă în România, lângă Târgu Mureș.
+- Plănuiește să testeze campanii în **București** și **Cluj**; speranța cea mai mare e la **București**.
