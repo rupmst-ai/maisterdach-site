@@ -4,6 +4,8 @@
 // Cloudflare Pages -> Settings -> Variables and Secrets. Nu se scriu in cod.
 
 const ALLOWED_ORIGINS = ['https://dachjetz.de', 'https://www.dachjetz.de'];
+// Site-ul din Romania (hidro-acoperis.ro) trimite tot aici.
+const RO_ORIGINS = ['https://hidro-acoperis.ro', 'https://www.hidro-acoperis.ro'];
 
 // Adauga aici fiecare campanie noua: ID -> nume.
 const CAMPAIGNS = {
@@ -56,7 +58,9 @@ function json(obj, status) {
 }
 
 export async function onRequestPost({ request, env }) {
-  if (ALLOWED_ORIGINS.indexOf(request.headers.get('Origin') || '') === -1) {
+  const origin = request.headers.get('Origin') || '';
+  const isRo = RO_ORIGINS.indexOf(origin) !== -1;
+  if (ALLOWED_ORIGINS.indexOf(origin) === -1 && !isRo) {
     return json({ ok: false, error: 'forbidden' }, 403);
   }
   if (!env.TG_TOKEN || !env.TG_CHAT_ID) {
@@ -102,12 +106,13 @@ export async function onRequestPost({ request, env }) {
   // Formularul de pe paginile /pl/wycena-.../: date scrise de vizitator.
   const lead = d.lead && typeof d.lead === 'object' ? d.lead : null;
   if (type === 'partial' && !lead) return json({ ok: false, error: 'bad lead' }, 400);
-  const isPl = page.indexOf('/pl/') === 0;
+  const isPl = !isRo && page.indexOf('/pl/') === 0;
   let title = TYPES[type];
   if (lead && isPl) title = type === 'partial' ? '⚠️ PL PARȚIAL (netrimis)' : '📝 PL FORMULAR';
+  if (lead && isRo) title = type === 'partial' ? '⚠️ RO PARȚIAL (netrimis)' : '📝 RO FORMULAR';
 
   const lines = [
-    title + ' – dachjetz.de' + (isPl ? ' 🇵🇱 POLONIA' : ''),
+    title + (isRo ? ' – hidro-acoperis.ro 🇷🇴 ROMÂNIA' : ' – dachjetz.de' + (isPl ? ' 🇵🇱 POLONIA' : '')),
     '📍 ' + where,
     '🔎 Cuvânt: ' + (kw || '–'),
     '📣 Sursă: ' + src,
@@ -119,6 +124,7 @@ export async function onRequestPost({ request, env }) {
     let tel = clean(lead.telefon, 40);
     if (isPl && digits.length === 9) tel = '+48' + digits;
     else if (isPl && digits.length === 11 && digits.indexOf('48') === 0) tel = '+' + digits;
+    else if (isRo && digits.length === 10 && digits.charAt(0) === '0') tel = '+4' + digits;
     const oferta = clean(lead.oferta, 80);
     const rabat = clean(lead.rabat, 10);
     const nume = clean(lead.nume, 80);
