@@ -33,7 +33,9 @@ const CAMPAIGNS = {
   '24405156377': 'Dachy – Warszawa',
   '24454030035': 'Dachy – Warszawa + 50 km',
   '24455346452': 'Dachy – Wrocław + 30 km',
-  '24461286400': 'Dachy – Dolnośląskie'
+  '24461286400': 'Dachy – Dolnośląskie',
+  '24540887738': 'RO – București + 50 km',
+  '24540903590': 'RO – Cluj-Napoca + 50 km'
 };
 
 const TYPES = {
